@@ -1,0 +1,104 @@
+:root {
+  --bs-indigo: #6610f2; /* اللون الأساسي */
+  --bs-indigo-rgb: 102, 16, 242;
+}
+
+.bg-indigo {
+  background-color: var(--bs-indigo) !important;
+}
+.text-indigo {
+  color: var(--bs-indigo) !important;
+}
+.btn-indigo {
+  background-color: var(--bs-indigo);
+  border-color: var(--bs-indigo);
+  color: #fff;
+}
+.btn-indigo:hover {
+  background-color: #520dc2;
+  border-color: #520dc2;
+}
+
+/* add font */
+@font-face {
+    font-family: 'TurkFont';
+    src: url('assets/fonts/arabic_font.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TurkFontD';
+    src: url('assets/fonts/dewan.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TurkLogo';
+    src: url('assets/fonts/logo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TurkFontE';
+    src: url('assets/fonts/Catleya_Signature.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+  font-family: 'iOS-Emoji';
+  src: url('assets/fonts/AppleColorEmoji.ttf') format('truetype'),
+}
+.emoji {
+  font-family: 'iOS-Emoji', sans-serif;
+  font-size: 1.2rem;
+}
+
+
+body {
+    font-family: 'TurkFontE', sans-serif;
+    background-color: #000;
+    color: #fff;
+    margin: 0;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: #fff;
+}
+
+nav {
+    width: 100%;
+    background-color: var(--bs-indigo) !important;
+    color: #fff;
+    padding: 10px;
+}
+
+.bg-body-tertiary {
+    background-color: var(--bs-indigo) !important;
+}
+
+.navbar-toggler-icon {
+    color: #fff !important;
+}
+
+.--bs-navbar-active-color {
+    color: #fff !important;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-family: 'TurkFont', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    margin-top: 50px;
+}
