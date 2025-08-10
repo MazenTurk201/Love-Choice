@@ -9,36 +9,40 @@
     <link rel="stylesheet" href="style.css">
     <title>Love Choice</title>
 </head>
-<body dir="rtl" style="unicode-bidi: bidi-override;">    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#" style="display: flex; align-items: center; justify-content: center;">
-            <img src="assets/images/logo.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-top" style="filter: drop-shadow(0px 0px 1px black) drop-shadow(0px 0px 5px black) drop-shadow(0px 0px 15px black);">
-        </a>
-        <span style="font-family: TurkLogo;font-size: 35px; color: #fff;">Love Choice</span>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-family: 'TurkFont';">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">الصفحة الرئيسية</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">تحميل</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">عنا</a>
-            </li>
-        </div>
+<body dir="rtl" style="unicode-bidi: bidi-override;">
+  <nav id="navbar"></nav>
+  <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/nav.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+
+                // هنا نحدد العنصر اللي هياخد الـ class
+                let currentPage = "home"; // غيرها حسب الصفحة
+                let link = document.querySelector(`[data-page="${currentPage}"]`);
+                if (link) {
+                    link.classList.add("active");
+                }
+            });
+  </script>
+  <head></head>
+  <main>
+      <div class="container">
+          <h1 style="font-family: 'TurkFont';">مرحبا بكم في لعبة</h1>
+          <span style="font-family: 'TurkLogo'; font-size: xx-large;">Love Choice</span>
+          <p dir="ltr" style="font-family: 'TurkFontE';">Make your choices wisely!</p>
+          <a href="download.html" class="download_btn">حمل اللعبة</a>
       </div>
-    </nav>
-    <head></head>
-    <main>
-        <div class="container">
-            <h1 style="font-family: 'TurkFont';">مرحبا بكم في لعبة <span style="font-family: 'TurkLogo';">Love Choice</span></h1>
-            <p>Make your choices wisely!</p>
-            <a class="download_btn" href="https://github.com/MazenTurk201/Love-Choice/releases/latest" target="_blank">حمل اللعبة</a>
-        </div>
-    <footer><span style="font-family: 'TurkFontD';">الحب اختيار.. وانا اخترتك ❤️`</span></footer>
+  </main>
+  <footer id="footer"></footer>
+  <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/footer.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+  </script>
 </body>
 </html>

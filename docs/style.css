@@ -40,17 +40,9 @@
 }
 @font-face {
     font-family: 'TurkFontE';
-    src: url('assets/fonts/Catleya_Signature.ttf') format('truetype');
+    src: url('assets/fonts/ZTOtez-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
-@font-face {
-  font-family: 'iOS-Emoji';
-  src: url('assets/fonts/AppleColorEmoji.ttf') format('truetype'),
-}
-.emoji {
-  font-family: 'iOS-Emoji', sans-serif;
-  font-size: 1.2rem;
 }
 
 
@@ -62,8 +54,24 @@ body {
     padding: 0px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
+    justify-content: space-between;
     align-items: center;
+    min-height: 100vh;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 * {
@@ -75,13 +83,21 @@ body {
 
 nav {
     width: 100%;
-    background-color: var(--bs-indigo) !important;
+    /* background-color: var(--bs-indigo) !important; */
     color: #fff;
     padding: 10px;
 }
 
+.navtitle {
+    font-family: TurkLogo;
+    font-size: 35px; color: #fff;
+    text-shadow: blueviolet 0px 0px 1px, blueviolet 0px 0px 5px, blueviolet 0px 0px 15px;
+}
+
 .bg-body-tertiary {
     background-color: var(--bs-indigo) !important;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 
 .navbar-toggler-icon {
@@ -111,4 +127,75 @@ nav {
   padding: 10px 20px ; 
   text-decoration: none ;
   border-radius: 20px;
+  border: white 2px solid;
+  box-shadow: #5900ff 0px 0px 1px, #6610f2 0px 0px 5px, #3f00a3 0px 0px 10px;
+}
+
+.download_btn:hover {
+    background-color: #520dc2;
+    box-shadow: #520dc2 0px 0px 1px, #6610f2 0px 0px 5px, #3f00a3 0px 0px 10px;
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in;
+}
+
+
+.title {
+    font-family: 'TurkFont', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.text {
+    font-family: 'TurkFont', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.total {
+    font-family: 'TurkFont', sans-serif;
+    font-size: 1.2rem;
+    color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background-color: var(--bs-indigo);
+    margin: 20px 0;
+    padding: 0px 50px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+legend {
+    font-family: 'TurkFont', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    padding: 0 10px;
+    background-color: var(--bs-indigo);
+    border-radius: 10px;
+    width: fit-content;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background-image: linear-gradient(to right, #6610f2, #6f42c1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    top: -40px;
+    /* left: 50%; */
+    animation: fadeIn 1s ease-out forwards;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
