@@ -119,7 +119,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-  plugin:
-    platforms:
-      ios:
-        deploymentTarget: 15.0
