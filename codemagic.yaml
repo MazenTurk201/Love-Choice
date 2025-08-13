@@ -18,4 +18,3 @@ workflows:
     artifacts:
       - build/ios/ipa/*.ipa
       - build/ios/iphoneos/*.app
-      - build/ios/archive/Runner.xcarchive
