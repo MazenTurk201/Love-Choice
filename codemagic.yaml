@@ -4,11 +4,13 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
-      cocoapods: default
     scripts:
       - name: Get dependencies
         script: flutter pub get
       - name: Build iOS IPA
-        script: flutter build ipa --release --no-codesign
+        script: |
+          flutter clean
+          flutter build ipa --release --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/ios/archive/*.ipa
