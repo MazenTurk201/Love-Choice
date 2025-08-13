@@ -14,5 +14,4 @@ workflows:
         -exportPath build/ios/ipa \
         -exportOptionsPlist ios/ExportOptions.plist
     artifacts:
-      - build/ios/ipa/*.ipa
-      - build/ios/archive/*.ipa
+  - build/ios/ipa/*.ipa
