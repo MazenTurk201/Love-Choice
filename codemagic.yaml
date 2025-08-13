@@ -1,10 +1,10 @@
 workflows:
-  flutter-app:
-    name: Build Flutter App
-    max_build_duration: 60
+  ios-build:
+    name: iOS Build Only
     environment:
       flutter: stable
       xcode: latest
+      cocoapods: default
     scripts:
       - name: Get dependencies
         script: flutter pub get
@@ -12,7 +12,3 @@ workflows:
         script: flutter build ipa --release --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
-    publishing:
-      email:
-        recipients:
-          - maznktr@gmail.com
