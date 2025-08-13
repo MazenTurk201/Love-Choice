@@ -7,13 +7,10 @@ workflows:
     scripts:
       - name: Get dependencies
         script: flutter pub get
-      - name: Build iOS .xcarchive
+      - name: Build iOS IPA
         script: |
           flutter clean
-          flutter build ios --release --no-codesign
-          xcodebuild -exportArchive \
-            -archivePath build/ios/archive/Runner.xcarchive \
-            -exportPath build/ios/ipa \
-            -exportOptionsPlist ios/ExportOptions.plist
+          flutter build ipa --release --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/ios/iphoneos/*.app
