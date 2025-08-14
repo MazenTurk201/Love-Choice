@@ -1,14 +1,20 @@
 workflows:
   ios-build:
-    name: iOS Build Only
+    name: iOS Build
     environment:
       flutter: stable
       xcode: latest
-      cocoapods: default
     scripts:
       - name: Get dependencies
         script: flutter pub get
-      - name: Build iOS IPA
-        script: flutter build ipa --release --no-codesign
+
+      - name: Build iOS app (no codesign)
+        script: flutter build ios --release --no-codesign
+
+      - name: Create IPA from .app
+        script: |
+          mkdir -p Payload
+          cp -R build/ios/iphoneos/Runner.app Payload/
+          zip -r Runner.ipa Payload
     artifacts:
-      - build/ios/ipa/*.ipa
+      - Runner.ipa
