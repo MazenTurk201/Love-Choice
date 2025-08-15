@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -9,23 +10,24 @@
   <link rel="stylesheet" href="style.css">
   <title>Download</title>
 </head>
+
 <body>
   <nav id="navbar"></nav>
-    <script>
-        // تحميل النافبار من ملف خارجي
-        fetch('assets/modules/nav.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('navbar').innerHTML = data;
+  <script>
+    // تحميل النافبار من ملف خارجي
+    fetch('assets/modules/nav.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('navbar').innerHTML = data;
 
-                // هنا نحدد العنصر اللي هياخد الـ class
-                let currentPage = "download"; // غيرها حسب الصفحة
-                let link = document.querySelector(`[data-page="${currentPage}"]`);
-                if (link) {
-                    link.classList.add("active");
-                }
-            });
-    </script>
+        // هنا نحدد العنصر اللي هياخد الـ class
+        let currentPage = "download"; // غيرها حسب الصفحة
+        let link = document.querySelector(`[data-page="${currentPage}"]`);
+        if (link) {
+          link.classList.add("active");
+        }
+      });
+  </script>
   <main>
     <fieldset>
       <legend>عدد تحميلات اللعبة</legend>
@@ -35,31 +37,85 @@
     </fieldset>
     <fieldset>
       <legend>حجم اللعبة</legend>
-      <div class="text" style="font-family: 'TurkFont'; text-align: center;"><p>حجم اللعبة هو 20 ميجابايت.</p></div>
+      <div class="text" style="font-family: 'TurkFont'; text-align: center;">
+        <p>حجم اللعبة هو 20 ميجابايت.</p>
+      </div>
     </fieldset>
     <fieldset>
       <legend>تحميل اللعبة</legend>
-      <p style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم بالنزول الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn" target="_blank">تحميل</a>
+      <p style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم بالنزول
+        الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn"
+        target="_blank">تحميل</a>
       <br>
     </fieldset>
     <fieldset>
       <legend>صور من اللعبة</legend>
+      <!-- <div class="imgslider">
+        <img src="assets/images/s1.jpg" alt="Screenshot 1" class="img-fluid screenshotimg">
+        <img src="assets/images/s2.jpg" alt="Screenshot 2" class="img-fluid screenshotimg">
+        <img src="assets/images/s3.jpg" alt="Screenshot 3" class="img-fluid screenshotimg">
+        <img src="assets/images/s4.jpg" alt="Screenshot 4" class="img-fluid screenshotimg">
+        <img src="assets/images/s5.jpg" alt="Screenshot 5" class="img-fluid screenshotimg">
+      </div> -->
+      <!-- Slideshow container -->
+      <div class="slideshow-container">
+
+        <!-- Full-width images with number and caption text -->
+        <div class="mySlides fade">
+          <div class="numbertext">1 / 6</div>
+          <img class="screenshotimg" src="assets/images/s1.jpg" loading="lazy">
+        </div>
+
+        <div class="mySlides fade">
+          <div class="numbertext">2 / 6</div>
+          <img class="screenshotimg" src="assets/images/s4.jpg" loading="lazy">
+        </div>
+        
+        <div class="mySlides fade">
+          <div class="numbertext">3 / 6</div>
+          <img class="screenshotimg" src="assets/images/s5.jpg" loading="lazy">
+        </div>
+        <div class="mySlides fade">
+          <div class="numbertext">4 / 6</div>
+          <img class="screenshotimg" src="assets/images/s2.jpg" loading="lazy">
+        </div>
+        <div class="mySlides fade">
+          <div class="numbertext">5 / 6</div>
+          <img class="screenshotimg" src="assets/images/s6.jpg" loading="lazy">
+        </div>
+        <div class="mySlides fade">
+          <div class="numbertext">6 / 6</div>
+          <img class="screenshotimg" src="assets/images/s3.jpg" loading="lazy">
+        </div>
       <br>
-      <img src="" alt="screenshot">
-      <img src="" alt="screenshot">
-      <img src="" alt="screenshot">
+      <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+          let i;
+          let slides = document.getElementsByClassName("mySlides");
+          for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+          }
+          slideIndex++;
+          if (slideIndex > slides.length) { slideIndex = 1 }
+          slides[slideIndex - 1].style.display = "block";
+          setTimeout(showSlides, 2000); // Change image every 2 seconds
+        }
+      </script>
     </fieldset>
   </main>
   <footer id="footer"></footer>
-    <script>
-        // تحميل النافبار من ملف خارجي
-        fetch('assets/modules/footer.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-            });
-    </script>
+  <script>
+    // تحميل النافبار من ملف خارجي
+    fetch('assets/modules/footer.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('footer').innerHTML = data;
+      });
+  </script>
   <script>
     async function fetchReleases() {
       const owner = "MazenTurk201";
@@ -110,4 +166,5 @@
     fetchReleases();
   </script>
 </body>
+
 </html>
