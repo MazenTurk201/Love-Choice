@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
   <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <link rel="stylesheet" href="style.css">
-  <title>Download</title>
+  <meta name="theme-color" content="#6610f2" />
+  <title>Download - Love Choice</title>
 </head>
 
 <body>
@@ -64,48 +65,68 @@
         <!-- Full-width images with number and caption text -->
         <div class="mySlides fade">
           <div class="numbertext">1 / 6</div>
-          <img class="screenshotimg" src="assets/images/s1.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s1.jpg">
         </div>
 
         <div class="mySlides fade">
           <div class="numbertext">2 / 6</div>
-          <img class="screenshotimg" src="assets/images/s4.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s4.jpg">
         </div>
-        
+
         <div class="mySlides fade">
           <div class="numbertext">3 / 6</div>
-          <img class="screenshotimg" src="assets/images/s5.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s5.jpg">
         </div>
         <div class="mySlides fade">
           <div class="numbertext">4 / 6</div>
-          <img class="screenshotimg" src="assets/images/s2.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s2.jpg">
         </div>
         <div class="mySlides fade">
           <div class="numbertext">5 / 6</div>
-          <img class="screenshotimg" src="assets/images/s6.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s6.jpg">
         </div>
         <div class="mySlides fade">
           <div class="numbertext">6 / 6</div>
-          <img class="screenshotimg" src="assets/images/s3.jpg" loading="lazy">
+          <img class="screenshotimg" src="assets/images/s3.jpg">
         </div>
-      <br>
-      <script>
-        let slideIndex = 0;
-        showSlides();
+        <br>
+        <script>
+          let slideIndex = 0;
+          showSlides();
 
-        function showSlides() {
-          let i;
-          let slides = document.getElementsByClassName("mySlides");
-          for (i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
+          function showSlides() {
+            let i;
+            let slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 2000); // Change image every 2 seconds
           }
-          slideIndex++;
-          if (slideIndex > slides.length) { slideIndex = 1 }
-          slides[slideIndex - 1].style.display = "block";
-          setTimeout(showSlides, 2000); // Change image every 2 seconds
-        }
-      </script>
+        </script>
     </fieldset>
+
+    <button id="backToTop">⬆</button>
+    <script>
+      const backToTop = document.getElementById("backToTop");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 200) { // يظهر بعد النزول 200px
+          backToTop.classList.add("show");
+        } else {
+          backToTop.classList.remove("show");
+        }
+      });
+
+      backToTop.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      });
+    </script>
   </main>
   <footer id="footer"></footer>
   <script>
