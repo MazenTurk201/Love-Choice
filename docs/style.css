@@ -1,0 +1,388 @@
+/* Colors Var */
+:root {
+    --hover: color-mix(in srgb, var(--main-color), white 20%);
+    --main-color: #6610f2;
+    --bg-main: #000;
+    --text-color: #fff;
+}
+
+/* add animaton */
+@keyframes scalehove {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.1);
+        z-index: 5;
+    }
+}
+
+@keyframes fromscalehove {
+    from {
+        transform: scale(1.1);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fade {
+    0% {
+        opacity: 0
+    }
+
+    50% {
+        opacity: 1
+    }
+
+    100% {
+        opacity: 0
+    }
+}
+
+
+/* add font */
+@font-face {
+    font-family: 'TurkFont';
+    src: url('assets/fonts/arabic_font.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TurkFontD';
+    src: url('assets/fonts/dewan.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TurkLogo';
+    src: url('assets/fonts/logo.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'TurkFontE';
+    src: url('assets/fonts/ZTOtez-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Styling */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    font-family: 'TurkFont', sans-serif;
+}
+
+
+body {
+    background-color: var(--bg-main);
+    margin: 0;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    justify-content: space-between;
+    align-items: center;
+    min-height: 100vh;
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+nav {
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+}
+
+.navtitle {
+    font-family: TurkLogo;
+    font-size: 35px;
+    text-shadow: var(--hover) 0px 0px 1px, var(--hover) 0px 0px 5px, var(--hover) 0px 0px 15px;
+}
+
+.bg-body-tertiary {
+    background-color: var(--main-color) !important;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+main {
+    margin-top: 100px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+    margin-top: 50px;
+}
+
+.download_btn {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 20px;
+    border: white 2px solid;
+    box-shadow: var(--main-color) 0px 0px 1px, var(--main-color) 0px 0px 5px, var(--main-color) 0px 0px 10px;
+    animation: fromscalehove 0.25s ease-out forwards;
+    &:hover {
+        background-color: var(--hover);
+        box-shadow: var(--main-color) 0px 0px 1px, var(--main-color) 0px 0px 5px, var(--main-color) 0px 0px 10px;
+        /* transform: scale(1.05); */
+        /* transition: transform 0.2s ease-in; */
+        animation: scalehove 0.25s ease-out forwards;
+    }
+}
+
+
+
+
+fieldset {
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    background-color: var(--main-color);
+    width: 75%;
+    max-width: 700px;
+    max-height: 600px;
+    margin: 20px 50px;
+    padding: 0px 25px;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: fadeIn 0.5s ease-in forwards;
+}
+
+legend {
+    font-size: 1.5rem;
+    padding: 0 10px;
+    background-color: var(--main-color);
+    border-radius: 10px;
+    width: fit-content;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background-image: linear-gradient(to right, var(--main-color), var(--hover));
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+    top: -40px;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+
+.linktile {
+    width: 100%;
+    /* padding: 10px; */
+}
+
+.linktile a {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    text-decoration: none;
+    color: var(--text-color);
+    background: linear-gradient(to right, var(--main-color), var(--hover));
+    padding: 10px 20px;
+    padding-left: 5px;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+    animation: fromscalehove 0.25s ease-out forwards;
+}
+
+.linktile a img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+.linktile a:hover {
+    animation: scalehove 0.25s ease-out forwards;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.linktile h5 {
+    font-size: 1.2rem;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    flex: 1;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin: 0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    flex: 1;
+}
+
+h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    margin-bottom: 20px;
+    margin-top: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    flex: 1;
+}
+
+.screenshotimg {
+    width: 100%;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 1);
+    max-height: 500px;
+}
+
+.slideshow-container {
+    max-width: 1000px;
+    position: relative;
+    margin: auto;
+}
+
+.mySlides {
+    display: none;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: var(--text-color);
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    font-family: serif;
+    background-color: var(--hover);
+    border: #000 solid;
+    border-radius: 25px;
+}
+
+/* Fading animation */
+.fade {
+    animation-name: fade;
+    animation-duration: 2.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+
+
+.welcome {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+section {
+    scroll-margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.about_table {
+    border-radius: 25px;
+
+    & a {
+        text-decoration: none;
+        font-size: 1rem;
+        font-family: 'TurkFont';
+    }
+}
+
+.about_main {
+    text-decoration: none;
+    font-size: 1rem;
+    font-family: 'TurkFont';
+
+    & a {
+        font-weight: bold;
+        color: #fff;
+    }
+}
+
+
+
+#backToTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(to right, var(--main-color), var(--hover));
+    color: var(--text-color);
+    border: none;
+    padding: 10px 15px;
+    font-size: 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 200;
+    border: var(--hover) solid 3px;
+
+    &.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="assets/images/favicon.ico">
+  <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
+  <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6610f2" />
+<title>Terms & Conditions - Love Choice</title>
+</head>
+<body>
+    <nav id="navbar"></nav>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/nav.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+
+                // هنا نحدد العنصر اللي هياخد الـ class
+                let currentPage = "terms-and-conditions"; // غيرها حسب الصفحة
+                let link = document.querySelector(`[data-page="${currentPage}"]`);
+                if (link) {
+                    link.classList.add("active");
+                }
+            });
+    </script>
+
+    <main style="font-family: 'TurkFont', 'Courier New', Courier, monospace; padding: 0px 50px;" class="container">
+        <br><br><br>
+        <h1>شروط الاستخدام</h1>
+        <br>
+        <strong>تاريخ السريان:</strong><p style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">1/1/2025</p>
+
+        <fieldset style="max-height: none;">
+            <legend>مقدمة</legend>
+            <p>مرحبًا بك في تطبيق <strong>Love Choice</strong>. باستخدام هذا التطبيق، فإنك توافق على الالتزام بشروط الاستخدام التالية. إذا كنت لا توافق على هذه الشروط، يرجى عدم استخدام التطبيق.</p>
+        <p>يرجى قراءة شروط الاستخدام هذه (“الشروط”) بعناية قبل استخدام تطبيق <strong>Love Choice</strong> (“التطبيق”) الذي يتم تشغيله بواسطة <strong>Turk</strong> (“نحن”، “لنا”، أو “خاصتنا”). من خلال الوصول إلى التطبيق أو استخدامه، فإنك توافق على الالتزام قانونًا بهذه الشروط. إذا كنت لا توافق على هذه الشروط بالكامل، يجب عليك التوقف فورًا عن استخدام التطبيق.</p>
+
+        <h3>1. استخدام التطبيق</h3>
+        <p>التطبيق مخصص فقط للاستخدام الشخصي وغير التجاري. أنت توافق على:</p>
+        <ul>
+            <li>عدم إعادة إنتاج أو نسخ أو بيع أو استغلال أي جزء من التطبيق دون إذن كتابي صريح منا.</li>
+            <li>عدم التدخل في عمل التطبيق أو الخوادم أو الشبكات المرتبطة به.</li>
+            <li>عدم استخدام أي وسائل آلية لجمع البيانات أو استخراجها.</li>
+            <li>عدم انتهاك أي قوانين أو لوائح محلية أو دولية أثناء استخدام التطبيق.</li>
+        </ul>
+
+        <h3>2. الخصوصية ومعالجة البيانات</h3>
+        <p>خصوصيتك مهمة بالنسبة لنا في <strong>Turk</strong>. تم تصميم التطبيق بحيث <strong>لا يقوم بجمع أو تخزين بيانات شخصية</strong> للمستخدمين.</p>
+        <ul>
+            <li>لا نجمع أو نخزن أي معلومات تعريف شخصية (PII) مثل الأسماء أو البريد الإلكتروني أو أرقام الهواتف أو بيانات الموقع الدقيقة.</li>
+            <li>التطبيق لا يتضمن نماذج تسجيل أو إدخال بيانات شخصية.</li>
+            <li>لا يلزم إنشاء حساب لاستخدام التطبيق.</li>
+        </ul>
+        <p><strong>خدمات الطرف الثالث:</strong></p>
+        <ul>
+            <li><strong>Firebase Crashlytics:</strong> لجمع تقارير الأعطال المجهولة فقط.</li>
+            <li><strong>Google AdMob:</strong> لعرض الإعلانات داخل التطبيق، وقد تجمع بيانات غير شخصية مثل معرف الجهاز.</li>
+        </ul>
+
+        <h3>3. تعديل الشروط</h3>
+        <p>نحتفظ بحق تعديل أو تحديث هذه الشروط في أي وقت، وسيتم إعلامك عند وجود تغييرات جوهرية.</p>
+
+        <h3>4. الإنهاء</h3>
+        <p>يجوز لنا تعليق أو إنهاء وصولك إلى التطبيق في أي وقت إذا انتهكت هذه الشروط.</p>
+
+        <h3>5. إخلاء المسؤولية</h3>
+        <p>يتم توفير التطبيق "كما هو" وبدون أي ضمانات.</p>
+
+        <h3>6. حدود المسؤولية</h3>
+        <p>لا تتحمل <strong>Turk</strong> أو شركاؤها أي مسؤولية عن الأضرار الناتجة عن استخدام التطبيق.</p>
+
+        <h3>7. معلومات الاتصال</h3>
+        <p>للاستفسارات: <a href="mailto:maznktr@gmail.com" style="color:#ff4081;">maznktr@gmail.com</a></p>
+        </fieldset>
+    </main>
+
+    <footer id="footer"></footer>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/footer.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

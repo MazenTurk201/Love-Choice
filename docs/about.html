@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
+    <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6610f2" />
+    <title>About - Love Choice</title>
+</head>
+
+<body>
+    <nav id="navbar"></nav>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/nav.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+
+                // هنا نحدد العنصر اللي هياخد الـ class
+                let currentPage = "about"; // غيرها حسب الصفحة
+                let link = document.querySelector(`[data-page="${currentPage}"]`);
+                if (link) {
+                    link.classList.add("active");
+                }
+            });
+    </script>
+
+    <head></head>
+    <main>
+        <fieldset>
+            <legend>أقسام اللعبة</legend>
+            <ul class="about_table">
+                <a href="#main">
+                    <li>نبذة عن اللعبة</li>
+                </a>
+                <a href="#ahl">
+                    <li>أهل</li>
+                </a>
+                <a href="#metgawzen">
+                    <li>متجوزين</li>
+                </a>
+                <a href="#ma5toben">
+                    <li>مخطوبين</li>
+                </a>
+                <a href="#t3arof">
+                    <li>تعارف</li>
+                </a>
+                <a href="#couples">
+                    <li>كوبلز</li>
+                </a>
+                <a href="#bestat">
+                    <li>بيستات</li>
+                </a>
+                <a href="#shella">
+                    <li>شلّة</li>
+                </a>
+            </ul>
+        </fieldset>
+        <section id="main">
+            <fieldset class="about_main">
+                <legend>نبذة عن اللعبة</legend>
+                <p>اللعبة عبارة عن لعبة صراحة وتحديات كل مهمتها قرب العلاقات وازالة الملل وفيها أقسام كتير وكل فسم مش زي
+                    اللي قبله واللعبة مبرمجة على انها تكون لكل الفئات ولو زهقت منها تقدر تغير وتضيف فيها براحتك وعلى
+                    كيفك واللعبة تحت التطوير فمتحرمناش من رأيك عشان تساعدنا ولو حابب ستساعدنا اكتر انشر اللعبة والعبها
+                    وسط اهلك وناسك ولو هتدعمني تقدر تدعمني من <strong><a href="make-a-donation.html">هنا</a></strong>
+                    بأي طريقة تسمحلك
+                    وأسيبك مع شرح الأقسام {هتضاف أقسام جديدة قرآنية وتحديات إن شاء الله} وشكرًا ❤️.</p>
+            </fieldset>
+        </section>
+        <section id="ahl">
+            <fieldset class="about_main">
+                <legend>أهل</legend>
+                <p>اكتر خانة مناسبة لجمع شمل العيلة وسط الجنينة او التجمع العائلي ومن مميزاتها الأسئلة والتحديات وتسمح
+                    لكل الأعمار</p>
+            </fieldset>
+        </section>
+        <section id="metgawzen">
+            <fieldset class="about_main">
+                <legend>متجوزين</legend>
+                <p>اكتر خانة مناسبة لإحياء الحب من جديد وانهاء المشاكل القديمة والتعرف على اهم نقاط راحة الطرف الآخر
+                    <strong>{ملحوظة اللعبة للمتزوجين فقط بها العاب +18}</strong></p>
+            </fieldset>
+        </section>
+        <section id="ma5toben">
+            <fieldset class="about_main">
+                <legend>مخطوبين</legend>
+                <p>ضاروري تدخل قبل اي خطوة جد عشان تفهم الطرف التاني وتاخد القرار الصح واهي فرصة لفتح مواضيع</p>
+            </fieldset>
+        </section>
+        <section id="t3arof">
+            <fieldset class="about_main">
+                <legend>تعارف</legend>
+                <p></p>
+            </fieldset>
+        </section>
+        <section id="couples">
+            <fieldset class="about_main">
+                <legend>كوبلز</legend>
+                <p></p>
+            </fieldset>
+        </section>
+        <section id="bestat">
+            <fieldset class="about_main">
+                <legend>بيستات</legend>
+                <p></p>
+            </fieldset>
+        </section>
+        <section id="shella">
+            <fieldset class="about_main">
+                <legend>شلّة</legend>
+                <p></p>
+            </fieldset>
+        </section>
+        <button id="backToTop">⬆</button>
+        <script>
+            const backToTop = document.getElementById("backToTop");
+
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 200) { // يظهر بعد النزول 200px
+                    backToTop.classList.add("show");
+                } else {
+                    backToTop.classList.remove("show");
+                }
+            });
+
+            backToTop.addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
+        </script>
+    </main>
+    <footer id="footer"></footer>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/footer.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+</body>
+
+</html>
