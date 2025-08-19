@@ -1,64 +1,9 @@
-# Miscellaneous
-*.class
 *.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IDE related
-*.iml
-*.ipr
-*.iws
-.idea/
-.vscode/
-
-# Flutter/Dart/Pub related
-.dart_tool/
-.flutter-plugins
+/.dart_tool
+/.idea
+.metadata
 .flutter-plugins-dependencies
-.pub-cache/
-.pub/
-/build/
-**/doc/api/
-**/ios/Flutter/.last_build_id
-
-# Android
-/android/app/debug
-/android/app/profile
-/android/app/release
-
-# iOS
-ios/Flutter/App.framework
-ios/Flutter/Flutter.framework
-ios/Flutter/Generated.xcconfig
-ios/Flutter/ephemeral/
-ios/.symlinks/
-ios/Pods/
-ios/Podfile.lock
-
-# Windows & Linux build
-windows/runner/Debug/
-windows/runner/Release/
-linux/flutter/ephemeral/
-
-# Web build
-web/.dart_tool/
-web/.flutter-plugins
-web/.flutter-plugins-dependencies
-
-# Symbolication
-app.*.symbols
-
-# Obfuscation
-app.*.map.json
-
-# Turk (do NOT commit these!)
+.metadata
+/.vscode
+/build
 secret.txt
-codemagic.yaml
-firebase.json

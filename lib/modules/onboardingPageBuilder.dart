@@ -16,6 +16,9 @@ class OnboardingPageBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.amber, child: Text(title));
+    return Container(
+      color: Colors.amber,
+      child: Center(child: Text(title)),
+    );
   }
 }

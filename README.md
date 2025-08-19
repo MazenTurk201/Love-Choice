@@ -2,8 +2,6 @@
 
 A new Flutter project.
 
-[Website](https://mazenturk201.github.io/Love-Choice/)
-
 ## Getting Started
 
 This project is a starting point for a Flutter application.
