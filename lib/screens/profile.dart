@@ -130,6 +130,7 @@ class _profileState extends State<profile> {
     );
   }
 
+  // ignore: non_constant_identifier_names, strict_top_level_inference
   ListTile BuildListTile({icon, text}) {
     return ListTile(
       leading: Icon(icon, size: 40),

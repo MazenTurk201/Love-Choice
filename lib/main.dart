@@ -1,31 +1,37 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'screens/home.dart';
+
+import 'firebase_options.dart';
 import 'screens/ahl.dart';
-import 'screens/metgawzen.dart';
-import 'screens/ma5toben.dart';
-import 'screens/shella.dart';
-import 'screens/t3arof.dart';
-import 'screens/couples.dart';
 import 'screens/bestat.dart';
+import 'screens/couples.dart';
+import 'screens/donation.dart';
+import 'screens/home.dart';
+import 'screens/ma5toben.dart';
+import 'screens/metgawzen.dart';
+import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
-import 'screens/donation.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'screens/shella.dart';
+import 'screens/t3arof.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("all_users");
+  final pref = await SharedPreferences.getInstance();
 
-  runApp(MyApp());
+  runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  final bool skipfirstPage;
+  // ignore: use_super_parameters
+  const MyApp({Key? key, required this.skipfirstPage}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -36,12 +42,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     requestNotificationPermission();
-    // FirebaseMessaging.instance.getToken().then((token) {
-    //   print("🔑 Token: $token");
-    // });
-
     FirebaseMessaging.onMessage.listen((message) {
-      // print("📲 إشعار جديد: ${message.notification?.title}");
       showNotification(message);
     });
   }
@@ -72,12 +73,12 @@ class _MyAppState extends State<MyApp> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
           waitDuration: Duration(milliseconds: 300),
           showDuration: Duration(seconds: 3),
-          preferBelow: false, // يظهر فوق العنصر
+          preferBelow: false,
         ),
       ),
 
-      initialRoute: '/main',
-      // initialRoute: '/',
+      // initialRoute: '/onboarding',
+      initialRoute: widget.skipfirstPage ? '/' : '/onboarding',
       routes: {
         '/main': (ctx) => home(),
         '/ahl': (ctx) => ahl(),
@@ -90,6 +91,7 @@ class _MyAppState extends State<MyApp> {
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/donation': (ctx) => donation(),
+        '/onboarding': (ctx) => onBoarding(),
       },
       debugShowCheckedModeBanner: false,
     );
