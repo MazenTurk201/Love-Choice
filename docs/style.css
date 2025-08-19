@@ -52,6 +52,54 @@
     }
 }
 
+@keyframes fromLeft {
+    from {
+        transform: translateX(-75px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes fromRight {
+    from {
+        transform: translateX(75px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes fromDown {
+    from {
+        transform: translateY(75px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes fromUp {
+    from {
+        transform: translateY(-75px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
 
 /* add font */
 @font-face {
@@ -119,6 +167,7 @@ footer {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    animation: fadeIn 1.5s ease-out forwards;
 }
 
 
@@ -139,6 +188,7 @@ nav {
     font-family: TurkLogo;
     font-size: 35px;
     text-shadow: var(--hover) 0px 0px 1px, var(--hover) 0px 0px 5px, var(--hover) 0px 0px 15px;
+    animation: fromUp 300ms ease-out forwards;
 }
 
 .bg-body-tertiary {
@@ -170,6 +220,7 @@ main {
     border: white 2px solid;
     box-shadow: var(--main-color) 0px 0px 1px, var(--main-color) 0px 0px 5px, var(--main-color) 0px 0px 10px;
     animation: fromscalehove 0.25s ease-out forwards;
+
     &:hover {
         background-color: var(--hover);
         box-shadow: var(--main-color) 0px 0px 1px, var(--main-color) 0px 0px 5px, var(--main-color) 0px 0px 10px;
@@ -216,6 +267,10 @@ legend {
     z-index: 1;
     top: -40px;
     animation: fadeIn 1s ease-out forwards;
+}
+
+.nav-link {
+    animation: fromLeft 300ms ease-out forwards;
 }
 
 
@@ -329,6 +384,7 @@ h3 {
     text-align: center;
     margin-bottom: 20px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    animation: fromRight 300ms ease-out forwards;
 }
 
 section {
