@@ -78,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       ),
 
       // initialRoute: '/onboarding',
-      initialRoute: widget.skipfirstPage ? '/' : '/onboarding',
+      initialRoute: widget.skipfirstPage ? '/main' : '/onboarding',
       routes: {
         '/main': (ctx) => home(),
         '/ahl': (ctx) => ahl(),

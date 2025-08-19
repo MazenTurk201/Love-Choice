@@ -7,11 +7,15 @@ class OnboardingPageBuilder extends StatelessWidget {
   final String lottie;
   final String title;
   final String discribtion;
+  final String link;
+  final List<Color> colors;
   const OnboardingPageBuilder({
     super.key,
     required this.lottie,
     required this.title,
     required this.discribtion,
+    required this.link,
+    required this.colors,
   });
 
   @override
