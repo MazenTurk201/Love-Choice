@@ -42,15 +42,12 @@ ios/.symlinks/
 ios/Pods/
 ios/Podfile.lock
 
-# Windows & Linux build
-windows/runner/Debug/
-windows/runner/Release/
-linux/flutter/ephemeral/
-
-# Web build
-web/.dart_tool/
-web/.flutter-plugins
-web/.flutter-plugins-dependencies
+# Another Trash
+/windows/
+/linux/
+/web/
+/macos/
+love_choice.iml
 
 # Symbolication
 app.*.symbols
