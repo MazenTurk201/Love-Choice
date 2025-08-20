@@ -194,7 +194,6 @@ footer {
     animation: fadeIn 1.5s ease-out forwards;
 }
 
-
 nav {
     z-index: 1000;
     position: fixed;
@@ -231,7 +230,6 @@ nav {
         box-shadow: none !important;
     }
 }
-
 
 .nav-link {
     position: relative;
@@ -287,9 +285,6 @@ main {
     }
 }
 
-
-
-
 fieldset {
     border: 1px solid #ccc;
     border-radius: 25px;
@@ -329,7 +324,6 @@ legend {
 .nav-link {
     animation: fromLeft 300ms ease-out forwards;
 }
-
 
 .linktile {
     width: 100%;
@@ -434,8 +428,6 @@ h3 {
     animation-direction: alternate;
 }
 
-
-
 .welcome {
     font-size: 2rem;
     text-align: center;
@@ -450,7 +442,6 @@ section {
     flex-direction: column;
     align-items: center;
 }
-
 
 .about_table {
     border-radius: 25px;
@@ -472,8 +463,6 @@ section {
         color: #fff;
     }
 }
-
-
 
 #backToTop {
     position: fixed;
