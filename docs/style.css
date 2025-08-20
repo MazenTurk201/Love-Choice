@@ -144,14 +144,14 @@ body {
     background-color: var(--bg-main);
     margin: 0;
     padding: 0px;
+    min-height: 100vh;
+    unicode-bidi: bidi-override;
+    direction: rtl;
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     justify-content: space-between;
     align-items: center;
-    min-height: 100vh;
-    unicode-bidi: bidi-override;
-    direction: rtl;
 }
 
 main {
@@ -159,7 +159,9 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     position: relative;
+    margin-top: 100px;
     overflow: hidden;
 }
 
@@ -229,10 +231,6 @@ nav {
     }
 }
 
-main {
-    margin-top: 100px;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -269,10 +267,10 @@ fieldset {
     width: 75%;
     max-width: 700px;
     max-height: 600px;
-    margin: 20px 50px;
+    margin: 20px 0px;
     padding: 0px 25px;
-    align-items: center;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: center;
     animation: fadeIn 0.5s ease-in forwards;
@@ -345,6 +343,7 @@ legend {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     text-align: center;
     flex: 1;
+    font-family: serif;
 }
 
 h1 {
@@ -464,4 +463,27 @@ section {
         pointer-events: auto;
         transform: translateY(0);
     }
+}
+
+p:nth-child(odd), .linktile:nth-child(odd) {
+    animation: fromLeft 500ms ease-out forwards;
+}
+
+p:nth-child(even), .linktile:nth-child(even) {
+    animation: fromRight 500ms ease-out forwards;
+}
+
+.text {
+    text-align: center;
+}
+
+tr {
+    /* font-size: 80%; */
+    margin: 10px;
+}
+td {
+    margin: 10px;
+}
+th {
+    margin: 10px;
 }
