@@ -186,6 +186,11 @@
 
     fetchReleases();
   </script>
+  <script>
+        document.querySelectorAll("p").forEach((el, i) => {
+            el.classList.add(i % 2 === 0 ? "odd" : "even");
+        });
+    </script>
 </body>
 
 </html>

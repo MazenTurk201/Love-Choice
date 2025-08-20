@@ -6,6 +6,11 @@
     --text-color: #fff;
 }
 
+/* Reduce */
+@media (prefers-reduced-motion: reduce) {
+  .anim-item { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+}
+
 /* Animatons */
 @keyframes scalehove {
     from {
@@ -265,6 +270,7 @@ fieldset {
     border-radius: 25px;
     background-color: var(--main-color);
     width: 75%;
+    min-width: 75%;
     max-width: 700px;
     max-height: 600px;
     margin: 20px 0px;
@@ -465,25 +471,14 @@ section {
     }
 }
 
-p:nth-child(odd), .linktile:nth-child(odd) {
-    animation: fromLeft 500ms ease-out forwards;
+p.odd, .linktile:nth-of-type(odd), .about_main ul li:nth-of-type(odd), .about_table a li.odd {
+  animation: fromLeft 500ms ease-out forwards;
 }
 
-p:nth-child(even), .linktile:nth-child(even) {
-    animation: fromRight 500ms ease-out forwards;
+p.even, .linktile:nth-of-type(even), .about_main ul li:nth-of-type(even), .about_table a li.even {
+  animation: fromRight 500ms ease-out forwards;
 }
 
 .text {
     text-align: center;
-}
-
-tr {
-    /* font-size: 80%; */
-    margin: 10px;
-}
-td {
-    margin: 10px;
-}
-th {
-    margin: 10px;
 }
