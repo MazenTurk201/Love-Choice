@@ -9,11 +9,8 @@
     <meta name="description" content="لعبة لكل الأعمار والفئات للجوال">
     <meta name="keywords" content="Love Choice, لعبة Love Choice, مازن ترك, Mazen Turk, لعبة قصص, ألعاب حب, ألعاب تفاعلية, ألعاب Flutter, تطبيق Love Choice, لعبة موبايل, لعبة قصص تفاعلية, لعبة بالعربي, لعبة مجانية, لعبة قصص رومانسية, لعبة قرارات, العاب درامية, لعبة مازن ترك, Love Choice app, Love Choice game, turk love choice, Love Choice, flutter game, game, mazen turk game, mazen turk love choice, mazen turk app">
     <meta name="google-adsense-account" content="ca-pub-5128290475212632">
-<<<<<<< HEAD
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
         crossorigin="anonymous"></script>
-=======
->>>>>>> parent of 7594106 (eee)
     <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
     <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -31,9 +28,7 @@
             .then(res => res.text())
             .then(data => {
                 document.getElementById('navbar').innerHTML = data;
-
-                // هنا نحدد العنصر اللي هياخد الـ class
-                let currentPage = "home"; // غيرها حسب الصفحة
+                let currentPage = "home";
                 let link = document.querySelector(`[data-page="${currentPage}"]`);
                 if (link) {
                     link.classList.add("active");
@@ -50,33 +45,6 @@
             <h1 style="animation: fromLeft 300ms ease-out forwards;">يمكنك التعرف على اللعبة وكيفية اللعب هنا</h1>
         </div>
         <a href="about.html" class="download_btn">تفاصيل اللعبة</a>
-        <div class="container">
-            <h1 style="animation: fadeIn 500ms ease-out forwards;">عدد الزوار لأخر 14 يوم</h1>
-            <div style="height: 30px;"></div>
-            <h3 style="animation: fromDown 300ms ease-out forwards;" id="visitors">جلب الزوار...</h3>
-            <h3 style="animation: fromDown 500ms ease-out forwards;" id="views">جلب المشاهدات...</h3>
-        </div>
-        <script>
-            async function loadTraffic() {
-                const username = "MazenTurk201";
-                const repo = "Love-Choice";
-                const token = "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";
-
-                const response = await fetch(`https://api.github.com/repos/${username}/${repo}/traffic/views`, {
-                    headers: {
-                        "Accept": "application/vnd.github.v3+json",
-                        "Authorization": `token ${token}`
-                    }
-                });
-
-                const data = await response.json();
-
-                document.getElementById("visitors").innerText = "عدد الزوار: " + data.uniques;
-                document.getElementById("views").innerText = "عدد مشاهدات الصفحة: " + data.count;
-            }
-
-            loadTraffic();
-        </script>
 
         <!-- <div class="bg"></div> -->
     </main>

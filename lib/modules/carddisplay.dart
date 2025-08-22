@@ -1,5 +1,7 @@
 // ignore_for_file: file_names, sized_box_for_whitespace
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:love_choice/data/db_helper.dart';
@@ -27,7 +29,6 @@ class CardsFactory extends StatefulWidget {
   State<CardsFactory> createState() => _CardsFactoryState();
 }
 
-// أنواع الكروت
 enum CardStyle { towCard, oneCard, towCardRandom }
 
 enum CardType { choice, dare }
@@ -61,13 +62,12 @@ class _CardsFactoryState extends State<CardsFactory> {
 
   void _getRandUsers() async {
     final data = await DBHelper.getRandUsers(widget.tablee);
-    final data2 = await DBHelper.getRandUsers(widget.tablee);
 
-    if (!mounted) return; // لو الـ widget اتشال قبل ما الداتا ترجع
+    if (!mounted) return;
 
     setState(() {
       randQuizs = data;
-      randDares = data2;
+      randDares = (data.reversed).toList();
       textQuiz = randQuizs.isNotEmpty ? randQuizs[index]['choice'] ?? '' : '';
       textDare = randDares.isNotEmpty ? randDares[dareIndex]['dare'] ?? '' : '';
       _isloading = false;
@@ -93,34 +93,6 @@ class _CardsFactoryState extends State<CardsFactory> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    Widget cardContent = Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          widget.type == CardType.dare ? "تحدي" : "سؤال",
-          style: const TextStyle(fontSize: 28, color: Colors.white),
-        ),
-        const SizedBox(height: 10),
-        _isloading
-            ? const Text(
-                "جارٍ التحميل...",
-                style: TextStyle(color: Colors.white),
-              )
-            : Text(
-                widget.type == CardType.dare ? textDare : textQuiz,
-                style: const TextStyle(color: Colors.white),
-              ),
-        const SizedBox(height: 10),
-        IconButton(
-          onPressed: _onNext,
-          icon: const Icon(Icons.swipe_right, color: Colors.white),
-        ),
-      ],
-    );
-
-    // بناء الكارت حسب النوع
     switch (widget.style) {
       case CardStyle.towCardRandom:
         return Container(
@@ -130,14 +102,16 @@ class _CardsFactoryState extends State<CardsFactory> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(50)),
           ),
-          height: 200,
+          height: 225,
           child: Stack(
             children: [
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    "images/quiz${widget.imageNumber}.jpg",
+                    pinImage
+                        ? "images/quiz${widget.imageNumber}.jpg"
+                        : "images/quiz${Random().nextInt(10) + 1}.jpg",
                     fit: BoxFit.cover,
                   ).redacted(context: context, redact: _isloading),
                 ),
@@ -317,16 +291,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                   child: Image.asset(
                     "images/quiz${widget.imageNumber}.jpg",
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey,
-                      child: Center(
-                        child: Text(
-                          'لا توجد صورة',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                  ),
+                  ).redacted(context: context, redact: _isloading),
                 ),
               ),
               Column(
@@ -335,7 +300,11 @@ class _CardsFactoryState extends State<CardsFactory> {
                 children: [
                   Center(
                     child: Text(
-                      widget.type == CardType.dare ? "تحدي" : "سؤال",
+                      _isloading
+                          ? "dataa"
+                          : widget.type == CardType.dare
+                          ? "تحدي"
+                          : "سؤال",
                       style: TextStyle(
                         fontSize: 30,
                         shadows: [
@@ -347,14 +316,14 @@ class _CardsFactoryState extends State<CardsFactory> {
                         ],
                       ),
                       textAlign: TextAlign.center,
-                    ),
+                    ).redacted(context: context, redact: _isloading),
                   ),
                   _isloading
                       ? const Text(
-                          'جارٍ التحميل...',
+                          'gary altahmel',
                           style: TextStyle(fontSize: 24, color: Colors.white),
                           textAlign: TextAlign.center,
-                        )
+                        ).redacted(context: context, redact: _isloading)
                       : Text(
                           widget.type == CardType.dare
                               ? (randDares.isNotEmpty
@@ -381,48 +350,63 @@ class _CardsFactoryState extends State<CardsFactory> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        IconButton(
-                          onPressed: _isloading
-                              ? null
-                              : () {
-                                  Share.share(
-                                    widget.type == CardType.dare
-                                        ? textDare
-                                        : textQuiz,
-                                  );
-                                },
-                          icon: const Icon(
-                            Icons.share,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: _isloading
-                              ? null
-                              : () {
-                                  Clipboard.setData(
-                                    ClipboardData(
-                                      text: widget.type == CardType.dare
-                                          ? textDare
-                                          : textQuiz,
-                                    ),
-                                  );
-                                },
-                          icon: const Icon(
-                            Icons.copy,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: _isloading ? null : _onNext,
-                          icon: const Icon(
-                            Icons.swipe_right,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                        ),
+                        _isloading
+                            ? Container(
+                                height: 40,
+                                width: 40,
+                              ).redacted(context: context, redact: _isloading)
+                            : IconButton(
+                                onPressed: _isloading
+                                    ? null
+                                    : () {
+                                        Share.share(
+                                          widget.type == CardType.dare
+                                              ? textDare
+                                              : textQuiz,
+                                        );
+                                      },
+                                icon: const Icon(
+                                  Icons.share,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
+                        _isloading
+                            ? Container(
+                                height: 40,
+                                width: 40,
+                              ).redacted(context: context, redact: _isloading)
+                            : IconButton(
+                                onPressed: _isloading
+                                    ? null
+                                    : () {
+                                        Clipboard.setData(
+                                          ClipboardData(
+                                            text: widget.type == CardType.dare
+                                                ? textDare
+                                                : textQuiz,
+                                          ),
+                                        );
+                                      },
+                                icon: const Icon(
+                                  Icons.copy,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
+                        _isloading
+                            ? Container(
+                                height: 40,
+                                width: 40,
+                              ).redacted(context: context, redact: _isloading)
+                            : IconButton(
+                                onPressed: _onNext,
+                                icon: const Icon(
+                                  Icons.swipe_right,
+                                  size: 35,
+                                  color: Colors.white,
+                                ),
+                              ),
                       ],
                     ),
                   ),
@@ -447,7 +431,9 @@ class _CardsFactoryState extends State<CardsFactory> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    "images/quiz${widget.imageNumber}.jpg",
+                    pinImage
+                        ? "images/quiz${widget.imageNumber}.jpg"
+                        : "images/quiz${Random().nextInt(10) + 1}.jpg",
                     fit: BoxFit.cover,
                   ).redacted(context: context, redact: _isloading),
                 ),
@@ -580,7 +566,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                                   SharePlus.instance.share(
                                     ShareParams(
                                       text:
-                                          '''السؤال: ${randQuizs[index]["choice"]}\n\nليه السؤال ده؟: ${randQuizs[index]["dare"]}''',
+                                          '''*السؤال:* * ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:* * ${randQuizs[index]["dare"]}''',
                                     ),
                                   );
                                 },
@@ -600,7 +586,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                                   Clipboard.setData(
                                     ClipboardData(
                                       text:
-                                          '''السؤال: ${randQuizs[index]["choice"]}\n\nليه السؤال ده؟: ${randQuizs[index]["dare"]}''',
+                                          '''*السؤال:* * ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:* * ${randQuizs[index]["dare"]}''',
                                     ),
                                   );
                                 },
