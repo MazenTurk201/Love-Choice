@@ -34,44 +34,68 @@ class _onBoardingState extends State<onBoarding> {
             children: [
               OnboardingPageBuilder(
                 lottie: "",
-                title: "عطل فني",
-                discribtion: "بلا بلا بلا",
+                title: "منور لعبتنا",
+                discribtion:
+                    "قبل أي شيء اللعبة معمولة لغرض المتعة والترفيه واتمنالك الراحة والمتعة وانشر اللعبة على قد متقدر فضلًا وليس أمرًا، وشكرا.",
                 link: "",
                 colors: [Colors.black, Colors.indigo],
               ),
               OnboardingPageBuilder(
                 lottie: "assets/animation/MoneyTransfer.json",
                 title: "دعم المطور",
-                discribtion: "بلا بلا بلا",
+                discribtion: "متنساش الدعم مش شرط فلوس.",
                 link:
                     "https://mazenturk201.github.io/Love-Choice/make-a-donation.html",
-                colors: [Colors.black, Colors.indigo],
+                colors: [Colors.indigo, Colors.teal],
               ),
               OnboardingPageBuilder(
                 lottie: "assets/animation/Error 404.json",
                 title: "عطل فني",
-                discribtion: "بلا بلا بلا",
+                discribtion: "تحت أي عطل فني متنساش تعرفنا عشان نساعدك اكتر.",
                 link: "https://wa.me/+201092130013?text=Hi+Turk",
-                colors: [Colors.black, Colors.indigo],
+                colors: [Colors.teal, Colors.blueAccent],
               ),
             ],
           ),
         ),
         bottomSheet: isListPage
-            ? TextButton(
-                style: TextButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(25),
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.zero, // عشان الجرادينت يملأ الزر كله
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                  ),
+                  onPressed: () async {
+                    final pref = await SharedPreferences.getInstance();
+                    pref.setBool("skipfirstPage", true);
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pushReplacementNamed("/main");
+                  },
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue, Colors.indigo],
+                      ),
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 50,
+                      width: 200,
+                      child: Text(
+                        "يلا بينا",
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: Colors.white,
+                          fontFamily: "TurkFont",
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                child: Text("يلا بينا", style: TextStyle(fontSize: 24)),
-                onPressed: () async {
-                  final pref = await SharedPreferences.getInstance();
-                  pref.setBool("skipfirstPage", true);
-                  // ignore: use_build_context_synchronously
-                  Navigator.of(context).pushReplacementNamed("/main");
-                },
               )
             : Container(
                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -81,7 +105,13 @@ class _onBoardingState extends State<onBoarding> {
                   children: [
                     TextButton(
                       onPressed: () => controller.jumpToPage(2),
-                      child: Text("تخطي"),
+                      child: Text(
+                        "تخطي",
+                        style: TextStyle(
+                          color: Colors.redAccent,
+                          fontFamily: "TurkFont",
+                        ),
+                      ),
                     ),
                     Center(
                       child: SmoothPageIndicator(
@@ -100,7 +130,13 @@ class _onBoardingState extends State<onBoarding> {
                         duration: Duration(milliseconds: 500),
                         curve: Curves.easeInOut,
                       ),
-                      child: Text("تمام"),
+                      child: Text(
+                        "تمام",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "TurkFont",
+                        ),
+                      ),
                     ),
                   ],
                 ),
