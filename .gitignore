@@ -60,3 +60,4 @@ secret.txt
 codemagic.yaml
 firebase.json
 build.bat
+android/local.properties
