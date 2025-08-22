@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:love_choice/modules/appbars.dart';
+import 'package:love_choice/modules/carddisplay.dart';
 import 'package:redacted/redacted.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,7 +86,15 @@ class _ma5tobenState extends State<ma5toben> {
               Positioned.fill(
                 child: Image.asset("images/main2.jpg", fit: BoxFit.cover),
               ),
-              Center(child: cardDisplay(rnum, "choice", false)),
+              // Center(child: cardDisplay(rnum, "choice", false)),
+              Center(
+                child: CardsFactory(
+                  tablee: tablee,
+                  type: CardType.choice,
+                  imageNumber: rnum,
+                  style: CardStyle.oneCard,
+                ),
+              ),
             ],
           ),
         ),

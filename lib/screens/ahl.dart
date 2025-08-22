@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:love_choice/modules/carddisplay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../modules/appbars.dart';
 import 'dart:math';
@@ -98,11 +99,30 @@ class _ahlState extends State<ahl> {
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        cardDisplay(rnum, "choice", switch_both),
-                        cardDisplay(rnum2, "dare", switch_both),
+                        CardsFactory(
+                          tablee: tablee,
+                          type: CardType.choice,
+                          imageNumber: rnum,
+                          style: CardStyle.towCardRandom,
+                        ),
+                        CardsFactory(
+                          tablee: tablee,
+                          type: CardType.dare,
+                          imageNumber: rnum,
+                          style: CardStyle.towCardRandom,
+                        ),
+                        // cardDisplay(rnum, "choice", switch_both),
+                        // cardDisplay(rnum2, "dare", switch_both),
                       ],
                     )
-                  : Center(child: cardDisplay(rnum, "choice", false)),
+                  : Center(
+                      child: CardsFactory(
+                        tablee: tablee,
+                        type: CardType.choice,
+                        imageNumber: rnum,
+                        style: CardStyle.towCardRandom,
+                      ),
+                    ),
             ],
           ),
         ),
