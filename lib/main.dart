@@ -2,20 +2,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:love_choice/modules/carddisplay.dart';
+import 'package:love_choice/screens/gamepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/firebase_options.dart';
-import 'screens/ahl.dart';
-import 'screens/bestat.dart';
-import 'screens/couples.dart';
 import 'screens/donation.dart';
 import 'screens/home.dart';
-import 'screens/ma5toben.dart';
-import 'screens/metgawzen.dart';
 import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
-import 'screens/shella.dart';
-import 'screens/t3arof.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,13 +75,20 @@ class _MyAppState extends State<MyApp> {
       initialRoute: widget.skipfirstPage ? '/main' : '/onboarding',
       routes: {
         '/main': (ctx) => home(),
-        '/ahl': (ctx) => ahl(),
-        '/metgawzen': (ctx) => metgawzen(),
-        '/ma5toben': (ctx) => ma5toben(),
-        '/shella': (ctx) => shella(),
-        '/t3arof': (ctx) => t3arof(),
-        '/couples': (ctx) => couples(),
-        '/bestat': (ctx) => bestat(),
+        '/ahl': (ctx) =>
+            Gamepage(tablee: 'ahl_choices', style: CardStyle.towCard),
+        '/metgawzen': (ctx) =>
+            Gamepage(tablee: 'metgawzen_choices', style: CardStyle.towCard),
+        '/ma5toben': (ctx) =>
+            Gamepage(tablee: 'ma5toben_choices', style: CardStyle.oneCard),
+        '/shella': (ctx) =>
+            Gamepage(tablee: 'shella_choices', style: CardStyle.towCardRandom),
+        '/t3arof': (ctx) =>
+            Gamepage(tablee: 't3arof_choices', style: CardStyle.towCardRandom),
+        '/couples': (ctx) =>
+            Gamepage(tablee: 'couples_choices', style: CardStyle.towCardRandom),
+        '/bestat': (ctx) =>
+            Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/donation': (ctx) => donation(),

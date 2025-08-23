@@ -1,10 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redacted/redacted.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../data/toastdata.dart';
 
-class Buildcard extends StatelessWidget {
+class Buildcard extends StatefulWidget {
   final String text;
   final String discribe;
   final String route;
@@ -12,94 +13,112 @@ class Buildcard extends StatelessWidget {
   const Buildcard(this.text, this.discribe, this.route, {super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    Size size = MediaQueryData().size;
-    List<String> ahl_enter_tablee = [
-      "يجمعكم على خير 🌙.",
-      "ربنا يديمكم سوا 🌙.",
-      "سلملي عليهم 🌙.",
-      "منورين 🌙.",
-    ];
-    List<String> metgawzen_enter_tablee = [
-      "بعشقك 💕.",
-      "كل اللي ليا 💕.",
-      "ادماني 💕.",
-      "ضي عيني 💕.",
-    ];
-    List<String> ma5toben_enter_tablee = ["انت مين بكرا؟ 💍."];
-    List<String> shella_enter_tablee = ["خروجة من غيري!؟ 😂."];
-    List<String> t3arof_enter_tablee = ["يلا بينا 😎."];
-    List<String> couples_enter_tablee = ["بحبك ❤️."];
-    List<String> bestat_enter_tablee = ["مفتاح 💙."];
+  State<Buildcard> createState() => _BuildcardState();
+}
 
+class _BuildcardState extends State<Buildcard> {
+  bool warning18 = true;
+
+  Future<void> loadwarning() async {
+    final pref = await SharedPreferences.getInstance();
+    warning18 = pref.getBool("warning18") ?? true;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadwarning();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () {
-          Navigator.pushReplacementNamed(context, "/$route");
-          if (route == "ahl") {
+          Navigator.pushReplacementNamed(context, "/${widget.route}");
+          if (widget.route == "ahl") {
             turkToast(
               ahl_enter_tablee[Random().nextInt(ahl_enter_tablee.length)],
             );
-          } else if (route == "metgawzen") {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text(
-                  "تنويه هام",
-                  style: TextStyle(fontFamily: "TurkFont", fontSize: 20),
-                  textAlign: TextAlign.center,
-                ),
-                content: Text(
-                  "ملحوظة",
-                  style: TextStyle(fontSize: 17),
-                  textAlign: TextAlign.center,
-                  textDirection: TextDirection.rtl,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      "فهمت",
-                      style: TextStyle(
-                        fontFamily: "TurkFont",
-                        fontSize: 15,
-                        color: Colors.deepPurpleAccent,
+          } else if (widget.route == "metgawzen") {
+            warning18
+                ? showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "تنويه هام",
+                        style: TextStyle(fontFamily: "TurkFont", fontSize: 20),
+                        textAlign: TextAlign.center,
                       ),
+                      content: Text(
+                        "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18}، استمتعوا.",
+                        style: TextStyle(fontSize: 17),
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            final pref = await SharedPreferences.getInstance();
+                            await pref.setBool('warning18', false);
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: Text(
+                            "عدم العرض",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "فهمت",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                      ],
+                      actionsAlignment: MainAxisAlignment.spaceEvenly,
                     ),
-                  ),
-                ],
-              ),
-            );
+                  )
+                : null;
             turkToast(
               metgawzen_enter_tablee[Random().nextInt(
                 metgawzen_enter_tablee.length,
               )],
             );
-          } else if (route == "ma5toben") {
+          } else if (widget.route == "ma5toben") {
             turkToast(
               ma5toben_enter_tablee[Random().nextInt(
                 ma5toben_enter_tablee.length,
               )],
             );
-          } else if (route == "shella") {
+          } else if (widget.route == "shella") {
             turkToast(
               shella_enter_tablee[Random().nextInt(shella_enter_tablee.length)],
             );
-          } else if (route == "t3arof") {
+          } else if (widget.route == "t3arof") {
             turkToast(
               t3arof_enter_tablee[Random().nextInt(t3arof_enter_tablee.length)],
             );
-          } else if (route == "couples") {
+          } else if (widget.route == "couples") {
             turkToast(
               couples_enter_tablee[Random().nextInt(
                 couples_enter_tablee.length,
               )],
             );
-          } else if (route == "bestat") {
+          } else if (widget.route == "bestat") {
             turkToast(
               bestat_enter_tablee[Random().nextInt(bestat_enter_tablee.length)],
             );
@@ -112,7 +131,10 @@ class Buildcard extends StatelessWidget {
             Positioned.fill(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.asset("images/$route.jpg", fit: BoxFit.cover),
+                child: Image.asset(
+                  "images/${widget.route}.jpg",
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(
@@ -123,7 +145,7 @@ class Buildcard extends StatelessWidget {
                 children: [
                   Center(
                     child: Text(
-                      text,
+                      widget.text,
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                       style: TextStyle(
@@ -132,7 +154,7 @@ class Buildcard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    discribe,
+                    widget.discribe,
                     softWrap: true,
                     style: TextStyle(
                       fontSize: 14,
@@ -221,6 +243,7 @@ class Buildcard extends StatelessWidget {
       backgroundColor: Colors.black54,
       textColor: Colors.white,
       fontSize: 16.0,
+      fontAsset: "fonts/arabic_font.otf",
     );
   }
 }

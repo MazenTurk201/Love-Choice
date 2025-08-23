@@ -128,7 +128,9 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
       onTap: () {
         if (widget.url == '') {
           exit(0);
-        } else if (widget.url == 'setting' || widget.url == 'profile' || widget.url == 'donation') {
+        } else if (widget.url == 'setting' ||
+            widget.url == 'profile' ||
+            widget.url == 'donation') {
           Navigator.pushReplacementNamed(context, "/${widget.url}");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
@@ -154,10 +156,29 @@ https://mazenturk201.github.io/Love-Choice''',
             builder: (_) => AlertDialog(
               alignment: Alignment.center,
               title: Text("قيمنا", textAlign: TextAlign.center),
-              content: TextField(
-                controller: _controller,
-                decoration: InputDecoration(hintText: "اكتب اقتراحك أو تقييمك"),
-                textAlign: TextAlign.center,
+              content: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      5,
+                      (index) => InkWell(
+                        onTap: () {
+                          print(index);
+                        },
+                        child: const Icon(Icons.star_border_outlined),
+                      ),
+                    ),
+                  ),
+
+                  TextField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: "اكتب اقتراحك أو تقييمك",
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
               actions: [
                 CupertinoDialogAction(
