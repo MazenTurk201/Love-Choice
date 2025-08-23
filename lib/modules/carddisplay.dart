@@ -1,7 +1,6 @@
 // ignore_for_file: file_names, sized_box_for_whitespace
 
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:love_choice/data/db_helper.dart';
@@ -11,17 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class CardsFactory extends StatefulWidget {
   final String tablee;
-  final CardType type; // "quiz" أو "dare"
-  final bool? switchBoth;
-  final int imageNumber;
   final CardStyle style;
 
   const CardsFactory({
     super.key,
     required this.tablee,
-    required this.type,
-    this.switchBoth,
-    required this.imageNumber,
     this.style = CardStyle.towCardRandom,
   });
 
@@ -36,8 +29,12 @@ enum CardType { choice, dare }
 class _CardsFactoryState extends State<CardsFactory> {
   bool isDare = true;
   bool pinImage = true;
+  bool switchBoth = false;
   bool _isloading = true;
+  int rnum = Random().nextInt(10) + 1;
+  int rnum2 = Random().nextInt(10) + 1;
 
+  // List<Map<String, dynamic>> normalQuizs = [];
   List<Map<String, dynamic>> randQuizs = [];
   List<Map<String, dynamic>> randDares = [];
   int index = 0;
@@ -56,17 +53,20 @@ class _CardsFactoryState extends State<CardsFactory> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       isDare = pref.getBool('isDare') ?? true;
+      switchBoth = pref.getBool('switch_both') ?? false;
       pinImage = pref.getBool('pin_image') ?? true;
     });
   }
 
   void _getRandUsers() async {
     final data = await DBHelper.getRandUsers(widget.tablee);
+    // final normalData = await DBHelper.getRandUsers(widget.tablee);
 
     if (!mounted) return;
 
     setState(() {
       randQuizs = data;
+      // normalQuizs = normalData;
       randDares = (data.reversed).toList();
       textQuiz = randQuizs.isNotEmpty ? randQuizs[index]['choice'] ?? '' : '';
       textDare = randDares.isNotEmpty ? randDares[dareIndex]['dare'] ?? '' : '';
@@ -74,347 +74,183 @@ class _CardsFactoryState extends State<CardsFactory> {
     });
   }
 
-  void _onNext() {
-    setState(() {
-      if (widget.switchBoth ?? false) {
-        index = (index + 1) % randQuizs.length;
-        dareIndex = (dareIndex + 1) % randDares.length;
-      } else {
-        if (widget.type == CardType.dare) {
-          dareIndex = (dareIndex + 1) % randDares.length;
-        } else {
-          index = (index + 1) % randQuizs.length;
-        }
-      }
-      textQuiz = randQuizs.isNotEmpty ? randQuizs[index]['choice'] ?? '' : '';
-      textDare = randDares.isNotEmpty ? randDares[dareIndex]['dare'] ?? '' : '';
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (!pinImage) {
+      rnum = Random().nextInt(10) + 1;
+      rnum2 = Random().nextInt(10) + 1;
+    }
     switch (widget.style) {
       case CardStyle.towCardRandom:
-        return Container(
-          width: double.infinity,
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-          ),
-          height: 225,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    pinImage
-                        ? "images/quiz${widget.imageNumber}.jpg"
-                        : "images/quiz${Random().nextInt(10) + 1}.jpg",
-                    fit: BoxFit.cover,
-                  ).redacted(context: context, redact: _isloading),
-                ),
-              ),
-              Column(
+        return isDare
+            ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Center(
-                    child: Text(
-                      widget.type == CardType.dare ? "تحدي" : "سؤال",
-                      style: TextStyle(
-                        fontSize: 30,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                            blurRadius: 30,
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ).redacted(context: context, redact: _isloading),
-                  ),
-                  _isloading
-                      ? Text(
-                          'fetching data',
-                          style: TextStyle(fontSize: 24),
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                        ).redacted(context: context, redact: _isloading)
-                      : Text(
-                          // choiceText ?? '',
-                          widget.type == CardType.dare
-                              ? randDares.isNotEmpty
-                                    ? randDares[dareIndex]["dare"]
-                                    : 'لا يوجد بيانات بعد'
-                              // Choice
-                              : randQuizs.isNotEmpty
-                              ? randQuizs[index]["choice"]
-                              : 'لا يوجد بيانات بعد',
-                          style: TextStyle(
-                            fontSize: 24,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                                blurRadius: 30,
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _isloading
-                            ? Container(
-                                width: 50,
-                                height: 50,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: () {
-                                  SharePlus.instance.share(
-                                    ShareParams(
-                                      text: widget.type == CardType.dare
-                                          ? textDare.toString()
-                                          : textQuiz.toString(),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.share,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                        _isloading
-                            ? Container(
-                                width: 50,
-                                height: 50,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: () {
-                                  Clipboard.setData(
-                                    ClipboardData(
-                                      text: widget.type == CardType.dare
-                                          ? textDare.toString()
-                                          : textQuiz.toString(),
-                                    ),
-                                  );
-                                },
-                                icon: Icon(
-                                  Icons.copy,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                        _isloading
-                            ? Container(
-                                width: 50,
-                                height: 50,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (widget.switchBoth ?? false) {
-                                      if (index == randQuizs.length - 1) {
-                                        index = -1;
-                                      }
-                                      if (dareIndex == randDares.length - 1) {
-                                        dareIndex = -1;
-                                      }
-                                      index++;
-                                      dareIndex++;
-                                      textQuiz =
-                                          randQuizs[index]['choice'] ?? '';
-                                      textDare = randQuizs[index]['dare'] ?? '';
-                                    } else {
-                                      if (widget.type == CardType.dare) {
-                                        if (dareIndex == randDares.length - 1) {
-                                          dareIndex = 0;
-                                          textDare = randQuizs[0]['dare'] ?? '';
-                                        } else {
-                                          dareIndex++;
-                                          textDare =
-                                              randQuizs[dareIndex]['dare'] ??
-                                              '';
-                                        }
-                                      } else {
-                                        if (index == randQuizs.length - 1) {
-                                          index = 0;
-                                          textQuiz =
-                                              randQuizs[0]['choice'] ?? '';
-                                        } else {
-                                          index++;
-                                          textQuiz =
-                                              randQuizs[index]['choice'] ?? '';
-                                        }
-                                      }
-                                    }
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.swipe_right,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
+                  towCardRandowmMethod(context, CardType.choice, rnum, 0),
+                  towCardRandowmMethod(context, CardType.dare, 0, rnum2),
                 ],
-              ),
-            ],
-          ),
-        );
+              )
+            : Center(
+                child: towCardRandowmMethod(context, CardType.choice, rnum, 0),
+              );
 
       case CardStyle.towCard:
-        return Container(
-          width: double.infinity,
-          margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(10),
-          height: 200,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(50)),
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    "images/quiz${widget.imageNumber}.jpg",
-                    fit: BoxFit.cover,
-                  ).redacted(context: context, redact: _isloading),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Text(
-                      _isloading
-                          ? "dataa"
-                          : widget.type == CardType.dare
-                          ? "تحدي"
-                          : "سؤال",
-                      style: TextStyle(
-                        fontSize: 30,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                            blurRadius: 30,
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ).redacted(context: context, redact: _isloading),
-                  ),
-                  _isloading
-                      ? const Text(
-                          'gary altahmel',
-                          style: TextStyle(fontSize: 24, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ).redacted(context: context, redact: _isloading)
-                      : Text(
-                          widget.type == CardType.dare
-                              ? (randDares.isNotEmpty
-                                    ? randDares[dareIndex]['dare']
-                                    : 'لا يوجد بيانات بعد')
-                              : (randQuizs.isNotEmpty
-                                    ? randQuizs[index]['choice']
-                                    : 'لا يوجد بيانات بعد'),
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                                blurRadius: 30,
-                              ),
-                            ],
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 10.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _isloading
-                            ? Container(
-                                height: 40,
-                                width: 40,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: _isloading
-                                    ? null
-                                    : () {
-                                        Share.share(
-                                          widget.type == CardType.dare
-                                              ? textDare
-                                              : textQuiz,
-                                        );
-                                      },
-                                icon: const Icon(
-                                  Icons.share,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                        _isloading
-                            ? Container(
-                                height: 40,
-                                width: 40,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: _isloading
-                                    ? null
-                                    : () {
-                                        Clipboard.setData(
-                                          ClipboardData(
-                                            text: widget.type == CardType.dare
-                                                ? textDare
-                                                : textQuiz,
-                                          ),
-                                        );
-                                      },
-                                icon: const Icon(
-                                  Icons.copy,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                        _isloading
-                            ? Container(
-                                height: 40,
-                                width: 40,
-                              ).redacted(context: context, redact: _isloading)
-                            : IconButton(
-                                onPressed: _onNext,
-                                icon: const Icon(
-                                  Icons.swipe_right,
-                                  size: 35,
-                                  color: Colors.white,
-                                ),
-                              ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
+        return Text("");
+      //     return Container(
+      //       width: double.infinity,
+      //       margin: const EdgeInsets.all(10),
+      //       padding: const EdgeInsets.all(10),
+      //       height: 200,
+      //       decoration: BoxDecoration(
+      //         borderRadius: BorderRadius.all(Radius.circular(50)),
+      //       ),
+      //       child: Stack(
+      //         children: [
+      //           Positioned.fill(
+      //             child: ClipRRect(
+      //               borderRadius: BorderRadius.circular(20),
+      //               child: Image.asset(
+      //                 "images/quiz$rnum.jpg",
+      //                 fit: BoxFit.cover,
+      //               ).redacted(context: context, redact: _isloading),
+      //             ),
+      //           ),
+      //           Column(
+      //             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               Center(
+      //                 child: Text(
+      //                   _isloading
+      //                       ? "dataa"
+      //                       : widget.type == CardType.dare
+      //                       ? "تحدي"
+      //                       : "سؤال",
+      //                   style: TextStyle(
+      //                     fontSize: 30,
+      //                     shadows: [
+      //                       Shadow(
+      //                         color: Colors.black,
+      //                         offset: Offset(1, 1),
+      //                         blurRadius: 30,
+      //                       ),
+      //                     ],
+      //                   ),
+      //                   textAlign: TextAlign.center,
+      //                 ).redacted(context: context, redact: _isloading),
+      //               ),
+      //               _isloading
+      //                   ? const Text(
+      //                       'gary altahmel',
+      //                       style: TextStyle(fontSize: 24, color: Colors.white),
+      //                       textAlign: TextAlign.center,
+      //                     ).redacted(context: context, redact: _isloading)
+      //                   : Text(
+      //                       widget.type == CardType.dare
+      //                           ? (randDares.isNotEmpty
+      //                                 ? randDares[dareIndex]['dare']
+      //                                 : 'لا يوجد بيانات بعد')
+      //                           : (randQuizs.isNotEmpty
+      //                                 ? randQuizs[index]['choice']
+      //                                 : 'لا يوجد بيانات بعد'),
+      //                       style: TextStyle(
+      //                         fontSize: 24,
+      //                         color: Colors.white,
+      //                         shadows: [
+      //                           Shadow(
+      //                             color: Colors.black,
+      //                             offset: Offset(1, 1),
+      //                             blurRadius: 30,
+      //                           ),
+      //                         ],
+      //                       ),
+      //                       textAlign: TextAlign.center,
+      //                     ),
+      //               Padding(
+      //                 padding: const EdgeInsets.only(bottom: 10.0),
+      //                 child: Row(
+      //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //                   children: [
+      //                     _isloading
+      //                         ? Container(
+      //                             height: 40,
+      //                             width: 40,
+      //                           ).redacted(context: context, redact: _isloading)
+      //                         : IconButton(
+      //                             onPressed: _isloading
+      //                                 ? null
+      //                                 : () {
+      //                                     Share.share(
+      //                                       widget.type == CardType.dare
+      //                                           ? textDare
+      //                                           : textQuiz,
+      //                                     );
+      //                                   },
+      //                             icon: const Icon(
+      //                               Icons.share,
+      //                               size: 35,
+      //                               color: Colors.white,
+      //                             ),
+      //                           ),
+      //                     _isloading
+      //                         ? Container(
+      //                             height: 40,
+      //                             width: 40,
+      //                           ).redacted(context: context, redact: _isloading)
+      //                         : IconButton(
+      //                             onPressed: _isloading
+      //                                 ? null
+      //                                 : () {
+      //                                     Clipboard.setData(
+      //                                       ClipboardData(
+      //                                         text: widget.type == CardType.dare
+      //                                             ? textDare
+      //                                             : textQuiz,
+      //                                       ),
+      //                                     );
+      //                                   },
+      //                             icon: const Icon(
+      //                               Icons.copy,
+      //                               size: 35,
+      //                               color: Colors.white,
+      //                             ),
+      //                           ),
+      //                     _isloading
+      //                         ? Container(
+      //                             height: 40,
+      //                             width: 40,
+      //                           ).redacted(context: context, redact: _isloading)
+      //                         : IconButton(
+      //                             onPressed: () {
+      //                               setState(() {
+      //   if (switchBoth) {
+      //     index = (index + 1) % randQuizs.length;
+      //     dareIndex = (dareIndex + 1) % randDares.length;
+      //   } else {
+      //     if (type == CardType.dare) {
+      //       dareIndex = (dareIndex + 1) % randDares.length;
+      //     } else {
+      //       index = (index + 1) % randQuizs.length;
+      //     }
+      //   }
+      //   textQuiz = randQuizs.isNotEmpty ? randQuizs[index]['choice'] ?? '' : '';
+      //   textDare = randDares.isNotEmpty ? randDares[dareIndex]['dare'] ?? '' : '';
+      // });
+      //                             },
+      //                             icon: const Icon(
+      //                               Icons.swipe_right,
+      //                               size: 35,
+      //                               color: Colors.white,
+      //                             ),
+      //                           ),
+      //                   ],
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         ],
+      //       ),
+      //     );
 
       case CardStyle.oneCard:
         return Container(
@@ -431,9 +267,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
-                    pinImage
-                        ? "images/quiz${widget.imageNumber}.jpg"
-                        : "images/quiz${Random().nextInt(10) + 1}.jpg",
+                    "images/quiz$rnum.jpg",
                     fit: BoxFit.cover,
                   ).redacted(context: context, redact: _isloading),
                 ),
@@ -626,5 +460,188 @@ class _CardsFactoryState extends State<CardsFactory> {
           ),
         );
     }
+  }
+
+  Container towCardRandowmMethod(
+    BuildContext context,
+    CardType type,
+    int? imagenum1,
+    int? imagenum2,
+  ) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(50)),
+      ),
+      height: 225,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                pinImage
+                    ? "images/quiz${imagenum2 == 0 ? imagenum1 : imagenum2}.jpg"
+                    : "images/quiz${Random().nextInt(10) + 1}.jpg",
+                fit: BoxFit.cover,
+              ).redacted(context: context, redact: _isloading),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  type == CardType.dare ? "تحدي" : "سؤال",
+                  style: TextStyle(
+                    fontSize: 30,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black,
+                        offset: Offset(1, 1),
+                        blurRadius: 30,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ).redacted(context: context, redact: _isloading),
+              ),
+              _isloading
+                  ? Text(
+                      'fetching data',
+                      style: TextStyle(fontSize: 24),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                    ).redacted(context: context, redact: _isloading)
+                  : Text(
+                      // choiceText ?? '',
+                      type == CardType.dare
+                          ? randDares.isNotEmpty
+                                ? randDares[dareIndex]["dare"]
+                                : 'لا يوجد بيانات بعد'
+                          // Choice
+                          : randQuizs.isNotEmpty
+                          ? randQuizs[index]["choice"]
+                          : 'لا يوجد بيانات بعد',
+                      style: TextStyle(
+                        fontSize: 24,
+                        shadows: [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(1, 1),
+                            blurRadius: 30,
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                    ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _isloading
+                        ? Container(
+                            width: 50,
+                            height: 50,
+                          ).redacted(context: context, redact: _isloading)
+                        : IconButton(
+                            onPressed: () {
+                              SharePlus.instance.share(
+                                ShareParams(
+                                  text: type == CardType.dare
+                                      ? textDare.toString()
+                                      : textQuiz.toString(),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.share,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                    _isloading
+                        ? Container(
+                            width: 50,
+                            height: 50,
+                          ).redacted(context: context, redact: _isloading)
+                        : IconButton(
+                            onPressed: () {
+                              Clipboard.setData(
+                                ClipboardData(
+                                  text: type == CardType.dare
+                                      ? textDare.toString()
+                                      : textQuiz.toString(),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.copy,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                    _isloading
+                        ? Container(
+                            width: 50,
+                            height: 50,
+                          ).redacted(context: context, redact: _isloading)
+                        : IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (switchBoth) {
+                                  if (index == randQuizs.length - 1) {
+                                    index = -1;
+                                  }
+                                  if (dareIndex == randDares.length - 1) {
+                                    dareIndex = -1;
+                                  }
+                                  index++;
+                                  dareIndex++;
+                                  textQuiz = randQuizs[index]['choice'] ?? '';
+                                  textDare = randQuizs[index]['dare'] ?? '';
+                                } else {
+                                  if (type == CardType.dare) {
+                                    if (dareIndex == randDares.length - 1) {
+                                      dareIndex = 0;
+                                      textDare = randQuizs[0]['dare'] ?? '';
+                                    } else {
+                                      dareIndex++;
+                                      textDare =
+                                          randQuizs[dareIndex]['dare'] ?? '';
+                                    }
+                                  } else {
+                                    if (index == randQuizs.length - 1) {
+                                      index = 0;
+                                      textQuiz = randQuizs[0]['choice'] ?? '';
+                                    } else {
+                                      index++;
+                                      textQuiz =
+                                          randQuizs[index]['choice'] ?? '';
+                                    }
+                                  }
+                                }
+                              });
+                            },
+                            icon: Icon(
+                              Icons.swipe_right,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

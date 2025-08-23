@@ -56,35 +56,39 @@ class _metgawzenState extends State<metgawzen> {
               Positioned.fill(
                 child: Image.asset("images/main2.jpg", fit: BoxFit.cover),
               ),
-              isDare
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardsFactory(
-                          tablee: tablee,
-                          type: CardType.choice,
-                          switchBoth: switch_both,
-                          imageNumber: rnum,
-                          style: CardStyle.towCard,
-                        ),
-                        CardsFactory(
-                          tablee: tablee,
-                          imageNumber: rnum2,
-                          type: CardType.dare,
-                          switchBoth: switch_both,
-                          style: CardStyle.towCard,
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: CardsFactory(
-                        tablee: tablee,
-                        imageNumber: rnum2,
-                        type: CardType.choice,
-                        switchBoth: switch_both,
-                        style: CardStyle.towCard,
-                      ),
-                    ),
+              CardsFactory(
+                tablee: tablee,
+                style: CardStyle.towCardRandom,
+              ),
+              // isDare
+              //     ? Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //         children: [
+              //           CardsFactory(
+              //             tablee: tablee,
+              //             type: CardType.choice,
+              //             switchBoth: switch_both,
+              //             imageNumber: rnum,
+              //             style: CardStyle.towCard,
+              //           ),
+              //           CardsFactory(
+              //             tablee: tablee,
+              //             imageNumber: rnum2,
+              //             type: CardType.dare,
+              //             switchBoth: switch_both,
+              //             style: CardStyle.towCard,
+              //           ),
+              //         ],
+              //       )
+              //     : Center(
+              //         child: CardsFactory(
+              //           tablee: tablee,
+              //           imageNumber: rnum2,
+              //           type: CardType.choice,
+              //           switchBoth: switch_both,
+              //           style: CardStyle.towCard,
+              //         ),
+              //       ),
             ],
           ),
         ),

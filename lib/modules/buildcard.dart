@@ -43,6 +43,37 @@ class Buildcard extends StatelessWidget {
               ahl_enter_tablee[Random().nextInt(ahl_enter_tablee.length)],
             );
           } else if (route == "metgawzen") {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text(
+                  "تنويه هام",
+                  style: TextStyle(fontFamily: "TurkFont", fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                content: Text(
+                  "ملحوظة",
+                  style: TextStyle(fontSize: 17),
+                  textAlign: TextAlign.center,
+                  textDirection: TextDirection.rtl,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "فهمت",
+                      style: TextStyle(
+                        fontFamily: "TurkFont",
+                        fontSize: 15,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
             turkToast(
               metgawzen_enter_tablee[Random().nextInt(
                 metgawzen_enter_tablee.length,

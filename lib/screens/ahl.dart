@@ -95,35 +95,38 @@ class _ahlState extends State<ahl> {
               Positioned.fill(
                 child: Image.asset("images/main2.jpg", fit: BoxFit.cover),
               ),
-              isDare
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardsFactory(
-                          tablee: tablee,
-                          type: CardType.choice,
-                          imageNumber: rnum,
-                          style: CardStyle.towCardRandom,
-                          switchBoth: switch_both,
-                        ),
-                        CardsFactory(
-                          tablee: tablee,
-                          type: CardType.dare,
-                          imageNumber: rnum2,
-                          style: CardStyle.towCardRandom,
-                          switchBoth: switch_both,
-                        ),
-                      ],
-                    )
-                  : Center(
-                      child: CardsFactory(
-                        tablee: tablee,
-                        type: CardType.choice,
-                        imageNumber: rnum,
-                        style: CardStyle.towCardRandom,
-                        switchBoth: false,
-                      ),
-                    ),
+              CardsFactory(
+                tablee: tablee,
+              ),
+              // isDare
+              //     ? Column(
+              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //         children: [
+              //           CardsFactory(
+              //             tablee: tablee,
+              //             type: CardType.choice,
+              //             imageNumber: rnum,
+              //             style: CardStyle.towCardRandom,
+              //             switchBoth: switch_both,
+              //           ),
+              //           CardsFactory(
+              //             tablee: tablee,
+              //             type: CardType.dare,
+              //             imageNumber: rnum2,
+              //             style: CardStyle.towCardRandom,
+              //             switchBoth: switch_both,
+              //           ),
+              //         ],
+              //       )
+              //     : Center(
+              //         child: CardsFactory(
+              //           tablee: tablee,
+              //           type: CardType.choice,
+              //           imageNumber: rnum,
+              //           style: CardStyle.towCardRandom,
+              //           switchBoth: false,
+              //         ),
+              //       ),
             ],
           ),
         ),

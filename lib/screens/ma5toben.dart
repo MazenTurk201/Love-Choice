@@ -91,7 +91,6 @@ class _ma5tobenState extends State<ma5toben> {
                 child: CardsFactory(
                   tablee: tablee,
                   type: CardType.choice,
-                  imageNumber: rnum,
                   style: CardStyle.oneCard,
                 ),
               ),

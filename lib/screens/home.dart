@@ -129,7 +129,6 @@ class _homeState extends State<home> {
   }
 
   List<String> exit_tablee = ["مصيرك ترجعلي 😏", "اوروفوار يقلبي", "طب مثا"];
-  List<String> ahl_enter_tablee = ["يجمعكم"];
 
   @override
   Widget build(BuildContext context) {
