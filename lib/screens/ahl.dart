@@ -95,9 +95,7 @@ class _ahlState extends State<ahl> {
               Positioned.fill(
                 child: Image.asset("images/main2.jpg", fit: BoxFit.cover),
               ),
-              CardsFactory(
-                tablee: tablee,
-              ),
+              CardsFactory(tablee: tablee),
               // isDare
               //     ? Column(
               //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
