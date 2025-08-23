@@ -120,7 +120,7 @@ String? encodeQueryParameters(Map<String, String> params) {
 }
 
 class _menuDrawerButtonState extends State<menuDrawerButton> {
-  final TextEditingController _controller = TextEditingController();
+  // final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -135,74 +135,72 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(
-              text: '''ازاي مستحمل الملل ده؟؟
-تعال اعرفك ازاي تشيل الملل ده او ترجع علاقاتك مع الناس اللي بتحبهم وتقوي العلاقة
-لعبة Love Choice هي انسب حل ليك مش بس فيها العاب للملل لا دي بتنقذك في حجات كتيرررر!!
+              text: '''😴 زهقت من الروتين؟
+🔥 لعبة Love Choice هتغيّر يومك كله!
 
-مثلا عندك :-
-• ازاي تصلح علاقتك مع مراتك؟
-• ازاي تجمع شمل عيلتك؟
-• ازاي تعرف البارتنر (شريكك) كويس قبل الجد؟
-• ازاي تتعرض على شخص بصورة احسن وتفك الملل؟
-• ازاي تفرفش الشلة وتخلص الوقت مع بعض؟
-ازي وازاي وازاي وحجات تانية كتير في اللعبة ومش مقتصرة على كده بس مش هحرق عليك حمل بسرعة وضحك غيرك
+🎯 تحديات وأسئلة تخليك:
+✔ تصلّح علاقتك 💕
+✔ تكسّر الملل مع أصحابك 😂
+✔ تقرّب أكتر من البارتنر ❤️
 
+🚀 جربها دلوقتي وخلي الضحك شغال طول القعدة 👇
 https://mazenturk201.github.io/Love-Choice''',
             ),
           );
         } else if (widget.url == 'rate') {
-          showDialog(
-            context: context,
-            builder: (_) => AlertDialog(
-              alignment: Alignment.center,
-              title: Text("قيمنا", textAlign: TextAlign.center),
-              content: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      5,
-                      (index) => InkWell(
-                        onTap: () {
-                          print(index);
-                        },
-                        child: const Icon(Icons.star_border_outlined),
-                      ),
-                    ),
-                  ),
+          // showDialog(
+          //   context: context,
+          //   builder: (_) => AlertDialog(
+          //     alignment: Alignment.center,
+          //     title: Text("قيمنا", textAlign: TextAlign.center),
+          //     content: Column(
+          //       children: [
+          //         Row(
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: List.generate(
+          //             5,
+          //             (index) => InkWell(
+          //               onTap: () {
+          //                 print(index);
+          //               },
+          //               child: const Icon(Icons.star_border_outlined),
+          //             ),
+          //           ),
+          //         ),
 
-                  TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                      hintText: "اكتب اقتراحك أو تقييمك",
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              actions: [
-                CupertinoDialogAction(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      String text = _controller.text;
-                      launchUrl(
-                        Uri(
-                          scheme: 'mailto',
-                          path: 'maznktr@gmail.com',
-                          query: encodeQueryParameters(<String, String>{
-                            'subject': "Love Choice Game",
-                            'body': text,
-                          }),
-                        ),
-                      );
-                      Navigator.pop(context);
-                    },
-                    child: Text("أرسل"),
-                  ),
-                ),
-              ],
-            ),
-          );
+          //         TextField(
+          //           controller: _controller,
+          //           decoration: InputDecoration(
+          //             hintText: "اكتب اقتراحك أو تقييمك",
+          //           ),
+          //           textAlign: TextAlign.center,
+          //         ),
+          //       ],
+          //     ),
+          //     actions: [
+          //       CupertinoDialogAction(
+          //         child: ElevatedButton(
+          //           onPressed: () {
+          //             String text = _controller.text;
+          //             launchUrl(
+          //               Uri(
+          //                 scheme: 'mailto',
+          //                 path: 'maznktr@gmail.com',
+          //                 query: encodeQueryParameters(<String, String>{
+          //                   'subject': "Love Choice Game",
+          //                   'body': text,
+          //                 }),
+          //               ),
+          //             );
+          //             Navigator.pop(context);
+          //           },
+          //           child: Text("أرسل"),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // );
+          _showRateDialog(context);
         } else {
           _launchUrl(widget.url);
         }
@@ -223,4 +221,75 @@ Future<void> _launchUrl(String url) async {
   if (!await launchUrl(Uri.parse(url))) {
     throw Exception('Could not launch URL: $url');
   }
+}
+
+final TextEditingController _controller = TextEditingController();
+
+void _showRateDialog(BuildContext context) {
+  int uiStars = 0;
+
+  showDialog(
+    context: context,
+    builder: (_) => AlertDialog(
+      alignment: Alignment.center,
+      title: const Text("قيمنا", textAlign: TextAlign.center),
+      content: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                  (index) => InkWell(
+                    onTap: () {
+                      setState(() {
+                        uiStars = index + 1;
+                      });
+                    },
+                    child: Icon(
+                      index < uiStars ? Icons.star : Icons.star_border_outlined,
+                      color: Colors.amber,
+                      size: 32,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              // نص التقييم
+              TextField(
+                controller: _controller,
+                decoration: const InputDecoration(
+                  hintText: "اكتب اقتراحك أو تقييمك",
+                  border: OutlineInputBorder(),
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+              ),
+            ],
+          );
+        },
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            String text = _controller.text;
+            launchUrl(
+              Uri(
+                scheme: 'mailto',
+                path: 'maznktr@gmail.com',
+                query: encodeQueryParameters(<String, String>{
+                  'subject': "Love Choice Game تقييم جديد",
+                  'body': "⭐ التقييم: $uiStars من 5\n\nالرسالة:\n$text",
+                }),
+              ),
+            );
+            Navigator.pop(context);
+          },
+          child: const Text("أرسل"),
+        ),
+      ],
+    ),
+  );
 }
