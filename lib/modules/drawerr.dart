@@ -75,7 +75,8 @@ class TurkDrawer extends StatelessWidget {
             menuDrawerButton(
               title: 'اعزمني على قهوة',
               icon: Icons.coffee,
-              url: 'donation',
+              url:
+                  'https://mazenturk201.github.io/Love-Choice/make-a-donation.html',
             ),
             Expanded(child: Container()),
             Divider(endIndent: 30, indent: 30),
@@ -127,23 +128,13 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
       onTap: () {
         if (widget.url == '') {
           exit(0);
-        } else if (widget.url == 'setting' ||
-            widget.url == 'profile' ||
-            widget.url == 'donation') {
+        } else if (widget.url == 'setting' || widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/${widget.url}");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(
-              text: '''😴 زهقت من الروتين؟
-🔥 لعبة Love Choice هتغيّر يومك كله!
-
-🎯 تحديات وأسئلة تخليك:
-✔ تصلّح علاقتك 💕
-✔ تكسّر الملل مع أصحابك 😂
-✔ تقرّب أكتر من البارتنر ❤️
-
-🚀 جربها دلوقتي وخلي الضحك شغال طول القعدة 👇
-https://mazenturk201.github.io/Love-Choice''',
+              text:
+                  '''😴 *زهقت* من الروتين؟\n🔥 *لعبة* `Love Choice` هتغيّر يومك كله!\n\n🎯 تحديات وأسئلة تخليك:\n✔ تصلّح علاقتك 💕\n✔ تكسّر الملل مع أصحابك 😂\n✔ تقرّب أكتر من البارتنر ❤️\n\n🚀 جربها دلوقتي وخلي الضحك شغال طول القعدة 👇\nhttps://mazenturk201.github.io/Love-Choice''',
             ),
           );
         } else if (widget.url == 'rate') {

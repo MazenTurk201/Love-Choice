@@ -1,13 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:love_choice/modules/carddisplay.dart';
-import 'package:love_choice/screens/gamepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/firebase_options.dart';
-import 'screens/donation.dart';
+import 'modules/carddisplay.dart';
 import 'screens/home.dart';
+import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
@@ -91,7 +90,6 @@ class _MyAppState extends State<MyApp> {
             Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
-        '/donation': (ctx) => donation(),
         '/onboarding': (ctx) => onBoarding(),
       },
       debugShowCheckedModeBanner: false,

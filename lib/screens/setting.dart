@@ -127,6 +127,13 @@ class _settingState extends State<setting> {
               //     }
               //   },
               // ),
+              Expanded(child: Container()),
+              Divider(endIndent: 30, indent: 30),
+              Text(
+                "MazenTurk © 2025",
+                style: TextStyle(fontSize: 15, fontFamily: "arial"),
+              ),
+              SizedBox(height: 10),
             ],
           ),
         ),
