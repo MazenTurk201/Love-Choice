@@ -1,10 +1,12 @@
 // ignore_for_file: unrelated_type_equality_checks
 
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../data/toastdata.dart';
 
 class TurkDrawer extends StatelessWidget {
   const TurkDrawer({super.key});
@@ -20,7 +22,6 @@ class TurkDrawer extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 100,
-              // color: Color.fromARGB(255, 55, 0, 255),
               margin: EdgeInsets.only(bottom: 15),
               padding: EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
@@ -33,7 +34,6 @@ class TurkDrawer extends StatelessWidget {
                   bottomLeft: Radius.circular(50),
                   bottomRight: Radius.circular(50),
                 ),
-                // color: Color.fromARGB(255, 55, 0, 255),
               ),
               child: Center(
                 child: Text(
@@ -120,13 +120,21 @@ String? encodeQueryParameters(Map<String, String> params) {
 }
 
 class _menuDrawerButtonState extends State<menuDrawerButton> {
-  // final TextEditingController _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         if (widget.url == '') {
+          Fluttertoast.showToast(
+            msg: exit_tablee[Random().nextInt(exit_tablee.length)],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black54,
+            textColor: Colors.white,
+            fontSize: 16.0,
+            fontAsset: "fonts/arabic_font.otf",
+          );
           exit(0);
         } else if (widget.url == 'setting' || widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/${widget.url}");
@@ -138,58 +146,6 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
             ),
           );
         } else if (widget.url == 'rate') {
-          // showDialog(
-          //   context: context,
-          //   builder: (_) => AlertDialog(
-          //     alignment: Alignment.center,
-          //     title: Text("قيمنا", textAlign: TextAlign.center),
-          //     content: Column(
-          //       children: [
-          //         Row(
-          //           mainAxisAlignment: MainAxisAlignment.center,
-          //           children: List.generate(
-          //             5,
-          //             (index) => InkWell(
-          //               onTap: () {
-          //                 print(index);
-          //               },
-          //               child: const Icon(Icons.star_border_outlined),
-          //             ),
-          //           ),
-          //         ),
-
-          //         TextField(
-          //           controller: _controller,
-          //           decoration: InputDecoration(
-          //             hintText: "اكتب اقتراحك أو تقييمك",
-          //           ),
-          //           textAlign: TextAlign.center,
-          //         ),
-          //       ],
-          //     ),
-          //     actions: [
-          //       CupertinoDialogAction(
-          //         child: ElevatedButton(
-          //           onPressed: () {
-          //             String text = _controller.text;
-          //             launchUrl(
-          //               Uri(
-          //                 scheme: 'mailto',
-          //                 path: 'maznktr@gmail.com',
-          //                 query: encodeQueryParameters(<String, String>{
-          //                   'subject': "Love Choice Game",
-          //                   'body': text,
-          //                 }),
-          //               ),
-          //             );
-          //             Navigator.pop(context);
-          //           },
-          //           child: Text("أرسل"),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // );
           _showRateDialog(context);
         } else {
           _launchUrl(widget.url);

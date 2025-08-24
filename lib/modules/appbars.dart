@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:love_choice/screens/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/db_helper.dart';
+import '../screens/home.dart';
 import '../main.dart';
 
 Color textColor = Color.fromARGB(255, 248, 206, 255);

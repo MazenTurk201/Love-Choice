@@ -1,4 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class setting extends StatefulWidget {
@@ -12,6 +15,8 @@ class _settingState extends State<setting> {
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
+  int? metgawzen_password_num;
+  TextEditingController controler = TextEditingController();
 
   @override
   void initState() {
@@ -85,7 +90,6 @@ class _settingState extends State<setting> {
               },
             ),
             backgroundColor: Color.fromARGB(255, 55, 0, 255),
-            elevation: 4,
             automaticallyImplyLeading: false,
           ),
           body: Column(
@@ -117,6 +121,134 @@ class _settingState extends State<setting> {
                   saveSettings("pin_image", val);
                 },
               ),
+              InkWell(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "تغيير باسورد المتجوزين",
+                        style: TextStyle(fontFamily: "TurkFont", fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      content: SizedBox(
+                        height: 150,
+                        child: Column(
+                          children: [
+                            Text(
+                              "شوف هتغير لـ ايه؟",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            TextField(
+                              keyboardType: TextInputType.numberWithOptions(),
+                              onSubmitted: (value) async {
+                                final pref =
+                                    await SharedPreferences.getInstance();
+                                if (controler.text.isNotEmpty) {
+                                  await pref.setInt(
+                                    "metgawzen_password_num",
+                                    int.parse(controler.text),
+                                  );
+                                  Navigator.pop(context);
+                                  controler.text = "";
+                                  turkToast("تم التغيير");
+                                } else {
+                                  controler.text = "غلط";
+                                }
+                              },
+                              cursorColor: Color.fromARGB(255, 55, 0, 255),
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 55, 0, 255),
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 55, 0, 255),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                floatingLabelAlignment:
+                                    FloatingLabelAlignment.center,
+                                hint: Text(
+                                  "Password",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                label: Text(
+                                  "منورين",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontFamily: "TurkFont",
+                                  ),
+                                ),
+                              ),
+                              cursorHeight: 30,
+                              style: TextStyle(fontFamily: "TurkFont"),
+                              textAlign: TextAlign.center,
+                              controller: controler,
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            final pref = await SharedPreferences.getInstance();
+                            if (controler.text.isNotEmpty) {
+                              await pref.setInt(
+                                "metgawzen_password_num",
+                                int.parse(controler.text),
+                              );
+                              await pref.setBool('warning18', false);
+                              await pref.setBool('metgawzen_password', true);
+                              Navigator.pop(context);
+                              controler.text = "";
+                              turkToast("تم التغيير");
+                            } else {
+                              controler.text = "غلط";
+                            }
+                          },
+                          child: Text(
+                            "تغيير",
+                            style: TextStyle(fontFamily: "TurkFont"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onDoubleTap: () async {
+                  final pref = await SharedPreferences.getInstance();
+                  await pref.remove("metgawzen_password_num");
+                  await pref.remove("metgawzen_password");
+                  await pref.setBool("warning18", true);
+                  turkToast("اتحذف بنجاح");
+                },
+                onTap: () {
+                  turkToast("دوس مرتين عشان يتحذف \nدوسة طويلة عشان تغيير");
+                },
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Icon(Icons.password_rounded, size: 40),
+                  ),
+                  title: Text(
+                    "حذف الباسورد؟",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontFamily: "TurkFont"),
+                  ),
+                ),
+              ),
               // settingTile(
               //   title: "تغيرهم مع بعض؟",
               //   state: isSwitched2,
@@ -138,6 +270,19 @@ class _settingState extends State<setting> {
           ),
         ),
       ),
+    );
+  }
+
+  void turkToast(String text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black54,
+      textColor: Colors.white,
+      fontSize: 16.0,
+      fontAsset: "fonts/arabic_font.otf",
     );
   }
 }

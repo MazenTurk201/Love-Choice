@@ -10,6 +10,7 @@ import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
+import '../screens/metgawzenPassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +92,7 @@ class _MyAppState extends State<MyApp> {
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/onboarding': (ctx) => onBoarding(),
+        '/metgawzen_password': (ctx) => metgawzenPassword(),
       },
       debugShowCheckedModeBanner: false,
     );

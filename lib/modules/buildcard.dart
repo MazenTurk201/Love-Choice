@@ -9,8 +9,15 @@ class Buildcard extends StatefulWidget {
   final String text;
   final String discribe;
   final String route;
+  final bool? single;
 
-  const Buildcard(this.text, this.discribe, this.route, {super.key});
+  const Buildcard(
+    this.text,
+    this.discribe,
+    this.route,
+    this.single, {
+    super.key,
+  });
 
   @override
   State<Buildcard> createState() => _BuildcardState();
@@ -18,10 +25,12 @@ class Buildcard extends StatefulWidget {
 
 class _BuildcardState extends State<Buildcard> {
   bool warning18 = true;
+  bool metgawzen_password = false;
 
   Future<void> loadwarning() async {
     final pref = await SharedPreferences.getInstance();
     warning18 = pref.getBool("warning18") ?? true;
+    metgawzen_password = pref.getBool("metgawzen_password") ?? false;
   }
 
   @override
@@ -52,7 +61,7 @@ class _BuildcardState extends State<Buildcard> {
                         textAlign: TextAlign.center,
                       ),
                       content: Text(
-                        "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18}، استمتعوا.",
+                        "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18} وفي أي حالة ارجاع هذا التحذير الرجاء حذف الباسورد من الاعدادات، استمتعوا.",
                         style: TextStyle(fontSize: 17),
                         textAlign: TextAlign.center,
                         textDirection: TextDirection.rtl,
@@ -77,6 +86,22 @@ class _BuildcardState extends State<Buildcard> {
                         ),
                         TextButton(
                           onPressed: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              "/metgawzen_password",
+                            );
+                          },
+                          child: Text(
+                            "باسورد",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
                             Navigator.of(context).pop();
                           },
                           child: Text(
@@ -92,6 +117,8 @@ class _BuildcardState extends State<Buildcard> {
                       actionsAlignment: MainAxisAlignment.spaceEvenly,
                     ),
                   )
+                : metgawzen_password
+                ? Navigator.pushReplacementNamed(context, "/metgawzen_password")
                 : null;
             turkToast(
               metgawzen_enter_tablee[Random().nextInt(
@@ -138,7 +165,11 @@ class _BuildcardState extends State<Buildcard> {
               ),
             ),
             SizedBox(
-              height: 150,
+              // height: 150,
+              height: MediaQuery.of(context).size.height / 4 - 50,
+              width: widget.single ?? false
+                  ? MediaQuery.of(context).size.width - 20
+                  : MediaQuery.of(context).size.width / 2 - 20,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,68 +201,6 @@ class _BuildcardState extends State<Buildcard> {
         ),
       ),
     );
-
-    // return Expanded(
-    //   child: InkWell(
-    //     onTap: () {
-    //       Navigator.pushReplacementNamed(context, "/$route");
-    //     },
-    //     child: Card(
-    //       color: Colors.transparent,
-    //       child: SizedBox(
-    //         width: double.infinity,
-    //         child: Stack(
-    //           children: [
-    //             Positioned.fill(
-    //               child: ClipRRect(
-    //                 borderRadius: BorderRadius.circular(20),
-    //                 child: Image.asset("images/$route.jpg", fit: BoxFit.cover),
-    //               ),
-    //             ),
-    //             Container(
-    //               margin: EdgeInsets.all(size.width * 0.8),
-    //               // padding: EdgeInsets.all(5),
-    //               child: Center(
-    //                 child: SizedBox(
-    //                   width: double.infinity,
-    //                   child: Column(
-    //                     mainAxisAlignment: MainAxisAlignment.center,
-    //                     crossAxisAlignment: CrossAxisAlignment.center,
-    //                     spacing: 15,
-    //                     children: [
-    //                       Text(
-    //                         text,
-    //                         textAlign: TextAlign.center,
-    //                         textDirection: TextDirection.rtl,
-    //                         style: TextStyle(
-    //                           shadows: [
-    //                             Shadow(blurRadius: 10, color: Colors.black),
-    //                           ],
-    //                         ),
-    //                       ),
-    //                       Text(
-    //                         discribe,
-    //                         softWrap: true,
-    //                         style: TextStyle(
-    //                           fontSize: 14,
-    //                           shadows: [
-    //                             Shadow(blurRadius: 10, color: Colors.black),
-    //                           ],
-    //                         ),
-    //                         textAlign: TextAlign.center,
-    //                         textDirection: TextDirection.rtl,
-    //                       ),
-    //                     ],
-    //                   ),
-    //                 ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   void turkToast(String text) {

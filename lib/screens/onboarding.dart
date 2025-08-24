@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -59,14 +61,16 @@ class _onBoardingState extends State<onBoarding> {
           ),
         ),
         bottomSheet: isListPage
-            ? Padding(
-                padding: const EdgeInsets.only(bottom: 15),
+            ? Container(
+                color: Colors.black87,
+                width: double.infinity,
+                height: 80,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero, // عشان الجرادينت يملأ الزر كله
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
+                    // shape: RoundedRectangleBorder(
+                    //   borderRadius: BorderRadius.circular(25),
+                    // ),
                   ),
                   onPressed: () async {
                     final pref = await SharedPreferences.getInstance();
@@ -79,16 +83,16 @@ class _onBoardingState extends State<onBoarding> {
                       gradient: LinearGradient(
                         colors: [Colors.blue, Colors.indigo],
                       ),
-                      borderRadius: BorderRadius.circular(25),
+                      // borderRadius: BorderRadius.circular(25),
                     ),
                     child: Container(
                       alignment: Alignment.center,
-                      height: 50,
-                      width: 200,
+                      // height: 50,
+                      // width: 200,
                       child: Text(
                         "يلا بينا",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 30,
                           color: Colors.white,
                           fontFamily: "TurkFont",
                         ),
@@ -98,6 +102,7 @@ class _onBoardingState extends State<onBoarding> {
                 ),
               )
             : Container(
+                color: Colors.black87,
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 height: 80,
                 child: Row(

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
 import 'package:http/http.dart' as http;
@@ -104,38 +104,17 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  // List<Map<String, String>> data = [
-  //   // {"title": "أهل", "subtitle": "التجمع الحلو والقعدة الأحلى", "root": "ahl"},
-  //   {
-  //     "title": "متجوزين",
-  //     "subtitle": "يلّا نحيي حُبنا من جديد",
-  //     "root": "metgawzen",
-  //   },
-  //   {"title": "مخطوبين", "subtitle": "نفهم بعض قبل الجد", "root": "ma5toben"},
-  //   {"title": "تعارف", "subtitle": "نجرب نكتشف بعض", "root": "t3arof"},
-  //   {
-  //     "title": "كوبلز",
-  //     "subtitle": "ايدي ف ايدك نرجع البدايات",
-  //     "root": "couples",
-  //   },
-  //   {"title": "بيستات", "subtitle": "مين حبيب اخوه؟", "root": "bestat"},
-  //   {"title": "شلة", "subtitle": "يلا بينا نفك الملل", "root": "shella"},
-  // ];
-
   @override
   void initState() {
     super.initState();
     getVersionText(context, currentVersion);
   }
 
-  List<String> exit_tablee = ["مصيرك ترجعلي 😏", "اوروفوار يقلبي", "طب مثا"];
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
         Fluttertoast.showToast(
-          // msg: "مصيرك ترجعلي 😏",
           msg: exit_tablee[Random().nextInt(exit_tablee.length)],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
@@ -143,8 +122,8 @@ class _homeState extends State<home> {
           backgroundColor: Colors.black54,
           textColor: Colors.white,
           fontSize: 16.0,
+          fontAsset: "fonts/arabic_font.otf",
         );
-        // exit(0);
         return Future.value(true);
       },
       child: Scaffold(
@@ -179,119 +158,70 @@ class _homeState extends State<home> {
               Positioned.fill(
                 child: Image.asset("images/main.jpg", fit: BoxFit.cover),
               ),
-
-              // ListView.builder(
-              //   itemCount: 3,
-              //   // itemCount: data.length / 2,
-              //   itemBuilder: (BuildContext context, int index) {
-              //     return Container(
-              //       margin: EdgeInsets.all(8),
-              //       height: 200,
-              //       child: Buildcard(
-              //         data[index]["title"]!,
-              //         data[index]["subtitle"]!,
-              //         data[index]["root"]!,
-              //       ),
-              //     );
-              //   },
-              // ),
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // صف واحد
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "أهل",
-                            "التجمع الحلو والقعدة الأحلى",
-                            "ahl",
-                          ),
-                        ),
-                      ],
-                    ),
-                    // صف ثاني
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "متجوزين",
-                            "يلّا نحيي حُبنا من جديد",
-                            "metgawzen",
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "مخطوبين",
-                            "نفهم بعض قبل الجد",
-                            "ma5toben",
-                          ),
-                        ),
-                      ],
-                    ),
-                    // صف ثالث
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard("تعارف", "نجرب نكتشف بعض", "t3arof"),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "كوبلز",
-                            "ايدي ف ايدك نرجع البدايات",
-                            "couples",
-                          ),
-                        ),
-                      ],
-                    ),
-                    // صف رابع
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "بيستات",
-                            "مين حبيب اخوه؟",
-                            "bestat",
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Buildcard(
-                            "شلة",
-                            "يلا بينا نفك الملل",
-                            "shella",
-                          ),
-                        ),
-                      ],
-                    ),
-                    // نص تحت
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: Text(
-                        "الحب اختيار، وانا اخترتك ❤️\"",
-                        style: TextStyle(
-                          fontFamily: "TurkD",
-                          shadows: [
-                            Shadow(
-                              color: Colors.black,
-                              offset: Offset(1, 1),
-                              blurRadius: 2,
-                            ),
-                          ],
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                        textDirection: TextDirection.rtl,
+              Column(
+                children: [
+                  Buildcard(
+                    "أهل",
+                    "التجمع الحلو والقعدة الأحلى",
+                    "ahl",
+                    true,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Buildcard(
+                        "متجوزين",
+                        "يلّا نحيي حُبنا من جديد",
+                        "metgawzen",
+                        false,
                       ),
+                      Buildcard(
+                        "مخطوبين",
+                        "نفهم بعض قبل الجد",
+                        "ma5toben",
+                        false,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Buildcard("تعارف", "نجرب نكتشف بعض", "t3arof", false),
+                      Buildcard(
+                        "كوبلز",
+                        "ايدي ف ايدك نرجع البدايات",
+                        "couples",
+                        false,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Buildcard("بيستات", "مين حبيب اخوه؟", "bestat", false),
+                      Buildcard("شلة", "يلا بينا نفك الملل", "shella", false),
+                    ],
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: Text(
+                      "الحب اختيار، وانا اخترتك ❤️\"",
+                      style: TextStyle(
+                        fontFamily: "TurkD",
+                        shadows: [
+                          Shadow(
+                            color: Colors.black,
+                            offset: Offset(1, 1),
+                            blurRadius: 2,
+                          ),
+                        ],
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                      textDirection: TextDirection.rtl,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

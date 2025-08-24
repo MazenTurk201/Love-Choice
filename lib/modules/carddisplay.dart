@@ -269,7 +269,7 @@ class _CardsFactoryState extends State<CardsFactory> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(50)),
             ),
-            height: 200,
+            height: 300,
             child: Stack(
               children: [
                 Positioned.fill(
