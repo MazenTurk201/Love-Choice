@@ -7,12 +7,8 @@ import '../modules/carddisplay.dart';
 class Gamepage extends StatefulWidget {
   final String tablee;
   final CardStyle style;
-  const Gamepage({
-    Key? key,
-    required this.tablee,
-    required this.style,
-  }) : super(key: key);
-
+  const Gamepage({Key? key, required this.tablee, required this.style})
+    : super(key: key);
 
   @override
   State<Gamepage> createState() => _GamepageState();

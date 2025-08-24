@@ -160,12 +160,7 @@ class _homeState extends State<home> {
               ),
               Column(
                 children: [
-                  Buildcard(
-                    "أهل",
-                    "التجمع الحلو والقعدة الأحلى",
-                    "ahl",
-                    true,
-                  ),
+                  Buildcard("أهل", "التجمع الحلو والقعدة الأحلى", "ahl", true),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

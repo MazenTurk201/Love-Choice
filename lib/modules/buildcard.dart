@@ -166,7 +166,7 @@ class _BuildcardState extends State<Buildcard> {
             ),
             SizedBox(
               // height: 150,
-              height: MediaQuery.of(context).size.height / 4 - 50,
+              height: MediaQuery.of(context).size.height / 4 - 62.5,
               width: widget.single ?? false
                   ? MediaQuery.of(context).size.width - 20
                   : MediaQuery.of(context).size.width / 2 - 20,
