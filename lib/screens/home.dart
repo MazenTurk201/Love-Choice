@@ -126,39 +126,41 @@ class _homeState extends State<home> {
         );
         return Future.value(true);
       },
-      child: Scaffold(
-        drawer: TurkDrawer(),
-        appBar: AppBar(
-          title: Text(
-            "Love Choice",
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: "TurkLogo",
-              fontSize: 35,
+      child: SafeArea(
+        top: false,
+        child: Scaffold(
+          drawer: TurkDrawer(),
+          appBar: AppBar(
+            title: Text(
+              "Love Choice",
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "TurkLogo",
+                fontSize: 35,
+              ),
             ),
-          ),
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Icon(Icons.menu, size: 30),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              tooltip: "قائمة الخيارات",
+            leading: Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.menu, size: 30),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip: "قائمة الخيارات",
+              ),
             ),
+            centerTitle: true,
+            backgroundColor: Color.fromARGB(255, 55, 0, 255),
+            iconTheme: IconThemeData(color: Colors.white),
           ),
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 55, 0, 255),
-          iconTheme: IconThemeData(color: Colors.white),
-        ),
-        backgroundColor: Colors.black,
-        body: SafeArea(
-          child: Stack(
+          backgroundColor: Colors.black,
+          body: Stack(
             fit: StackFit.expand,
             children: [
               Positioned.fill(
                 child: Image.asset("images/main.jpg", fit: BoxFit.cover),
               ),
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Buildcard("أهل", "التجمع الحلو والقعدة الأحلى", "ahl", true),
                   Row(

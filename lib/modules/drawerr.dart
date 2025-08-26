@@ -21,12 +21,15 @@ class TurkDrawer extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 100,
+              height: 93,
               margin: EdgeInsets.only(bottom: 15),
               padding: EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.transparent, Color.fromARGB(255, 55, 0, 255)],
+                  colors: [
+                    Colors.transparent,
+                    Color.fromARGB(255, 55, 0, 255),
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),

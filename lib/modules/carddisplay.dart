@@ -29,7 +29,8 @@ enum CardType { choice, dare }
 class _CardsFactoryState extends State<CardsFactory> {
   bool isDare = true;
   bool pinImage = true;
-  bool switchBoth = false;
+  bool switchBoth = true;
+  double font_Size = 24;
   bool _isloading = true;
   int rnum = Random().nextInt(10) + 1;
   int rnum2 = Random().nextInt(10) + 1;
@@ -55,6 +56,7 @@ class _CardsFactoryState extends State<CardsFactory> {
       isDare = pref.getBool('isDare') ?? true;
       switchBoth = pref.getBool('switch_both') ?? false;
       pinImage = pref.getBool('pin_image') ?? true;
+      font_Size = pref.getDouble('font_Size') ?? 24;
     });
   }
 
@@ -82,12 +84,92 @@ class _CardsFactoryState extends State<CardsFactory> {
     }
     switch (widget.style) {
       case CardStyle.towCardRandom:
+        Container iconsRow = Container(
+          margin: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            gradient: LinearGradient(
+              colors: [Color.fromARGB(255, 55, 0, 255), Colors.indigo],
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            boxShadow: [
+              BoxShadow(color: Colors.black, blurRadius: 20, spreadRadius: 3),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        SharePlus.instance.share(
+                          ShareParams(
+                            text:
+                                "*السؤال* \n* ${textDare.toString()}\n\n*التحدي*\n* ${textQuiz.toString()}",
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.share, size: 35, color: Colors.white),
+                    ),
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text:
+                                "*السؤال* \n* ${textDare.toString()}\n\n*التحدي*\n* ${textQuiz.toString()}",
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.copy, size: 35, color: Colors.white),
+                    ),
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (switchBoth) {
+                            if (index == randQuizs.length - 1) {
+                              index = -1;
+                            }
+                            if (dareIndex == randDares.length - 1) {
+                              dareIndex = -1;
+                            }
+                            index++;
+                            dareIndex++;
+                            textQuiz = randQuizs[index]['choice'] ?? '';
+                            textDare = randQuizs[index]['dare'] ?? '';
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        Icons.swipe_right,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                    ),
+            ],
+          ),
+        );
         return isDare
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   towCardRandowmMethod(context, CardType.choice, rnum, 0),
                   towCardRandowmMethod(context, CardType.dare, 0, rnum2),
+                  if (switchBoth) iconsRow,
                 ],
               )
             : Center(
@@ -95,12 +177,93 @@ class _CardsFactoryState extends State<CardsFactory> {
               );
 
       case CardStyle.towCard:
+        Container iconsRow = Container(
+          margin: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.amber,
+            gradient: LinearGradient(
+              colors: [Color.fromARGB(255, 55, 0, 255), Colors.indigo],
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            boxShadow: [
+              BoxShadow(color: Colors.black, blurRadius: 20, spreadRadius: 3),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        SharePlus.instance.share(
+                          ShareParams(
+                            text:
+                                "*السؤال* \n* ${textDare.toString()}\n\n*التحدي*\n* ${textQuiz.toString()}",
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.share, size: 35, color: Colors.white),
+                    ),
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        Clipboard.setData(
+                          ClipboardData(
+                            text:
+                                "*السؤال* \n* ${textDare.toString()}\n\n*التحدي*\n* ${textQuiz.toString()}",
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.copy, size: 35, color: Colors.white),
+                    ),
+              _isloading
+                  ? Container(
+                      width: 50,
+                      height: 50,
+                    ).redacted(context: context, redact: _isloading)
+                  : IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (switchBoth) {
+                            if (index == randQuizs.length - 1) {
+                              index = -1;
+                            }
+                            if (dareIndex == randDares.length - 1) {
+                              dareIndex = -1;
+                            }
+                            index++;
+                            dareIndex++;
+                            textQuiz = randQuizs[index]['choice'] ?? '';
+                            textDare = randQuizs[index]['dare'] ?? '';
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        Icons.swipe_right,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                    ),
+            ],
+          ),
+        );
+
         return isDare
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   towCardMethod(context, CardType.choice, rnum, 0),
                   towCardMethod(context, CardType.dare, 0, rnum2),
+                  if (switchBoth) iconsRow,
                 ],
               )
             : Center(child: towCardMethod(context, CardType.choice, rnum, 0));
@@ -370,7 +533,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                       child: _isloading
                           ? Text(
                               'fetching data',
-                              style: TextStyle(fontSize: 24),
+                              style: TextStyle(fontSize: font_Size),
                               textAlign: TextAlign.center,
                               textDirection: TextDirection.rtl,
                             ).redacted(context: context, redact: _isloading)
@@ -379,7 +542,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                                   ? randQuizs[index]["choice"]
                                   : 'لا يوجد بيانات بعد',
                               style: TextStyle(
-                                fontSize: 24,
+                                fontSize: font_Size,
                                 shadows: [
                                   Shadow(
                                     color: Colors.black,
@@ -485,7 +648,7 @@ class _CardsFactoryState extends State<CardsFactory> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(50)),
       ),
-      height: 225,
+      height: MediaQuery.of(context).size.height / 3,
       child: Stack(
         children: [
           Positioned.fill(
@@ -522,7 +685,7 @@ class _CardsFactoryState extends State<CardsFactory> {
               _isloading
                   ? Text(
                       'fetching data',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: font_Size),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                     ).redacted(context: context, redact: _isloading)
@@ -537,7 +700,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                           ? randQuizs[index]["choice"]
                           : 'لا يوجد بيانات بعد',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: font_Size,
                         shadows: [
                           Shadow(
                             color: Colors.black,
@@ -565,8 +728,8 @@ class _CardsFactoryState extends State<CardsFactory> {
                               SharePlus.instance.share(
                                 ShareParams(
                                   text: type == CardType.dare
-                                      ? textDare.toString()
-                                      : textQuiz.toString(),
+                                      ? "*التحدي*\n* ${textQuiz.toString()}"
+                                      : "*السؤال* \n* ${textDare.toString()}",
                                 ),
                               );
                             },
@@ -586,8 +749,8 @@ class _CardsFactoryState extends State<CardsFactory> {
                               Clipboard.setData(
                                 ClipboardData(
                                   text: type == CardType.dare
-                                      ? textDare.toString()
-                                      : textQuiz.toString(),
+                                      ? "*التحدي*\n* ${textQuiz.toString()}"
+                                      : "*السؤال* \n* ${textDare.toString()}",
                                 ),
                               );
                             },
@@ -605,36 +768,22 @@ class _CardsFactoryState extends State<CardsFactory> {
                         : IconButton(
                             onPressed: () {
                               setState(() {
-                                if (switchBoth) {
-                                  if (index == randQuizs.length - 1) {
-                                    index = -1;
-                                  }
+                                if (type == CardType.dare) {
                                   if (dareIndex == randDares.length - 1) {
-                                    dareIndex = -1;
-                                  }
-                                  index++;
-                                  dareIndex++;
-                                  textQuiz = randQuizs[index]['choice'] ?? '';
-                                  textDare = randQuizs[index]['dare'] ?? '';
-                                } else {
-                                  if (type == CardType.dare) {
-                                    if (dareIndex == randDares.length - 1) {
-                                      dareIndex = 0;
-                                      textDare = randQuizs[0]['dare'] ?? '';
-                                    } else {
-                                      dareIndex++;
-                                      textDare =
-                                          randQuizs[dareIndex]['dare'] ?? '';
-                                    }
+                                    dareIndex = 0;
+                                    textDare = randQuizs[0]['dare'] ?? '';
                                   } else {
-                                    if (index == randQuizs.length - 1) {
-                                      index = 0;
-                                      textQuiz = randQuizs[0]['choice'] ?? '';
-                                    } else {
-                                      index++;
-                                      textQuiz =
-                                          randQuizs[index]['choice'] ?? '';
-                                    }
+                                    dareIndex++;
+                                    textDare =
+                                        randQuizs[dareIndex]['dare'] ?? '';
+                                  }
+                                } else {
+                                  if (index == randQuizs.length - 1) {
+                                    index = 0;
+                                    textQuiz = randQuizs[0]['choice'] ?? '';
+                                  } else {
+                                    index++;
+                                    textQuiz = randQuizs[index]['choice'] ?? '';
                                   }
                                 }
                               });
@@ -668,7 +817,7 @@ class _CardsFactoryState extends State<CardsFactory> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(50)),
       ),
-      height: 225,
+      height: MediaQuery.of(context).size.height / 3,
       child: Stack(
         children: [
           Positioned.fill(
@@ -705,7 +854,7 @@ class _CardsFactoryState extends State<CardsFactory> {
               _isloading
                   ? Text(
                       'fetching data',
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: font_Size),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
                     ).redacted(context: context, redact: _isloading)
@@ -720,7 +869,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                           ? randQuizs[index]["choice"]
                           : 'لا يوجد بيانات بعد',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: font_Size,
                         shadows: [
                           Shadow(
                             color: Colors.black,
@@ -748,8 +897,8 @@ class _CardsFactoryState extends State<CardsFactory> {
                               SharePlus.instance.share(
                                 ShareParams(
                                   text: type == CardType.dare
-                                      ? textDare.toString()
-                                      : textQuiz.toString(),
+                                      ? "*التحدي*\n* ${textQuiz.toString()}"
+                                      : "*السؤال* \n* ${textDare.toString()}",
                                 ),
                               );
                             },
@@ -769,8 +918,8 @@ class _CardsFactoryState extends State<CardsFactory> {
                               Clipboard.setData(
                                 ClipboardData(
                                   text: type == CardType.dare
-                                      ? textDare.toString()
-                                      : textQuiz.toString(),
+                                      ? "*التحدي*\n* ${textQuiz.toString()}"
+                                      : "*السؤال* \n* ${textDare.toString()}",
                                 ),
                               );
                             },
@@ -788,36 +937,22 @@ class _CardsFactoryState extends State<CardsFactory> {
                         : IconButton(
                             onPressed: () {
                               setState(() {
-                                if (switchBoth) {
-                                  if (index == randQuizs.length - 1) {
-                                    index = -1;
-                                  }
+                                if (type == CardType.dare) {
                                   if (dareIndex == randDares.length - 1) {
-                                    dareIndex = -1;
-                                  }
-                                  index++;
-                                  dareIndex++;
-                                  textQuiz = randQuizs[index]['choice'] ?? '';
-                                  textDare = randQuizs[index]['dare'] ?? '';
-                                } else {
-                                  if (type == CardType.dare) {
-                                    if (dareIndex == randDares.length - 1) {
-                                      dareIndex = 0;
-                                      textDare = randQuizs[0]['dare'] ?? '';
-                                    } else {
-                                      dareIndex++;
-                                      textDare =
-                                          randQuizs[dareIndex]['dare'] ?? '';
-                                    }
+                                    dareIndex = 0;
+                                    textDare = randQuizs[0]['dare'] ?? '';
                                   } else {
-                                    if (index == randQuizs.length - 1) {
-                                      index = 0;
-                                      textQuiz = randQuizs[0]['choice'] ?? '';
-                                    } else {
-                                      index++;
-                                      textQuiz =
-                                          randQuizs[index]['choice'] ?? '';
-                                    }
+                                    dareIndex++;
+                                    textDare =
+                                        randQuizs[dareIndex]['dare'] ?? '';
+                                  }
+                                } else {
+                                  if (index == randQuizs.length - 1) {
+                                    index = 0;
+                                    textQuiz = randQuizs[0]['choice'] ?? '';
+                                  } else {
+                                    index++;
+                                    textQuiz = randQuizs[index]['choice'] ?? '';
                                   }
                                 }
                               });

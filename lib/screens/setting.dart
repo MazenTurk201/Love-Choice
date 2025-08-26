@@ -15,8 +15,11 @@ class _settingState extends State<setting> {
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
+  bool switch1 = true;
+  bool switch2 = false;
   int? metgawzen_password_num;
   TextEditingController controler = TextEditingController();
+  TextEditingController font_controler = TextEditingController();
 
   @override
   void initState() {
@@ -28,7 +31,7 @@ class _settingState extends State<setting> {
     final pref = await SharedPreferences.getInstance();
     setState(() {
       isSwitched = pref.getBool('isDare') ?? true;
-      isSwitched2 = pref.getBool('switch_both') ?? false;
+      isSwitched2 = pref.getBool('switch_both') ?? true;
       isSwitched3 = pref.getBool('pin_image') ?? true;
       // isSwitched2 = pref.getBool('isSwitched2') ?? true;
     });
@@ -99,20 +102,31 @@ class _settingState extends State<setting> {
                 state: isSwitched,
                 fun: (val) {
                   isSwitched = val;
-                  // if (val) {
-                  //   print("lol");
-                  // }
+                  if (!isSwitched) {
+                    isSwitched2 = false; // يقفل التاني كمان
+                    saveSettings("switch_both", val);
+                  }
                   saveSettings("isDare", val);
                 },
               ),
               settingTile(
-                title: "تغيرهم مع بعض؟",
+                title: "التغيير مع بعض؟",
                 state: isSwitched2,
-                fun: (val) {
-                  isSwitched2 = val;
-                  saveSettings("switch_both", val);
-                },
+                fun: isSwitched
+                    ? (val) {
+                        isSwitched2 = val;
+                        saveSettings("switch_both", val);
+                      }
+                    : (val) {},
               ),
+              // settingTile(
+              //   title: "أخفاء التغيير مع بعض؟",
+              //   state: isSwitched2,
+              //   fun: (val) {
+              //     isSwitched2 = val;
+              //     saveSettings("switch_both", val);
+              //   },
+              // ),
               settingTile(
                 title: "تثبيت الصور؟",
                 state: isSwitched3,
@@ -120,6 +134,135 @@ class _settingState extends State<setting> {
                   isSwitched3 = val;
                   saveSettings("pin_image", val);
                 },
+              ),
+              InkWell(
+                onLongPress: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "تغيير حجم الخط",
+                        style: TextStyle(fontFamily: "TurkFont", fontSize: 22),
+                        textAlign: TextAlign.center,
+                      ),
+                      content: SizedBox(
+                        height: 150,
+                        child: Column(
+                          children: [
+                            Text(
+                              "شوف هتغير لـ ايه؟",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            TextField(
+                              keyboardType: TextInputType.numberWithOptions(),
+                              onSubmitted: (value) async {
+                                final pref =
+                                    await SharedPreferences.getInstance();
+                                if (font_controler.text.isNotEmpty) {
+                                  await pref.setDouble(
+                                    "font_Size",
+                                    double.parse(font_controler.text),
+                                  );
+                                  Navigator.pop(context);
+                                  font_controler.text = "";
+                                  turkToast("تم التغيير");
+                                } else {
+                                  font_controler.text = "غلط";
+                                }
+                              },
+                              cursorColor: Color.fromARGB(255, 55, 0, 255),
+                              decoration: InputDecoration(
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 55, 0, 255),
+                                    width: 1.5,
+                                  ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color.fromARGB(255, 55, 0, 255),
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                floatingLabelAlignment:
+                                    FloatingLabelAlignment.center,
+                                hint: Text(
+                                  "الطبيعي 24",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                label: Text(
+                                  "ظبط الخط على كيفك",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontFamily: "TurkFont",
+                                  ),
+                                ),
+                              ),
+                              cursorHeight: 30,
+                              style: TextStyle(fontFamily: "TurkFont"),
+                              textAlign: TextAlign.center,
+                              controller: font_controler,
+                            ),
+                          ],
+                        ),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            final pref = await SharedPreferences.getInstance();
+                            if (font_controler.text.isNotEmpty) {
+                              await pref.setDouble(
+                                "font_Size",
+                                double.parse(font_controler.text),
+                              );
+                              Navigator.pop(context);
+                              font_controler.text = "";
+                              turkToast("تم التغيير");
+                            } else {
+                              font_controler.text = "غلط";
+                            }
+                          },
+                          child: Text(
+                            "تغيير",
+                            style: TextStyle(fontFamily: "TurkFont"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                onDoubleTap: () async {
+                  final pref = await SharedPreferences.getInstance();
+                  await pref.setDouble("font_Size", 24);
+                  turkToast("تمت اعادة التعيين");
+                },
+                onTap: () {
+                  turkToast(
+                    "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان تغيير",
+                  );
+                },
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Icon(Icons.format_size_rounded, size: 40),
+                  ),
+                  title: Text(
+                    "تغيير حجم الخط؟",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontFamily: "TurkFont"),
+                  ),
+                ),
               ),
               InkWell(
                 onLongPress: () {
