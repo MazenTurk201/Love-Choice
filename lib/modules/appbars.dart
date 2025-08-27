@@ -72,6 +72,59 @@ class _TurkAppBarState extends State<TurkAppBar> {
     del_quiz_input.clear();
   }
 
+  TextField Input(
+    TextEditingController controler,
+    TextInputType type,
+    String hint,
+    String lable,
+    bool next_node,
+    Function fun,
+  ) {
+    return TextField(
+      keyboardType: type,
+      onSubmitted: (value) async {
+        if (next_node) {
+          TextInputAction.next;
+        } else {
+          fun();
+        }
+      },
+      cursorColor: Color.fromARGB(255, 55, 0, 255),
+      textInputAction: next_node ? TextInputAction.next : TextInputAction.done,
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 55, 0, 255),
+            width: 1.5,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 55, 0, 255),
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        floatingLabelAlignment: FloatingLabelAlignment.center,
+        hint: Text(
+          hint,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white70, fontSize: 18),
+        ),
+        label: Text(
+          lable,
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white70, fontFamily: "TurkFont"),
+        ),
+      ),
+      cursorHeight: 30,
+      style: TextStyle(fontFamily: "TurkFont"),
+      textAlign: TextAlign.center,
+      controller: controler,
+    );
+  }
+
   List<Map<String, dynamic>> users = [];
   late String userUpdate;
   final first_input = TextEditingController();
@@ -130,35 +183,40 @@ class _TurkAppBarState extends State<TurkAppBar> {
                                           MainAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          child: TextField(
-                                            controller: add_quiz_input,
-                                            decoration: InputDecoration(
-                                              label: Text(
-                                                "سؤال؟",
-                                                textAlign: TextAlign.right,
-                                              ),
-                                              labelStyle: TextStyle(
-                                                fontFamily: "TurkFont",
-                                              ),
-                                            ),
-                                            textDirection: TextDirection.rtl,
-                                            textAlign: TextAlign.right,
+                                          child: Input(
+                                            add_quiz_input,
+                                            TextInputType.text,
+                                            "سؤال؟",
+                                            "اكتب السؤال اللي يعجبك",
+                                            true,
+                                            () {},
                                           ),
                                         ),
                                         Expanded(
-                                          child: TextField(
-                                            controller: add_dare_input,
-                                            decoration: InputDecoration(
-                                              label: Text(
-                                                "التاني؟",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              labelStyle: TextStyle(
-                                                fontFamily: "TurkFont",
-                                              ),
-                                            ),
-                                            textDirection: TextDirection.rtl,
-                                            textAlign: TextAlign.right,
+                                          child: Input(
+                                            add_dare_input,
+                                            TextInputType.text,
+                                            "التاني؟",
+                                            "اكتب الشيء اللي يعجبك",
+                                            false,
+                                            () {
+                                              if (add_dare_input.text
+                                                      .trim()
+                                                      .isNotEmpty ||
+                                                  add_quiz_input.text
+                                                      .trim()
+                                                      .isNotEmpty) {
+                                                addUser(
+                                                  add_quiz_input.text.trim(),
+                                                  add_dare_input.text.trim(),
+                                                );
+                                                clearFields();
+                                              } else {
+                                                clearFields();
+                                                add_quiz_input.text = "الرجاء";
+                                                add_dare_input.text = "الملئ";
+                                              }
+                                            },
                                           ),
                                         ),
                                       ],
@@ -168,16 +226,28 @@ class _TurkAppBarState extends State<TurkAppBar> {
                                     ElevatedButton(
                                       onPressed: () {
                                         Navigator.pop(context);
+                                        clearFields();
                                       },
                                       child: Text("فاكس", style: iconTextS),
                                     ),
                                     ElevatedButton(
                                       onPressed: () {
-                                        addUser(
-                                          add_quiz_input.text.trim(),
-                                          add_dare_input.text.trim(),
-                                        );
-                                        clearFields();
+                                        if (add_dare_input.text
+                                                .trim()
+                                                .isNotEmpty ||
+                                            add_quiz_input.text
+                                                .trim()
+                                                .isNotEmpty) {
+                                          addUser(
+                                            add_quiz_input.text.trim(),
+                                            add_dare_input.text.trim(),
+                                          );
+                                          clearFields();
+                                        } else {
+                                          clearFields();
+                                          add_quiz_input.text = "الرجاء";
+                                          add_dare_input.text = "الملئ";
+                                        }
                                       },
                                       child: Text("ودي", style: iconTextS),
                                     ),
@@ -210,9 +280,11 @@ class _TurkAppBarState extends State<TurkAppBar> {
                                     itemBuilder: (_, i) {
                                       final user = users[i];
                                       return Text(
-                                        "${i + 1}: ${user['choice']} \n ${user['dare']}\n\n",
+                                        // "${"=" * 10}\n السؤال رقم: ${i + 1}\n\nالسؤال: ${user['choice']}\n\nالتحدي: ${user['dare']}\n${"=" * 10}\n",
+                                        "${"=" * 5} ${i + 1} ${"=" * 5}\n\nالسؤال: ${user['choice']}\n\nالتحدي: ${user['dare']}\n\n${"=" * 15}\n",
                                         textDirection: TextDirection.rtl,
                                         style: TextStyle(fontSize: 14),
+                                        textAlign: TextAlign.center,
                                       );
                                     },
                                   ),
@@ -271,13 +343,16 @@ class _TurkAppBarState extends State<TurkAppBar> {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(fontFamily: "TurkFont"),
                                   ),
-                                  content: TextField(
-                                    controller: del_quiz_input,
-                                    decoration: InputDecoration(
-                                      label: Text("ID?"),
-                                    ),
-                                    keyboardType: TextInputType.number,
-                                    textAlign: TextAlign.center,
+                                  content: Input(
+                                    del_quiz_input,
+                                    TextInputType.number,
+                                    "ID?",
+                                    "اكتب ID من عرض الكل",
+                                    false,
+                                    () {
+                                      deleteUser(del_quiz_input.text);
+                                      clearFields();
+                                    },
                                   ),
                                   actions: [
                                     ElevatedButton(
@@ -348,11 +423,6 @@ class _TurkAppBarState extends State<TurkAppBar> {
       }
     }
 
-    // void onEditChanged() {
-    //   var result = geteditUser(int.parse(edit_quiz_input.text));
-    //   new_edit_quiz_input.text = result['choice'] ?? '';
-    //   new_edit_dare_input.text = result['dare'] ?? '';
-    // }
     bool editstate = false;
     showDialog(
       context: context,
@@ -371,41 +441,52 @@ class _TurkAppBarState extends State<TurkAppBar> {
                       child: Column(
                         children: [
                           Expanded(
-                            child: TextField(
-                              controller: new_edit_quiz_input,
-                              decoration: InputDecoration(
-                                label: Text(
-                                  "هي دي الداتا",
-                                  style: TextStyle(fontFamily: "TurkFont"),
-                                ),
-                              ),
-                              textAlign: TextAlign.right,
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(fontFamily: "TurkFont"),
+                            child: Input(
+                              new_edit_quiz_input,
+                              TextInputType.text,
+                              "عدل براحتك",
+                              "عدل على شوقك",
+                              true,
+                              () {},
                             ),
                           ),
                           Expanded(
-                            child: TextField(
-                              controller: new_edit_dare_input,
-                              textAlign: TextAlign.right,
-                              textDirection: TextDirection.rtl,
-                              decoration: InputDecoration(
-                                label: Text(
-                                  "هي دي الداتا",
-                                  style: TextStyle(fontFamily: "TurkFont"),
-                                ),
-                              ),
-                              style: TextStyle(fontFamily: "TurkFont"),
+                            child: Input(
+                              new_edit_dare_input,
+                              TextInputType.text,
+                              "عدل براحتك",
+                              "عدل على شوقك",
+                              false,
+                              () {
+                                setState(() {
+                                  editUser(
+                                    new_edit_quiz_input.text,
+                                    new_edit_dare_input.text,
+                                    int.parse(edit_quiz_input.text) - 1,
+                                  );
+                                  edit_quiz_input.clear();
+                                  editstate = false;
+                                });
+                                clearFields();
+                              },
                             ),
                           ),
                         ],
                       ),
                     )
-                  : TextField(
-                      controller: edit_quiz_input,
-                      decoration: InputDecoration(label: Text("ID?")),
-                      keyboardType: TextInputType.number,
-                      textAlign: TextAlign.center,
+                  : Input(
+                      edit_quiz_input,
+                      TextInputType.number,
+                      "ID?",
+                      "احذفه رقم السؤال",
+                      false,
+                      () {
+                        setState(() {
+                          editstate = true;
+                          onsub();
+                        });
+                        clearFields();
+                      },
                     ),
               actions: [
                 ElevatedButton(
