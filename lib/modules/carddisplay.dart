@@ -3,6 +3,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../data/db_helper.dart';
 import '../modules/skileton.dart';
 import 'package:share_plus/share_plus.dart';
@@ -30,8 +32,10 @@ class _CardsFactoryState extends State<CardsFactory> {
   bool isDare = true;
   bool pinImage = true;
   bool switchBoth = true;
-  double font_Size = 24;
+  bool spic_share = false;
+  String spic_share_text = "";
   bool _isloading = true;
+  double font_Size = 24;
   int rnum = Random().nextInt(10) + 1;
   int rnum2 = Random().nextInt(10) + 1;
 
@@ -54,6 +58,8 @@ class _CardsFactoryState extends State<CardsFactory> {
       isDare = pref.getBool('isDare') ?? true;
       switchBoth = pref.getBool('switch_both') ?? true;
       pinImage = pref.getBool('pin_image') ?? true;
+      spic_share = pref.getBool('spic_share') ?? false;
+      spic_share_text = pref.getString('spic_share_text') ?? "";
       font_Size = pref.getDouble('font_Size') ?? 24;
     });
   }
@@ -83,12 +89,16 @@ class _CardsFactoryState extends State<CardsFactory> {
         GestureDetector iconsRow = GestureDetector(
           onHorizontalDragEnd: (details) {
             if (details.primaryVelocity! > 0) {
-              SharePlus.instance.share(
-                ShareParams(
-                  text:
-                      "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}",
-                ),
-              );
+              spic_share
+                  ? _launchUrl(
+                      "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}")}",
+                    )
+                  : SharePlus.instance.share(
+                      ShareParams(
+                        text:
+                            "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}",
+                      ),
+                    );
             } else if (details.primaryVelocity! < 0) {
               setState(() {
                 if (switchBoth) {
@@ -122,12 +132,16 @@ class _CardsFactoryState extends State<CardsFactory> {
               children: [
                 IconButton(
                   onPressed: () {
-                    SharePlus.instance.share(
-                      ShareParams(
-                        text:
-                            "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}",
-                      ),
-                    );
+                    spic_share
+                        ? _launchUrl(
+                            "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}")}",
+                          )
+                        : SharePlus.instance.share(
+                            ShareParams(
+                              text:
+                                  "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randDares[dareIndex]["dare"]}",
+                            ),
+                          );
                   },
                   icon: Icon(Icons.share, size: 35, color: Colors.white),
                 ),
@@ -192,12 +206,16 @@ class _CardsFactoryState extends State<CardsFactory> {
         GestureDetector iconsRow = GestureDetector(
           onHorizontalDragEnd: (details) {
             if (details.primaryVelocity! > 0) {
-              SharePlus.instance.share(
-                ShareParams(
-                  text:
-                      "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}",
-                ),
-              );
+              spic_share
+                  ? _launchUrl(
+                      "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}")}",
+                    )
+                  : SharePlus.instance.share(
+                      ShareParams(
+                        text:
+                            "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}",
+                      ),
+                    );
             } else if (details.primaryVelocity! < 0) {
               setState(() {
                 if (switchBoth) {
@@ -231,12 +249,16 @@ class _CardsFactoryState extends State<CardsFactory> {
               children: [
                 IconButton(
                   onPressed: () {
-                    SharePlus.instance.share(
-                      ShareParams(
-                        text:
-                            "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}",
-                      ),
-                    );
+                    spic_share
+                        ? _launchUrl(
+                            "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}")}",
+                          )
+                        : SharePlus.instance.share(
+                            ShareParams(
+                              text:
+                                  "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*التحدي*\n* ${randQuizs[dareIndex]["dare"]}",
+                            ),
+                          );
                   },
                   icon: Icon(Icons.share, size: 35, color: Colors.white),
                 ),
@@ -302,12 +324,16 @@ class _CardsFactoryState extends State<CardsFactory> {
                 child: GestureDetector(
                   onHorizontalDragEnd: (details) {
                     if (details.primaryVelocity! > 0) {
-                      SharePlus.instance.share(
-                        ShareParams(
-                          text:
-                              '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
-                        ),
-                      );
+                      spic_share
+                          ? _launchUrl(
+                              "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
+                            )
+                          : SharePlus.instance.share(
+                              ShareParams(
+                                text:
+                                    '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
+                              ),
+                            );
                     } else if (details.primaryVelocity! < 0) {
                       setState(() {
                         if (index == randQuizs.length - 1) {
@@ -448,12 +474,16 @@ class _CardsFactoryState extends State<CardsFactory> {
                                 children: [
                                   IconButton(
                                     onPressed: () {
-                                      SharePlus.instance.share(
-                                        ShareParams(
-                                          text:
-                                              '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
-                                        ),
-                                      );
+                                      spic_share
+                                          ? _launchUrl(
+                                              "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
+                                            )
+                                          : SharePlus.instance.share(
+                                              ShareParams(
+                                                text:
+                                                    '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
+                                              ),
+                                            );
                                     },
                                     icon: Icon(
                                       Icons.share,
@@ -514,13 +544,19 @@ class _CardsFactoryState extends State<CardsFactory> {
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0) {
-          SharePlus.instance.share(
-            ShareParams(
-              text: type == CardType.dare
-                  ? "*التحدي*\n* ${randDares[dareIndex]["dare"]}"
-                  : "*السؤال* \n* ${randQuizs[index]["choice"]}",
-            ),
-          );
+          spic_share
+              ? _launchUrl(
+                  type == CardType.dare
+                      ? "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*التحدي*\n* ${randDares[dareIndex]["dare"]}")}"
+                      : "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}")}",
+                )
+              : SharePlus.instance.share(
+                  ShareParams(
+                    text: type == CardType.dare
+                        ? "*التحدي*\n* ${randDares[dareIndex]["dare"]}"
+                        : "*السؤال* \n* ${randQuizs[index]["choice"]}",
+                  ),
+                );
         } else if (details.primaryVelocity! < 0) {
           setState(() {
             if (type == CardType.dare) {
@@ -614,13 +650,19 @@ class _CardsFactoryState extends State<CardsFactory> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          SharePlus.instance.share(
-                            ShareParams(
-                              text: type == CardType.dare
-                                  ? "*التحدي*\n* ${randDares[dareIndex]["dare"]}"
-                                  : "*السؤال* \n* ${randQuizs[index]["choice"]}",
-                            ),
-                          );
+                          spic_share
+                              ? _launchUrl(
+                                  type == CardType.dare
+                                      ? "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*التحدي*\n* ${randDares[dareIndex]["dare"]}")}"
+                                      : "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}")}",
+                                )
+                              : SharePlus.instance.share(
+                                  ShareParams(
+                                    text: type == CardType.dare
+                                        ? "*التحدي*\n* ${randDares[dareIndex]["dare"]}"
+                                        : "*السؤال* \n* ${randQuizs[index]["choice"]}",
+                                  ),
+                                );
                         },
                         icon: Icon(Icons.share, size: 35, color: Colors.white),
                       ),
@@ -680,13 +722,19 @@ class _CardsFactoryState extends State<CardsFactory> {
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity! > 0) {
-          SharePlus.instance.share(
-            ShareParams(
-              text: type == CardType.dare
-                  ? "*التحدي*\n* ${randQuizs[dareIndex]["dare"]}"
-                  : "*السؤال* \n* ${randQuizs[index]["choice"]}",
-            ),
-          );
+          spic_share
+              ? _launchUrl(
+                  type == CardType.dare
+                      ? "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*التحدي*\n* ${randQuizs[dareIndex]["dare"]}")}"
+                      : "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}")}",
+                )
+              : SharePlus.instance.share(
+                  ShareParams(
+                    text: type == CardType.dare
+                        ? "*التحدي*\n* ${randQuizs[dareIndex]["dare"]}"
+                        : "*السؤال* \n* ${randQuizs[index]["choice"]}",
+                  ),
+                );
         } else if (details.primaryVelocity! < 0) {
           setState(() {
             if (type == CardType.dare) {
@@ -781,13 +829,19 @@ class _CardsFactoryState extends State<CardsFactory> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          SharePlus.instance.share(
-                            ShareParams(
-                              text: type == CardType.dare
-                                  ? "*التحدي*\n* ${randQuizs[dareIndex]["dare"]}"
-                                  : "*السؤال* \n* ${randQuizs[index]["choice"]}",
-                            ),
-                          );
+                          spic_share
+                              ? _launchUrl(
+                                  type == CardType.dare
+                                      ? "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*التحدي*\n* ${randQuizs[dareIndex]["dare"]}")}"
+                                      : "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}")}",
+                                )
+                              : SharePlus.instance.share(
+                                  ShareParams(
+                                    text: type == CardType.dare
+                                        ? "*التحدي*\n* ${randQuizs[dareIndex]["dare"]}"
+                                        : "*السؤال* \n* ${randQuizs[index]["choice"]}",
+                                  ),
+                                );
                         },
                         icon: Icon(Icons.share, size: 35, color: Colors.white),
                       ),
@@ -836,5 +890,11 @@ class _CardsFactoryState extends State<CardsFactory> {
         ),
       ),
     );
+  }
+}
+
+Future<void> _launchUrl(String url) async {
+  if (!await launchUrl(Uri.parse(url))) {
+    throw Exception('Could not launch URL: $url');
   }
 }
