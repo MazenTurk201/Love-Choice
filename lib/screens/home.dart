@@ -249,20 +249,3 @@ Future<void> showNotification(RemoteMessage message) async {
     );
 }
 
-Future<bool> requestStoragePermission() async {
-  // اطلب صلاحية الوصول للتخزين
-  var status = await Permission.storage.status;
-
-  if (!status.isGranted) {
-    status = await Permission.storage.request();
-  }
-
-  // في حالة أندرويد 11+
-  if (status.isDenied || status.isPermanentlyDenied) {
-    // هنا ممكن تفتح إعدادات التطبيق علشان المستخدم يفعل الصلاحية بنفسه
-    await openAppSettings();
-    return false;
-  }
-
-  return status.isGranted;
-}

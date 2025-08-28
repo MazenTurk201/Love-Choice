@@ -14,6 +14,8 @@ class DBHelper {
     // مجلد التخزين الآمن للتطبيق
     final downloadsDir = await getExternalStorageDirectory();
     final dbDir = Directory(join(downloadsDir!.path, 'Love Choice'));
+    // final downloadsDir = "/storage/emulated/0/Download";
+    // final dbDir = Directory(join(downloadsDir, 'Love Choice'));
     if (!dbDir.existsSync()) dbDir.createSync(recursive: true);
 
     // مسار defaultDb

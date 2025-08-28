@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,14 +13,16 @@ import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
 import '../screens/metgawzenPassword.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await requestStoragePermission();
+  await requestNotificationPermission();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("all_users");
   final pref = await SharedPreferences.getInstance();
-  requestStoragePermission();
   await DBHelper.init();
 
   runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));
@@ -40,7 +41,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    requestNotificationPermission();
     FirebaseMessaging.onMessage.listen((message) {
       showNotification(message);
     });
@@ -109,7 +109,39 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   showNotification(message);
 }
 
+// void requestNotificationPermission() async {
+//     // await FirebaseMessaging.instance.requestPermission();
+//     var status = await Permission.notification.status;
+//   if (!status.isGranted) {
+//     status = await Permission.notification.request();
+//   }
+// }
 
-void requestNotificationPermission() async {
-    await FirebaseMessaging.instance.requestPermission();
+Future<void> requestNotificationPermission() async {
+  var status = await Permission.notification.status;
+  if (!status.isGranted) {
+    await Permission.notification.request();
+    // var result = await Permission.notification.request();
+    // if (result.isPermanentlyDenied) {
+    //   openAppSettings(); // بس لو المستخدم رفض بشكل دائم
+    // }
+  }
+}
+
+Future<bool> requestStoragePermission() async {
+  // اطلب صلاحية الوصول للتخزين
+  var status = await Permission.storage.status;
+
+  if (!status.isGranted) {
+    status = await Permission.storage.request();
+  }
+
+  // في حالة أندرويد 11+
+  // if (status.isDenied || status.isPermanentlyDenied) {
+  //   // هنا ممكن تفتح إعدادات التطبيق علشان المستخدم يفعل الصلاحية بنفسه
+  //   await openAppSettings();
+  //   return false;
+  // }
+
+  return status.isGranted;
 }
