@@ -17,14 +17,12 @@ import '../screens/metgawzenPassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    FirebaseMessaging.instance.subscribeToTopic("all_users");
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.instance.subscribeToTopic("all_users");
   final pref = await SharedPreferences.getInstance();
   requestStoragePermission();
-   await DBHelper.init();
+  await DBHelper.init();
 
   runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));
 }
@@ -42,12 +40,10 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid || Platform.isIOS) {
-      requestNotificationPermission();
-      FirebaseMessaging.onMessage.listen((message) {
-        showNotification(message);
-      });
-    }
+    requestNotificationPermission();
+    FirebaseMessaging.onMessage.listen((message) {
+      showNotification(message);
+    });
   }
 
   @override
@@ -109,6 +105,11 @@ class _MyAppState extends State<MyApp> {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
-    showNotification(message);
+  await Firebase.initializeApp();
+  showNotification(message);
+}
+
+
+void requestNotificationPermission() async {
+    await FirebaseMessaging.instance.requestPermission();
 }

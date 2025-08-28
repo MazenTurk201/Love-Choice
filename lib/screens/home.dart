@@ -231,9 +231,7 @@ class _homeState extends State<home> {
   }
 }
 
-void requestNotificationPermission() async {
-    await FirebaseMessaging.instance.requestPermission();
-}
+
 
 Future<void> showNotification(RemoteMessage message) async {
     await flutterLocalNotificationsPlugin.show(
