@@ -60,7 +60,7 @@ class _TurkAppBarState extends State<TurkAppBar> {
   Future<Map<String, dynamic>?> geteditUser(int index) async {
     Map<String, dynamic>? data = await DBHelper.getupdateUser(
       widget.tablee,
-      index,
+      index - 1,
     );
     // loadUsers();
     return data;

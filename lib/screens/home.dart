@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:love_choice/data/db_helper.dart';
 import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -9,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -108,22 +110,25 @@ class _homeState extends State<home> {
   void initState() {
     super.initState();
     getVersionText(context, currentVersion);
+  //  await DBHelper.init();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        Fluttertoast.showToast(
-          msg: exit_tablee[Random().nextInt(exit_tablee.length)],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black54,
-          textColor: Colors.white,
-          fontSize: 16.0,
-          fontAsset: "fonts/arabic_font.otf",
-        );
+        if (Platform.isAndroid || Platform.isIOS) {
+          Fluttertoast.showToast(
+            msg: exit_tablee[Random().nextInt(exit_tablee.length)],
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black54,
+            textColor: Colors.white,
+            fontSize: 16.0,
+            fontAsset: "fonts/arabic_font.otf",
+          );
+        }
         return Future.value(true);
       },
       child: SafeArea(
@@ -229,21 +234,43 @@ class _homeState extends State<home> {
 }
 
 void requestNotificationPermission() async {
-  await FirebaseMessaging.instance.requestPermission();
+  if (Platform.isAndroid || Platform.isIOS) {
+    await FirebaseMessaging.instance.requestPermission();
+  }
 }
 
 Future<void> showNotification(RemoteMessage message) async {
-  await flutterLocalNotificationsPlugin.show(
-    message.hashCode,
-    message.notification?.title ?? 'عنوان',
-    message.notification?.body ?? 'محتوى',
-    NotificationDetails(
-      android: AndroidNotificationDetails(
-        'channel_id',
-        'channel_name',
-        channelDescription: 'channel_description',
-        icon: 'ic_notification', // ← مهم جدا
+  if (Platform.isAndroid || Platform.isIOS) {
+    await flutterLocalNotificationsPlugin.show(
+      message.hashCode,
+      message.notification?.title ?? 'عنوان',
+      message.notification?.body ?? 'محتوى',
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          'channel_id',
+          'channel_name',
+          channelDescription: 'channel_description',
+          icon: 'ic_notification', // ← مهم جدا
+        ),
       ),
-    ),
-  );
+    );
+  }
+}
+
+Future<bool> requestStoragePermission() async {
+  // اطلب صلاحية الوصول للتخزين
+  var status = await Permission.storage.status;
+
+  if (!status.isGranted) {
+    status = await Permission.storage.request();
+  }
+
+  // في حالة أندرويد 11+
+  if (status.isDenied || status.isPermanentlyDenied) {
+    // هنا ممكن تفتح إعدادات التطبيق علشان المستخدم يفعل الصلاحية بنفسه
+    await openAppSettings();
+    return false;
+  }
+
+  return status.isGranted;
 }
