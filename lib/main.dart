@@ -17,13 +17,11 @@ import '../screens/metgawzenPassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (Platform.isAndroid || Platform.isIOS) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     FirebaseMessaging.instance.subscribeToTopic("all_users");
-  }
   final pref = await SharedPreferences.getInstance();
   requestStoragePermission();
    await DBHelper.init();
@@ -111,8 +109,6 @@ class _MyAppState extends State<MyApp> {
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  if (Platform.isAndroid || Platform.isIOS) {
     await Firebase.initializeApp();
     showNotification(message);
-  }
 }

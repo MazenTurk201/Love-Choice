@@ -117,7 +117,6 @@ class _homeState extends State<home> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (Platform.isAndroid || Platform.isIOS) {
           Fluttertoast.showToast(
             msg: exit_tablee[Random().nextInt(exit_tablee.length)],
             toastLength: Toast.LENGTH_SHORT,
@@ -128,7 +127,6 @@ class _homeState extends State<home> {
             fontSize: 16.0,
             fontAsset: "fonts/arabic_font.otf",
           );
-        }
         return Future.value(true);
       },
       child: SafeArea(
@@ -234,13 +232,10 @@ class _homeState extends State<home> {
 }
 
 void requestNotificationPermission() async {
-  if (Platform.isAndroid || Platform.isIOS) {
     await FirebaseMessaging.instance.requestPermission();
-  }
 }
 
 Future<void> showNotification(RemoteMessage message) async {
-  if (Platform.isAndroid || Platform.isIOS) {
     await flutterLocalNotificationsPlugin.show(
       message.hashCode,
       message.notification?.title ?? 'عنوان',
@@ -254,7 +249,6 @@ Future<void> showNotification(RemoteMessage message) async {
         ),
       ),
     );
-  }
 }
 
 Future<bool> requestStoragePermission() async {
