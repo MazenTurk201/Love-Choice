@@ -26,10 +26,7 @@ class TurkDrawer extends StatelessWidget {
               padding: EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Colors.transparent,
-                    Color.fromARGB(255, 55, 0, 255),
-                  ],
+                  colors: [Colors.transparent, Color.fromARGB(255, 55, 0, 255)],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -139,6 +136,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
             fontAsset: "fonts/arabic_font.otf",
           );
           Future.value(true);
+          exit(0);
         } else if (widget.url == 'setting' || widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/${widget.url}");
         } else if (widget.url == 'share') {

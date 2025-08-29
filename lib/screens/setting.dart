@@ -1,8 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
+import 'package:love_choice/data/db_helper.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class setting extends StatefulWidget {
@@ -97,6 +103,7 @@ class _settingState extends State<setting> {
             backgroundColor: Color.fromARGB(255, 55, 0, 255),
             automaticallyImplyLeading: false,
           ),
+          resizeToAvoidBottomInset: true,
           body: Column(
             children: [
               settingTile(
@@ -105,7 +112,7 @@ class _settingState extends State<setting> {
                 fun: (val) {
                   isSwitched = val;
                   if (!isSwitched) {
-                    isSwitched2 = false; // يقفل التاني كمان
+                    isSwitched2 = false;
                     saveSettings("switch_both", val);
                   }
                   saveSettings("isDare", val);
@@ -121,14 +128,6 @@ class _settingState extends State<setting> {
                       }
                     : (val) {},
               ),
-              // settingTile(
-              //   title: "أخفاء التغيير مع بعض؟",
-              //   state: isSwitched2,
-              //   fun: (val) {
-              //     isSwitched2 = val;
-              //     saveSettings("switch_both", val);
-              //   },
-              // ),
               settingTile(
                 title: "تثبيت الصور؟",
                 state: isSwitched3,
@@ -138,6 +137,61 @@ class _settingState extends State<setting> {
                 },
               ),
               SizedBox(height: 20, child: Divider(indent: 30, endIndent: 30)),
+              InkWell(
+                onLongPress: () {
+                  BackUp_Restore_LoveChoice(false);
+                  turkToast("تم الاسترجاع");
+                },
+                onDoubleTap: () {
+                  BackUp_Restore_LoveChoice(true);
+                  turkToast("تم النسخ في ملفات الجهاز");
+                  Fluttertoast.showToast(
+                    msg: "/storage/emulated/0/Love Choice/user_database.db",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.black54,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
+                },
+                onTap: () {
+                  turkToast(
+                    "دوس مرتين عشان تنسخ البيانات\nدوسة طويلة عشان تسترجع البيانات",
+                  );
+                },
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Icon(Icons.backup, size: 40),
+                  ),
+                  title: Text(
+                    "نسخ احتياطي واستعادة؟",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontFamily: "TurkFont"),
+                  ),
+                ),
+              ),
+              InkWell(
+                onLongPress: () {
+                  downloadDB();
+                  turkToast("تم التحديث");
+                },
+                onTap: () {
+                  turkToast("دوسة طويلة عشان تحدث البيانات");
+                },
+                child: ListTile(
+                  leading: Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Icon(Icons.system_update_tv_outlined, size: 40),
+                  ),
+                  title: Text(
+                    "تحديث الأسئلة والتحديات؟",
+                    textAlign: TextAlign.right,
+                    style: TextStyle(fontFamily: "TurkFont"),
+                  ),
+                ),
+              ),
               InkWell(
                 onLongPress: () {
                   showDialog(
@@ -566,5 +620,99 @@ class _settingState extends State<setting> {
       fontSize: 16.0,
       fontAsset: "fonts/arabic_font.otf",
     );
+  }
+}
+
+Future<void> BackUp_Restore_LoveChoice(bool backup) async {
+  if (backup) {
+    // 📂 Backup
+    Directory? ext_Dir = await getExternalStorageDirectory();
+    Directory? extDir = Directory(join(ext_Dir!.path, 'Love Choice'));
+
+    // ملف التطبيق
+    File sourceFile = File(join(extDir.path, "user_database.db"));
+
+    // مكان النسخة الاحتياطية (خارجي)
+    Directory targetDir = Directory("/storage/emulated/0/Love Choice/");
+    if (!await targetDir.exists()) {
+      await targetDir.create(recursive: true);
+    }
+
+    File targetFile = File(join(targetDir.path, "user_database.db"));
+
+    if (await targetFile.exists()) {
+      await targetFile.delete();
+    }
+
+    await sourceFile.copy(targetFile.path);
+  } else {
+    // 📂 Restore
+    try {
+      // غلقها
+      await DBHelper.close();
+
+      // ملف النسخة الاحتياطية
+      File sourceFile = File(
+        "/storage/emulated/0/Love Choice/user_database.db",
+      );
+
+      // مسار التطبيق
+      Directory? extDir = await getExternalStorageDirectory();
+      if (extDir == null) return;
+
+      Directory targetDir = Directory(join(extDir.path, "Love Choice"));
+      if (!await targetDir.exists()) {
+        await targetDir.create(recursive: true);
+      }
+
+      File targetFile = File(join(targetDir.path, "user_database.db"));
+
+      if (await targetFile.exists()) {
+        await targetFile.delete();
+      }
+
+      await sourceFile.copy(targetFile.path);
+      await DBHelper.init();
+    } catch (e) {
+      BackUp_Restore_LoveChoice(true);
+    }
+  }
+}
+
+Future<void> downloadDB() async {
+  try {
+    await DBHelper.close();
+    // 1. الرابط
+    const url =
+        "https://github.com/MazenTurk201/Love-Choice/raw/refs/heads/main/assets/love_choice3.db";
+
+    // 2. هات الديركتوري الأساسي
+    Directory? extDir = await getExternalStorageDirectory();
+    if (extDir == null) return;
+
+    // اعمل فولدر "Love Choice" لو مش موجود
+    Directory saveDir = Directory(join(extDir.path, "Love Choice"));
+    if (!await saveDir.exists()) {
+      await saveDir.create(recursive: true);
+    }
+
+    // 3. نحدد مسار الحفظ
+    String filePath = "${saveDir.path}/love_choice3.db";
+    File file = File(filePath);
+
+    // 4. اعمل داونلود
+    var response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      // لو الملف موجود امسحه احتياط
+      if (await file.exists()) {
+        await file.delete();
+      }
+
+      // اكتب الجديد
+      await file.writeAsBytes(response.bodyBytes, flush: true);
+      await DBHelper.init();
+    }
+  } catch (e) {
+    // null;
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:love_choice/data/db_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/firebase_options.dart';
@@ -23,7 +24,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("all_users");
   final pref = await SharedPreferences.getInstance();
-  await DBHelper.init();
+  // await DBHelper.init();
 
   runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));
 }
@@ -144,4 +145,17 @@ Future<bool> requestStoragePermission() async {
   // }
 
   return status.isGranted;
+}
+
+void turkToast(String text) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 1,
+    backgroundColor: Colors.black54,
+    textColor: Colors.white,
+    fontSize: 16.0,
+    fontAsset: "fonts/arabic_font.otf",
+  );
 }

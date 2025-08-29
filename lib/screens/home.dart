@@ -107,10 +107,11 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   @override
-  void initState() {
+  void initState() async {
     super.initState();
     getVersionText(context, currentVersion);
-  //  await DBHelper.init();
+    openAllFilesAccessSettings();
+   await DBHelper.init();
   }
 
   @override
@@ -249,3 +250,18 @@ Future<void> showNotification(RemoteMessage message) async {
     );
 }
 
+Future<bool> openAllFilesAccessSettings() async {
+  // if (Platform.isAndroid) {
+  //   const intent = AndroidIntent(
+  //     action: 'android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION',
+  //   );
+  //   await intent.launch();
+  //   turkToast("اديلنا صلاحيات الملفات عشان التحديثات");
+  // }
+  if (await Permission.manageExternalStorage.request().isGranted) {
+    return true;
+  } else {
+    openAppSettings(); // يفتح الإعدادات يدويًا
+    return false;
+  }
+}

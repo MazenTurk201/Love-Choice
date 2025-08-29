@@ -70,6 +70,11 @@ class DBHelper {
     database = CombinedDatabase(defaultDb, userDb);
   }
 
+  static Future<void> close() async {
+    await database.defaultDb.close();
+    await database.userDb.close();
+  }
+
   ///================= CRUD =================///
 
   // GET جميع العناصر من القاعدتين
