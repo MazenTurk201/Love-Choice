@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:love_choice/data/db_helper.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/firebase_options.dart';
 import 'modules/carddisplay.dart';
+import 'data/db_helper.dart';
 import 'screens/home.dart';
 import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
-import '../screens/metgawzenPassword.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'screens/metgawzenPassword.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
