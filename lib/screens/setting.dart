@@ -106,127 +106,219 @@ class _settingState extends State<setting> {
           ),
           resizeToAvoidBottomInset: true,
           body: SingleChildScrollView(
-            child: Column(
-              children: [
-                settingTile(
-                  title: "عرض الخيار التاني؟",
-                  state: isSwitched,
-                  fun: (val) {
-                    isSwitched = val;
-                    if (!isSwitched) {
-                      isSwitched2 = false;
-                      saveSettings("switch_both", val);
-                    }
-                    saveSettings("isDare", val);
-                  },
-                ),
-                settingTile(
-                  title: "التغيير مع بعض؟",
-                  state: isSwitched2,
-                  fun: isSwitched
-                      ? (val) {
-                          isSwitched2 = val;
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height - 150,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: [
+                    settingTile(
+                      title: "عرض الخيار التاني؟",
+                      state: isSwitched,
+                      fun: (val) {
+                        isSwitched = val;
+                        if (!isSwitched) {
+                          isSwitched2 = false;
                           saveSettings("switch_both", val);
                         }
-                      : (val) {},
-                ),
-                settingTile(
-                  title: "تثبيت الصور؟",
-                  state: isSwitched3,
-                  fun: (val) {
-                    isSwitched3 = val;
-                    saveSettings("pin_image", val);
-                  },
-                ),
-                SizedBox(height: 20, child: Divider(indent: 30, endIndent: 30)),
-                InkWell(
-                  onLongPress: () {
-                    BackUp_Restore_LoveChoice(false);
-                    turkToast("تم الاسترجاع");
-                  },
-                  onDoubleTap: () {
-                    BackUp_Restore_LoveChoice(true);
-                    turkToast("تم النسخ في ملفات الجهاز");
-                    Fluttertoast.showToast(
-                      msg: "/storage/emulated/0/Love Choice/user_database.db",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.black54,
-                      textColor: Colors.white,
-                      fontSize: 16.0,
-                    );
-                  },
-                  onTap: () {
-                    turkToast(
-                      "دوس مرتين عشان تنسخ البيانات\nدوسة طويلة عشان تسترجع البيانات",
-                    );
-                  },
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Icon(Icons.backup, size: 40),
+                        saveSettings("isDare", val);
+                      },
                     ),
-                    title: Text(
-                      "نسخ احتياطي واستعادة؟",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(fontFamily: "TurkFont"),
+                    settingTile(
+                      title: "التغيير مع بعض؟",
+                      state: isSwitched2,
+                      fun: isSwitched
+                          ? (val) {
+                              isSwitched2 = val;
+                              saveSettings("switch_both", val);
+                            }
+                          : (val) {},
                     ),
-                  ),
-                ),
-                InkWell(
-                  onLongPress: () {
-                    downloadDB();
-                    turkToast("تم التحديث");
-                  },
-                  onTap: () {
-                    turkToast("دوسة طويلة عشان تحدث البيانات");
-                  },
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Icon(Icons.system_update_tv_outlined, size: 40),
+                    settingTile(
+                      title: "تثبيت الصور؟",
+                      state: isSwitched3,
+                      fun: (val) {
+                        isSwitched3 = val;
+                        saveSettings("pin_image", val);
+                      },
                     ),
-                    title: Text(
-                      "تحديث الأسئلة والتحديات؟",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(fontFamily: "TurkFont"),
+                    SizedBox(
+                      height: 20,
+                      child: Divider(indent: 30, endIndent: 30),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          "مشاركة مخصصة",
-                          style: TextStyle(
-                            fontFamily: "TurkFont",
-                            fontSize: 22,
-                          ),
-                          textAlign: TextAlign.center,
+                    InkWell(
+                      onLongPress: () {
+                        BackUp_Restore_LoveChoice(false);
+                        turkToast("تم الاسترجاع");
+                      },
+                      onDoubleTap: () {
+                        BackUp_Restore_LoveChoice(true);
+                        turkToast("تم النسخ في ملفات الجهاز");
+                        Fluttertoast.showToast(
+                          msg:
+                              "/storage/emulated/0/Love Choice/user_database.db",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.black54,
+                          textColor: Colors.white,
+                          fontSize: 16.0,
+                        );
+                      },
+                      onTap: () {
+                        turkToast(
+                          "دوس مرتين عشان تنسخ البيانات\nدوسة طويلة عشان تسترجع البيانات",
+                        );
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.backup, size: 40),
                         ),
-                        content: SizedBox(
-                          height: 150,
-                          child: Column(
-                            children: [
-                              Text(
-                                "شوف هتبعت لـ مين؟",
-                                style: TextStyle(
-                                  fontFamily: "TurkFont",
-                                  fontSize: 20,
-                                ),
+                        title: Text(
+                          "نسخ احتياطي واستعادة؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onLongPress: () {
+                        downloadDB();
+                        turkToast("تم التحديث");
+                      },
+                      onTap: () {
+                        turkToast("دوسة طويلة عشان تحدث البيانات");
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(
+                            Icons.system_update_tv_outlined,
+                            size: 40,
+                          ),
+                        ),
+                        title: Text(
+                          "تحديث الأسئلة والتحديات؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "مشاركة مخصصة",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 22,
                               ),
-                              SizedBox(height: 20),
-                              TextField(
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.deny(
-                                    RegExp(r'\+'),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "شوف هتبعت لـ مين؟",
+                                    style: TextStyle(
+                                      fontFamily: "TurkFont",
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  TextField(
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.deny(
+                                        RegExp(r'\+'),
+                                      ),
+                                    ],
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(),
+                                    onSubmitted: (value) async {
+                                      final pref =
+                                          await SharedPreferences.getInstance();
+                                      if (spic_share_controler
+                                          .text
+                                          .isNotEmpty) {
+                                        await pref.setBool("spic_share", true);
+                                        await pref.setString(
+                                          "spic_share_text",
+                                          spic_share_controler.text.trim(),
+                                        );
+                                        Navigator.pop(context);
+                                        spic_share_controler.text = "";
+                                        turkToast("تم التغيير");
+                                      } else {
+                                        spic_share_controler.text = "غلط";
+                                      }
+                                    },
+                                    cursorColor: Color.fromARGB(
+                                      255,
+                                      55,
+                                      0,
+                                      255,
+                                    ),
+                                    decoration: InputDecoration(
+                                      prefixText: "+ ",
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      floatingLabelAlignment:
+                                          FloatingLabelAlignment.center,
+                                      hint: Text(
+                                        "201092130013",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      label: Text(
+                                        "الرقم برمز الدولة",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontFamily: "TurkFont",
+                                        ),
+                                      ),
+                                    ),
+                                    cursorHeight: 30,
+                                    style: TextStyle(fontFamily: "TurkFont"),
+                                    textAlign: TextAlign.center,
+                                    controller: spic_share_controler,
                                   ),
                                 ],
-                                keyboardType: TextInputType.numberWithOptions(),
-                                onSubmitted: (value) async {
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   if (spic_share_controler.text.isNotEmpty) {
@@ -242,128 +334,142 @@ class _settingState extends State<setting> {
                                     spic_share_controler.text = "غلط";
                                   }
                                 },
-                                cursorColor: Color.fromARGB(255, 55, 0, 255),
-                                decoration: InputDecoration(
-                                  prefixText: "+ ",
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  floatingLabelAlignment:
-                                      FloatingLabelAlignment.center,
-                                  hint: Text(
-                                    "201092130013",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  label: Text(
-                                    "الرقم برمز الدولة",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontFamily: "TurkFont",
-                                    ),
-                                  ),
+                                child: Text(
+                                  "تغيير",
+                                  style: TextStyle(fontFamily: "TurkFont"),
                                 ),
-                                cursorHeight: 30,
-                                style: TextStyle(fontFamily: "TurkFont"),
-                                textAlign: TextAlign.center,
-                                controller: spic_share_controler,
                               ),
                             ],
                           ),
+                        );
+                      },
+                      onDoubleTap: () async {
+                        final pref = await SharedPreferences.getInstance();
+                        await pref.setBool("spic_share", false);
+                        await pref.setString("spic_share_text", "");
+                        turkToast("تمت اعادة التعيين");
+                      },
+                      onTap: () {
+                        turkToast(
+                          "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان الاضافة",
+                        );
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.numbers_rounded, size: 40),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () async {
-                              final pref =
-                                  await SharedPreferences.getInstance();
-                              if (spic_share_controler.text.isNotEmpty) {
-                                await pref.setBool("spic_share", true);
-                                await pref.setString(
-                                  "spic_share_text",
-                                  spic_share_controler.text.trim(),
-                                );
-                                Navigator.pop(context);
-                                spic_share_controler.text = "";
-                                turkToast("تم التغيير");
-                              } else {
-                                spic_share_controler.text = "غلط";
-                              }
-                            },
-                            child: Text(
-                              "تغيير",
-                              style: TextStyle(fontFamily: "TurkFont"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  onDoubleTap: () async {
-                    final pref = await SharedPreferences.getInstance();
-                    await pref.setBool("spic_share", false);
-                    await pref.setString("spic_share_text", "");
-                    turkToast("تمت اعادة التعيين");
-                  },
-                  onTap: () {
-                    turkToast(
-                      "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان الاضافة",
-                    );
-                  },
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Icon(Icons.numbers_rounded, size: 40),
-                    ),
-                    title: Text(
-                      "مشاركة مخصصة للواتساب؟",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(fontFamily: "TurkFont"),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
                         title: Text(
-                          "تغيير حجم الخط",
-                          style: TextStyle(
-                            fontFamily: "TurkFont",
-                            fontSize: 22,
-                          ),
-                          textAlign: TextAlign.center,
+                          "مشاركة مخصصة للواتساب؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
                         ),
-                        content: SizedBox(
-                          height: 150,
-                          child: Column(
-                            children: [
-                              Text(
-                                "شوف هتغير لـ ايه؟",
-                                style: TextStyle(
-                                  fontFamily: "TurkFont",
-                                  fontSize: 20,
-                                ),
+                      ),
+                    ),
+                    InkWell(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "تغيير حجم الخط",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 22,
                               ),
-                              SizedBox(height: 20),
-                              TextField(
-                                keyboardType: TextInputType.numberWithOptions(),
-                                onSubmitted: (value) async {
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "شوف هتغير لـ ايه؟",
+                                    style: TextStyle(
+                                      fontFamily: "TurkFont",
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  TextField(
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(),
+                                    onSubmitted: (value) async {
+                                      final pref =
+                                          await SharedPreferences.getInstance();
+                                      if (font_controler.text.isNotEmpty) {
+                                        await pref.setDouble(
+                                          "font_Size",
+                                          double.parse(font_controler.text),
+                                        );
+                                        Navigator.pop(context);
+                                        font_controler.text = "";
+                                        turkToast("تم التغيير");
+                                      } else {
+                                        font_controler.text = "غلط";
+                                      }
+                                    },
+                                    cursorColor: Color.fromARGB(
+                                      255,
+                                      55,
+                                      0,
+                                      255,
+                                    ),
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      floatingLabelAlignment:
+                                          FloatingLabelAlignment.center,
+                                      hint: Text(
+                                        "الطبيعي 24",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      label: Text(
+                                        "ظبط الخط على كيفك",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontFamily: "TurkFont",
+                                        ),
+                                      ),
+                                    ),
+                                    cursorHeight: 30,
+                                    style: TextStyle(fontFamily: "TurkFont"),
+                                    textAlign: TextAlign.center,
+                                    controller: font_controler,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   if (font_controler.text.isNotEmpty) {
@@ -378,131 +484,149 @@ class _settingState extends State<setting> {
                                     font_controler.text = "غلط";
                                   }
                                 },
-                                cursorColor: Color.fromARGB(255, 55, 0, 255),
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  floatingLabelAlignment:
-                                      FloatingLabelAlignment.center,
-                                  hint: Text(
-                                    "الطبيعي 24",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  label: Text(
-                                    "ظبط الخط على كيفك",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontFamily: "TurkFont",
-                                    ),
-                                  ),
+                                child: Text(
+                                  "تغيير",
+                                  style: TextStyle(fontFamily: "TurkFont"),
                                 ),
-                                cursorHeight: 30,
-                                style: TextStyle(fontFamily: "TurkFont"),
-                                textAlign: TextAlign.center,
-                                controller: font_controler,
                               ),
                             ],
                           ),
+                        );
+                      },
+                      onDoubleTap: () async {
+                        final pref = await SharedPreferences.getInstance();
+                        await pref.setDouble("font_Size", 24);
+                        turkToast("تمت اعادة التعيين");
+                      },
+                      onTap: () {
+                        turkToast(
+                          "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان تغيير",
+                        );
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.format_size_rounded, size: 40),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () async {
-                              final pref =
-                                  await SharedPreferences.getInstance();
-                              if (font_controler.text.isNotEmpty) {
-                                await pref.setDouble(
-                                  "font_Size",
-                                  double.parse(font_controler.text),
-                                );
-                                Navigator.pop(context);
-                                font_controler.text = "";
-                                turkToast("تم التغيير");
-                              } else {
-                                font_controler.text = "غلط";
-                              }
-                            },
-                            child: Text(
-                              "تغيير",
-                              style: TextStyle(fontFamily: "TurkFont"),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                  onDoubleTap: () async {
-                    final pref = await SharedPreferences.getInstance();
-                    await pref.setDouble("font_Size", 24);
-                    turkToast("تمت اعادة التعيين");
-                  },
-                  onTap: () {
-                    turkToast(
-                      "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان تغيير",
-                    );
-                  },
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Icon(Icons.format_size_rounded, size: 40),
-                    ),
-                    title: Text(
-                      "تغيير حجم الخط؟",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(fontFamily: "TurkFont"),
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onLongPress: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
                         title: Text(
-                          "تغيير باسورد المتجوزين",
-                          style: TextStyle(
-                            fontFamily: "TurkFont",
-                            fontSize: 22,
-                          ),
-                          textAlign: TextAlign.center,
+                          "تغيير حجم الخط؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
                         ),
-                        content: SizedBox(
-                          height: 150,
-                          child: Column(
-                            children: [
-                              Text(
-                                "شوف هتغير لـ ايه؟",
-                                style: TextStyle(
-                                  fontFamily: "TurkFont",
-                                  fontSize: 20,
-                                ),
+                      ),
+                    ),
+                    InkWell(
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "تغيير باسورد المتجوزين",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 22,
                               ),
-                              SizedBox(height: 20),
-                              TextField(
-                                keyboardType: TextInputType.numberWithOptions(),
-                                onSubmitted: (value) async {
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              height: 150,
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "شوف هتغير لـ ايه؟",
+                                    style: TextStyle(
+                                      fontFamily: "TurkFont",
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  TextField(
+                                    keyboardType:
+                                        TextInputType.numberWithOptions(),
+                                    onSubmitted: (value) async {
+                                      final pref =
+                                          await SharedPreferences.getInstance();
+                                      if (controler.text.isNotEmpty) {
+                                        await pref.setInt(
+                                          "metgawzen_password_num",
+                                          int.parse(controler.text),
+                                        );
+                                        Navigator.pop(context);
+                                        controler.text = "";
+                                        turkToast("تم التغيير");
+                                      } else {
+                                        controler.text = "غلط";
+                                      }
+                                    },
+                                    cursorColor: Color.fromARGB(
+                                      255,
+                                      55,
+                                      0,
+                                      255,
+                                    ),
+                                    decoration: InputDecoration(
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 1.5,
+                                        ),
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                            255,
+                                            55,
+                                            0,
+                                            255,
+                                          ),
+                                          width: 2,
+                                        ),
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      floatingLabelAlignment:
+                                          FloatingLabelAlignment.center,
+                                      hint: Text(
+                                        "Password",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                      label: Text(
+                                        "منورين",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontFamily: "TurkFont",
+                                        ),
+                                      ),
+                                    ),
+                                    cursorHeight: 30,
+                                    style: TextStyle(fontFamily: "TurkFont"),
+                                    textAlign: TextAlign.center,
+                                    controller: controler,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   if (controler.text.isNotEmpty) {
                                     await pref.setInt(
                                       "metgawzen_password_num",
                                       int.parse(controler.text),
+                                    );
+                                    await pref.setBool('warning18', false);
+                                    await pref.setBool(
+                                      'metgawzen_password',
+                                      true,
                                     );
                                     Navigator.pop(context);
                                     controler.text = "";
@@ -511,114 +635,60 @@ class _settingState extends State<setting> {
                                     controler.text = "غلط";
                                   }
                                 },
-                                cursorColor: Color.fromARGB(255, 55, 0, 255),
-                                decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 1.5,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                      color: Color.fromARGB(255, 55, 0, 255),
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  floatingLabelAlignment:
-                                      FloatingLabelAlignment.center,
-                                  hint: Text(
-                                    "Password",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(color: Colors.white70),
-                                  ),
-                                  label: Text(
-                                    "منورين",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontFamily: "TurkFont",
-                                    ),
-                                  ),
+                                child: Text(
+                                  "تغيير",
+                                  style: TextStyle(fontFamily: "TurkFont"),
                                 ),
-                                cursorHeight: 30,
-                                style: TextStyle(fontFamily: "TurkFont"),
-                                textAlign: TextAlign.center,
-                                controller: controler,
                               ),
                             ],
                           ),
+                        );
+                      },
+                      onDoubleTap: () async {
+                        final pref = await SharedPreferences.getInstance();
+                        await pref.remove("metgawzen_password_num");
+                        await pref.remove("metgawzen_password");
+                        await pref.setBool("warning18", true);
+                        turkToast("اتحذف بنجاح");
+                      },
+                      onTap: () {
+                        turkToast(
+                          "دوس مرتين عشان يتحذف \nدوسة طويلة عشان تغيير",
+                        );
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.password_rounded, size: 40),
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () async {
-                              final pref =
-                                  await SharedPreferences.getInstance();
-                              if (controler.text.isNotEmpty) {
-                                await pref.setInt(
-                                  "metgawzen_password_num",
-                                  int.parse(controler.text),
-                                );
-                                await pref.setBool('warning18', false);
-                                await pref.setBool('metgawzen_password', true);
-                                Navigator.pop(context);
-                                controler.text = "";
-                                turkToast("تم التغيير");
-                              } else {
-                                controler.text = "غلط";
-                              }
-                            },
-                            child: Text(
-                              "تغيير",
-                              style: TextStyle(fontFamily: "TurkFont"),
-                            ),
-                          ),
-                        ],
+                        title: Text(
+                          "حذف الباسورد؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
+                        ),
                       ),
-                    );
-                  },
-                  onDoubleTap: () async {
-                    final pref = await SharedPreferences.getInstance();
-                    await pref.remove("metgawzen_password_num");
-                    await pref.remove("metgawzen_password");
-                    await pref.setBool("warning18", true);
-                    turkToast("اتحذف بنجاح");
-                  },
-                  onTap: () {
-                    turkToast("دوس مرتين عشان يتحذف \nدوسة طويلة عشان تغيير");
-                  },
-                  child: ListTile(
-                    leading: Padding(
-                      padding: const EdgeInsets.only(left: 10.0),
-                      child: Icon(Icons.password_rounded, size: 40),
                     ),
-                    title: Text(
-                      "حذف الباسورد؟",
-                      textAlign: TextAlign.right,
-                      style: TextStyle(fontFamily: "TurkFont"),
+                    // settingTile(
+                    //   title: "تغيرهم مع بعض؟",
+                    //   state: isSwitched2,
+                    //   fun: (val) {
+                    //     isSwitched2 = val;
+                    //     if (!val) {
+                    //       print("dark");
+                    //     }
+                    //   },
+                    // ),
+                    Expanded(child: Container()),
+                    // SizedBox(height: MediaQuery.of(context).size.height / 25),
+                    Divider(endIndent: 30, indent: 30),
+                    Text(
+                      "MazenTurk © 2025",
+                      style: TextStyle(fontSize: 15, fontFamily: "arial"),
                     ),
-                  ),
+                    // SizedBox(height: 10),
+                  ],
                 ),
-                // settingTile(
-                //   title: "تغيرهم مع بعض؟",
-                //   state: isSwitched2,
-                //   fun: (val) {
-                //     isSwitched2 = val;
-                //     if (!val) {
-                //       print("dark");
-                //     }
-                //   },
-                // ),
-                SizedBox(height: MediaQuery.of(context).size.height / 25),
-                Divider(endIndent: 30, indent: 30),
-                Text(
-                  "MazenTurk © 2025",
-                  style: TextStyle(fontSize: 15, fontFamily: "arial"),
-                ),
-                SizedBox(height: 10),
-              ],
+              ),
             ),
           ),
         ),
