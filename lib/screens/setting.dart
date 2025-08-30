@@ -771,7 +771,7 @@ Future<void> downloadDB() async {
     await DBHelper.close();
     // 1. الرابط
     const url =
-        "https://github.com/MazenTurk201/Love-Choice/raw/refs/heads/main/assets/love_choice3.db";
+        "https://github.com/MazenTurk201/Love-Choice/raw/refs/heads/main/assets/love_choice.db";
 
     // 2. هات الديركتوري الأساسي
     Directory? extDir = await getExternalStorageDirectory();
@@ -784,7 +784,7 @@ Future<void> downloadDB() async {
     }
 
     // 3. نحدد مسار الحفظ
-    String filePath = "${saveDir.path}/love_choice3.db";
+    String filePath = "${saveDir.path}/love_choice.db";
     File file = File(filePath);
 
     // 4. اعمل داونلود

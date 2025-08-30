@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:love_choice/data/db_helper.dart';
+import 'package:love_choice/screens/setting.dart';
 import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -66,9 +67,10 @@ Future<void> getVersionText(
                   _launchUrl(
                     'https://github.com/MazenTurk201/Love-Choice/releases/latest',
                   );
+                  downloadDB();
                 },
                 child: Text(
-                  "حسناً",
+                  "يلا بينا",
                   style: TextStyle(fontSize: 15, fontFamily: "TurkFont"),
                   textAlign: TextAlign.center,
                 ),
@@ -190,7 +192,7 @@ class _homeState extends State<home> {
                     children: [
                       Buildcard("تعارف", "نجرب نكتشف بعض", "t3arof", false),
                       Buildcard(
-                        "كوبلز",
+                        "كابلز",
                         "ايدي ف ايدك نرجع البدايات",
                         "couples",
                         false,

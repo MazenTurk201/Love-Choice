@@ -87,14 +87,22 @@ class _MyAppState extends State<MyApp> {
             Gamepage(tablee: 'metgawzen_choices', style: CardStyle.towCard),
         '/ma5toben': (ctx) =>
             Gamepage(tablee: 'ma5toben_choices', style: CardStyle.oneCard),
+        // '/shella': (ctx) =>
+        //     Gamepage(tablee: 'shella_choices', style: CardStyle.towCardRandom),
+        // '/t3arof': (ctx) =>
+        //     Gamepage(tablee: 't3arof_choices', style: CardStyle.towCardRandom),
+        // '/couples': (ctx) =>
+        //     Gamepage(tablee: 'couples_choices', style: CardStyle.towCardRandom),
+        // '/bestat': (ctx) =>
+        //     Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
         '/shella': (ctx) =>
-            Gamepage(tablee: 'shella_choices', style: CardStyle.towCardRandom),
+            Gamepage(tablee: 'shella_choices', style: CardStyle.towCard),
         '/t3arof': (ctx) =>
-            Gamepage(tablee: 't3arof_choices', style: CardStyle.towCardRandom),
+            Gamepage(tablee: 't3arof_choices', style: CardStyle.towCard),
         '/couples': (ctx) =>
-            Gamepage(tablee: 'couples_choices', style: CardStyle.towCardRandom),
+            Gamepage(tablee: 'couples_choices', style: CardStyle.towCard),
         '/bestat': (ctx) =>
-            Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
+            Gamepage(tablee: 'bestat_choices', style: CardStyle.towCard),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/onboarding': (ctx) => onBoarding(),

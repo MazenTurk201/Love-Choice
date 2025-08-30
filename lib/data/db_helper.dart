@@ -19,12 +19,12 @@ class DBHelper {
     if (!dbDir.existsSync()) dbDir.createSync(recursive: true);
 
     // مسار defaultDb
-    final defaultDbPath = join(dbDir.path, 'love_choice3.db');
+    final defaultDbPath = join(dbDir.path, 'love_choice.db');
     final defaultDbFile = File(defaultDbPath);
 
     // انسخ من assets لو مش موجود
     if (!defaultDbFile.existsSync()) {
-      ByteData data = await rootBundle.load("assets/love_choice3.db");
+      ByteData data = await rootBundle.load("assets/love_choice.db");
       List<int> bytes = data.buffer.asUint8List();
       await defaultDbFile.writeAsBytes(bytes, flush: true);
     }
@@ -366,24 +366,24 @@ class CombinedDatabase {
     }
 
     if (orderBy?.toUpperCase() == "RANDOM()") {
-    // Shuffle تاني بعد الدمج
-    results.shuffle();
-  } else if (orderBy != null && orderBy.isNotEmpty) {
-    final parts = orderBy.split(' ');
-    final column = parts[0];
-    final desc = parts.length > 1 && parts[1].toUpperCase() == 'DESC';
-    results.sort((a, b) {
-      final aValue = a[column];
-      final bValue = b[column];
-      int cmp;
-      if (aValue is num && bValue is num) {
-        cmp = aValue.compareTo(bValue);
-      } else {
-        cmp = aValue.toString().compareTo(bValue.toString());
-      }
-      return desc ? -cmp : cmp;
-    });
-  }
+      // Shuffle تاني بعد الدمج
+      results.shuffle();
+    } else if (orderBy != null && orderBy.isNotEmpty) {
+      final parts = orderBy.split(' ');
+      final column = parts[0];
+      final desc = parts.length > 1 && parts[1].toUpperCase() == 'DESC';
+      results.sort((a, b) {
+        final aValue = a[column];
+        final bValue = b[column];
+        int cmp;
+        if (aValue is num && bValue is num) {
+          cmp = aValue.compareTo(bValue);
+        } else {
+          cmp = aValue.toString().compareTo(bValue.toString());
+        }
+        return desc ? -cmp : cmp;
+      });
+    }
 
     // // معالجة ORDER BY
     // if (orderBy != null && orderBy.isNotEmpty) {
