@@ -17,78 +17,83 @@ class TurkDrawer extends StatelessWidget {
       elevation: 0,
       child: SafeArea(
         top: false,
-        child: Column(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 93,
-              margin: EdgeInsets.only(bottom: 15),
-              padding: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.transparent, Color.fromARGB(255, 55, 0, 255)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * 0.175,
+                margin: EdgeInsets.only(bottom: 15),
+                padding: EdgeInsets.only(top: 20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.transparent,
+                      Color.fromARGB(255, 55, 0, 255),
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50),
+                  ),
                 ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(50),
-                  bottomRight: Radius.circular(50),
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  "Menu",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "TurkLogo",
-                    fontWeight: FontWeight.bold,
-                    fontSize: 45,
+                child: Center(
+                  child: Text(
+                    "Menu",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontFamily: "TurkLogo",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 45,
+                    ),
                   ),
                 ),
               ),
-            ),
-            menuDrawerButton(
-              title: 'اعدادات',
-              icon: Icons.settings,
-              url: 'setting',
-            ),
-            menuDrawerButton(
-              title: 'ملف المطور',
-              icon: Icons.person,
-              url: 'profile',
-            ),
-            menuDrawerButton(
-              title: 'موقعنا',
-              icon: Icons.contacts,
-              url: 'https://mazenturk201.github.io/Love-Choice',
-            ),
-            menuDrawerButton(
-              title: 'شكاوي',
-              icon: Icons.feedback,
-              url: 'https://wa.me/+201092130013?text=Hi+Turk',
-            ),
-            menuDrawerButton(
-              title: 'ادينا نصايح',
-              icon: Icons.rate_review,
-              url: 'rate',
-            ),
-            menuDrawerButton(
-              title: 'اعزمني على قهوة',
-              icon: Icons.coffee,
-              url:
-                  'https://mazenturk201.github.io/Love-Choice/make-a-donation.html',
-            ),
-            Expanded(child: Container()),
-            Divider(endIndent: 30, indent: 30),
-            SizedBox(height: 10),
-            menuDrawerButton(
-              title: 'شارك لعبتنا',
-              icon: Icons.ios_share,
-              url: 'share',
-            ),
-            menuDrawerButton(title: 'خروج', icon: Icons.exit_to_app, url: ''),
-            SizedBox(height: 10),
-          ],
+              menuDrawerButton(
+                title: 'اعدادات',
+                icon: Icons.settings,
+                url: 'setting',
+              ),
+              menuDrawerButton(
+                title: 'ملف المطور',
+                icon: Icons.person,
+                url: 'profile',
+              ),
+              menuDrawerButton(
+                title: 'موقعنا',
+                icon: Icons.contacts,
+                url: 'https://mazenturk201.github.io/Love-Choice',
+              ),
+              menuDrawerButton(
+                title: 'شكاوي',
+                icon: Icons.feedback,
+                url: 'https://wa.me/+201092130013?text=Hi+Turk',
+              ),
+              menuDrawerButton(
+                title: 'ادينا نصايح',
+                icon: Icons.rate_review,
+                url: 'rate',
+              ),
+              menuDrawerButton(
+                title: 'اعزمني على قهوة',
+                icon: Icons.coffee,
+                url:
+                    'https://mazenturk201.github.io/Love-Choice/make-a-donation.html',
+              ),
+              // Expanded(child: Container()),
+              Divider(endIndent: 30, indent: 30),
+              SizedBox(height: MediaQuery.of(context).size.height / 11),
+              menuDrawerButton(
+                title: 'شارك لعبتنا',
+                icon: Icons.ios_share,
+                url: 'share',
+              ),
+              menuDrawerButton(title: 'خروج', icon: Icons.exit_to_app, url: ''),
+              SizedBox(height: 10),
+            ],
+          ),
         ),
       ),
     );

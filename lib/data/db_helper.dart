@@ -334,6 +334,7 @@ class CombinedDatabase {
           whereArgs: whereArgs,
           groupBy: groupBy,
           having: having,
+          orderBy: orderBy?.toUpperCase() == "RANDOM()" ? "RANDOM()" : orderBy,
         ),
       );
     } catch (_) {}
@@ -348,6 +349,7 @@ class CombinedDatabase {
           whereArgs: whereArgs,
           groupBy: groupBy,
           having: having,
+          orderBy: orderBy?.toUpperCase() == "RANDOM()" ? "RANDOM()" : orderBy,
         ),
       );
     } catch (_) {}
@@ -363,23 +365,43 @@ class CombinedDatabase {
       });
     }
 
-    // معالجة ORDER BY
-    if (orderBy != null && orderBy.isNotEmpty) {
-      final parts = orderBy.split(' ');
-      final column = parts[0];
-      final desc = parts.length > 1 && parts[1].toUpperCase() == 'DESC';
-      results.sort((a, b) {
-        final aValue = a[column];
-        final bValue = b[column];
-        int cmp;
-        if (aValue is num && bValue is num) {
-          cmp = aValue.compareTo(bValue);
-        } else {
-          cmp = aValue.toString().compareTo(bValue.toString());
-        }
-        return desc ? -cmp : cmp;
-      });
-    }
+    if (orderBy?.toUpperCase() == "RANDOM()") {
+    // Shuffle تاني بعد الدمج
+    results.shuffle();
+  } else if (orderBy != null && orderBy.isNotEmpty) {
+    final parts = orderBy.split(' ');
+    final column = parts[0];
+    final desc = parts.length > 1 && parts[1].toUpperCase() == 'DESC';
+    results.sort((a, b) {
+      final aValue = a[column];
+      final bValue = b[column];
+      int cmp;
+      if (aValue is num && bValue is num) {
+        cmp = aValue.compareTo(bValue);
+      } else {
+        cmp = aValue.toString().compareTo(bValue.toString());
+      }
+      return desc ? -cmp : cmp;
+    });
+  }
+
+    // // معالجة ORDER BY
+    // if (orderBy != null && orderBy.isNotEmpty) {
+    //   final parts = orderBy.split(' ');
+    //   final column = parts[0];
+    //   final desc = parts.length > 1 && parts[1].toUpperCase() == 'DESC';
+    //   results.sort((a, b) {
+    //     final aValue = a[column];
+    //     final bValue = b[column];
+    //     int cmp;
+    //     if (aValue is num && bValue is num) {
+    //       cmp = aValue.compareTo(bValue);
+    //     } else {
+    //       cmp = aValue.toString().compareTo(bValue.toString());
+    //     }
+    //     return desc ? -cmp : cmp;
+    //   });
+    // }
 
     // تطبيق OFFSET و LIMIT
     final start = offset ?? 0;

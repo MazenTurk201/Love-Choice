@@ -36,8 +36,8 @@ class _CardsFactoryState extends State<CardsFactory> {
   String spic_share_text = "";
   bool _isloading = true;
   double font_Size = 24;
-  int rnum = Random().nextInt(10) + 1;
-  int rnum2 = Random().nextInt(10) + 1;
+  int rnum = Random().nextInt(20) + 1;
+  int rnum2 = Random().nextInt(20) + 1;
 
   // List<Map<String, dynamic>> normalQuizs = [];
   List<Map<String, dynamic>> randQuizs = [];
@@ -81,8 +81,8 @@ class _CardsFactoryState extends State<CardsFactory> {
   @override
   Widget build(BuildContext context) {
     if (!pinImage) {
-      rnum = Random().nextInt(10) + 1;
-      rnum2 = Random().nextInt(10) + 1;
+      rnum = Random().nextInt(20) + 1;
+      rnum2 = Random().nextInt(20) + 1;
     }
     switch (widget.style) {
       case CardStyle.towCardRandom:
@@ -171,7 +171,11 @@ class _CardsFactoryState extends State<CardsFactory> {
                       }
                     });
                   },
-                  icon: Icon(Icons.swipe_right, size: 35, color: Colors.white),
+                  icon: Icon(
+                    Icons.swipe_left_rounded,
+                    size: 35,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -288,7 +292,11 @@ class _CardsFactoryState extends State<CardsFactory> {
                       }
                     });
                   },
-                  icon: Icon(Icons.swipe_right, size: 35, color: Colors.white),
+                  icon: Icon(
+                    Icons.swipe_left_rounded,
+                    size: 35,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
@@ -517,7 +525,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                                       });
                                     },
                                     icon: Icon(
-                                      Icons.swipe_right,
+                                      Icons.swipe_left_rounded,
                                       size: 35,
                                       color: Colors.white,
                                     ),
@@ -697,7 +705,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                           });
                         },
                         icon: Icon(
-                          Icons.swipe_right,
+                          Icons.swipe_left_rounded,
                           size: 35,
                           color: Colors.white,
                         ),
@@ -876,7 +884,7 @@ class _CardsFactoryState extends State<CardsFactory> {
                           });
                         },
                         icon: Icon(
-                          Icons.swipe_right,
+                          Icons.swipe_left_rounded,
                           size: 35,
                           color: Colors.white,
                         ),

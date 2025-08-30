@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -107,27 +108,27 @@ class home extends StatefulWidget {
 
 class _homeState extends State<home> {
   @override
-  void initState() async {
+  void initState() {
     super.initState();
     getVersionText(context, currentVersion);
     openAllFilesAccessSettings();
-   await DBHelper.init();
+    DBHelper.init();
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-          Fluttertoast.showToast(
-            msg: exit_tablee[Random().nextInt(exit_tablee.length)],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.black54,
-            textColor: Colors.white,
-            fontSize: 16.0,
-            fontAsset: "fonts/arabic_font.otf",
-          );
+        Fluttertoast.showToast(
+          msg: exit_tablee[Random().nextInt(exit_tablee.length)],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black54,
+          textColor: Colors.white,
+          fontSize: 16.0,
+          fontAsset: "fonts/arabic_font.otf",
+        );
         return Future.value(true);
       },
       child: SafeArea(
@@ -232,22 +233,20 @@ class _homeState extends State<home> {
   }
 }
 
-
-
 Future<void> showNotification(RemoteMessage message) async {
-    await flutterLocalNotificationsPlugin.show(
-      message.hashCode,
-      message.notification?.title ?? 'عنوان',
-      message.notification?.body ?? 'محتوى',
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-          'channel_id',
-          'channel_name',
-          channelDescription: 'channel_description',
-          icon: 'ic_notification', // ← مهم جدا
-        ),
+  await flutterLocalNotificationsPlugin.show(
+    message.hashCode,
+    message.notification?.title ?? 'عنوان',
+    message.notification?.body ?? 'محتوى',
+    NotificationDetails(
+      android: AndroidNotificationDetails(
+        'channel_id',
+        'channel_name',
+        channelDescription: 'channel_description',
+        icon: 'ic_notification', // ← مهم جدا
       ),
-    );
+    ),
+  );
 }
 
 Future<bool> openAllFilesAccessSettings() async {
@@ -258,10 +257,27 @@ Future<bool> openAllFilesAccessSettings() async {
   //   await intent.launch();
   //   turkToast("اديلنا صلاحيات الملفات عشان التحديثات");
   // }
-  if (await Permission.manageExternalStorage.request().isGranted) {
-    return true;
+
+  // if (await Permission.manageExternalStorage.request().isGranted) {
+  //   return true;
+  // } else {
+  //   openAppSettings(); // يفتح الإعدادات يدويًا
+  //   return false;
+  // }
+
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  if (androidInfo.version.sdkInt < 30) {
+    var status = await Permission.storage.request();
+    return status.isGranted;
   } else {
-    openAppSettings(); // يفتح الإعدادات يدويًا
-    return false;
+    // أندرويد 11 أو أحدث
+    var status = await Permission.manageExternalStorage.request();
+    if (status.isGranted) {
+      return true;
+    } else {
+      openAppSettings();
+      return false;
+    }
   }
 }
