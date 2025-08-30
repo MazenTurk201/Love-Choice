@@ -42,7 +42,7 @@ flutter:
 
   assets:
     - images/
-    - assets/love_choice3.db
+    - assets/love_choice.db
     - assets/animation/
   
   fonts:
