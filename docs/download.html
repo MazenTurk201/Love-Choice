@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="style.css">
   <meta name="theme-color" content="#6610f2" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
-     crossorigin="anonymous"></script>
+    crossorigin="anonymous"></script>
   <title>Download - Love Choice</title>
 </head>
 
@@ -44,23 +44,39 @@
         <p>حجم اللعبة هو 20 ميجابايت.</p>
       </div>
     </fieldset>
-    <fieldset>
+    <fieldset style="display: flex; justify-content: start; max-height: none;">
       <legend>تحميل اللعبة</legend>
-      <p style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم بالنزول
-        الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn"
-        target="_blank">تحميل</a>
+      <h5 style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم
+        بالنزول
+        الى جدول التنزيلات واختار النسخة المتوفرة على جهازك. <a style="text-decoration: underline; color: azure;"
+          href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64">لمعرفة نوع المعالج اضغط هنا.</a>
+      </h5>
+      الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
+      <br>
+      <h4>حمل اللعبة وشاركها</h4>
+      <br> 
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-arm64-v8a.apk"
+        class="download_btn" target="_blank">تحميل للأجهزة الحديثة</a>
+      <h6>للمعالجات القوية arm64 v8a</h6>
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-armeabi-v7a.apk"
+        class="download_btn" target="_blank">تحميل للاجهزة الضعيفة</a>
+      <h6>للمعالجات الضعيفة armeabi v7a</h6>
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-x86_64.apk"
+        class="download_btn" target="_blank">تحميل للمحاكيات</a>
+      <h6>للمحاكيات x86 وx64</h6>
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice.apk"
+        class="download_btn" target="_blank">تحميل لجميع الفئات</a>
+      <h6>التحميل لكل المذكور</h6>
+      <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn" target="_blank">صفحة
+        التحميل لجميع الاصدارات</a>
+      <h6>صفحة الاصدارات القديمة</h6>
+      <a href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64" class="download_btn"
+        target="_blank">معرفة المعالج</a>
+      <h6>لعدم معرفة نوع المعالج</h6>
       <br>
     </fieldset>
     <fieldset>
       <legend>صور من اللعبة</legend>
-      <!-- <div class="imgslider">
-        <img src="assets/images/s1.jpg" alt="Screenshot 1" class="img-fluid screenshotimg">
-        <img src="assets/images/s2.jpg" alt="Screenshot 2" class="img-fluid screenshotimg">
-        <img src="assets/images/s3.jpg" alt="Screenshot 3" class="img-fluid screenshotimg">
-        <img src="assets/images/s4.jpg" alt="Screenshot 4" class="img-fluid screenshotimg">
-        <img src="assets/images/s5.jpg" alt="Screenshot 5" class="img-fluid screenshotimg">
-      </div> -->
       <!-- Slideshow container -->
       <div class="slideshow-container">
 
@@ -171,14 +187,15 @@
       let html = `<table><thead><tr><th style="text-align: center;">النسخة</th><th style="text-align: center;">التاريخ</th><th style="text-align: center;">إجمالي التحميلات</th></tr></thead><tbody>`;
       releases.forEach(rel => {
         const total = (rel.assets || []).reduce((sum, a) => sum + (a.download_count || 0), 0);
+        // <br/>
+        // <small class="muted text" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">${rel.tag_name}</small><br/>
+        // ${(rel.assets || []).map(a => `${a.name}: ${a.download_count}`).join("<br/>") || "<span class='muted text'>لا توجد ملفات</span>"}
         html += `<tr>
-          <td>
-            <strong class="text">${rel.name || rel.tag_name}</strong><br/>
-            <small class="muted text" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">${rel.tag_name}</small><br/>
-            ${(rel.assets || []).map(a => `${a.name}: ${a.download_count}`).join("<br/>") || "<span class='muted text'>لا توجد ملفات</span>"}
+          <td dir="ltr" style="padding: 10px;">
+            <strong class="text">${rel.name || rel.tag_name}</strong>
           </td>
-          <td class="text" dir="ltr" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">${new Date(rel.published_at).toLocaleString()}</td>
-          <td class="text total">${total}</td>
+          <td class="text" dir="ltr" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; padding: 10px;">${new Date(rel.published_at).toLocaleString()}</td>
+          <td class="text total" style="padding: 10px;">${total}</td>
         </tr>`;
       });
       html += "</tbody></table>";
@@ -189,10 +206,10 @@
     fetchReleases();
   </script>
   <script>
-        document.querySelectorAll("p").forEach((el, i) => {
-            el.classList.add(i % 2 === 0 ? "odd" : "even");
-        });
-    </script>
+    document.querySelectorAll("p").forEach((el, i) => {
+      el.classList.add(i % 2 === 0 ? "odd" : "even");
+    });
+  </script>
 </body>
 
 </html>
