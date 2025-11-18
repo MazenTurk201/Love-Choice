@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../style/styles.dart';
+
 class metgawzenPassword extends StatefulWidget {
   const metgawzenPassword({super.key});
 
@@ -53,7 +55,7 @@ class _metgawzenPasswordState extends State<metgawzenPassword> {
                 Navigator.pushReplacementNamed(context, "/main");
               },
             ),
-            backgroundColor: Color.fromARGB(255, 55, 0, 255),
+            backgroundColor: TurkStyle().mainColor,
             automaticallyImplyLeading: false,
           ),
           backgroundColor: Colors.black,
@@ -88,18 +90,18 @@ class _metgawzenPasswordState extends State<metgawzenPassword> {
                                 controler2.text = "غلط";
                               }
                             },
-                            cursorColor: Color.fromARGB(255, 55, 0, 255),
+                            cursorColor: TurkStyle().mainColor,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 55, 0, 255),
+                                  color: TurkStyle().mainColor,
                                   width: 1.5,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 55, 0, 255),
+                                  color: TurkStyle().mainColor,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(25),
@@ -157,18 +159,18 @@ class _metgawzenPasswordState extends State<metgawzenPassword> {
                                 );
                               }
                             },
-                            cursorColor: Color.fromARGB(255, 55, 0, 255),
+                            cursorColor: TurkStyle().mainColor,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 55, 0, 255),
+                                  color: TurkStyle().mainColor,
                                   width: 1.5,
                                 ),
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
-                                  color: Color.fromARGB(255, 55, 0, 255),
+                                  color: TurkStyle().mainColor,
                                   width: 2,
                                 ),
                                 borderRadius: BorderRadius.circular(25),

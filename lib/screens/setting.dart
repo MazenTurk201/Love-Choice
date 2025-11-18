@@ -12,6 +12,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
+import '../style/styles.dart';
+import 'home.dart';
 
 class setting extends StatefulWidget {
   const setting({super.key});
@@ -153,7 +155,7 @@ class _settingState extends State<setting> {
                 Navigator.pushReplacementNamed(context, "/main");
               },
             ),
-            backgroundColor: Color.fromARGB(255, 55, 0, 255),
+            backgroundColor: TurkStyle().mainColor,
             automaticallyImplyLeading: false,
           ),
           resizeToAvoidBottomInset: true,
@@ -352,11 +354,13 @@ class _settingState extends State<setting> {
                     InkWell(
                       onLongPress: () async {
                         await requestStoragePermission();
+                        openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(false);
                         turkToast("تم الاسترجاع");
                       },
                       onDoubleTap: () async {
                         await requestStoragePermission();
+                        openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(true);
                         turkToast("تم النسخ في ملفات الجهاز");
                         Fluttertoast.showToast(

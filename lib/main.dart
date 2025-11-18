@@ -15,10 +15,13 @@ import 'screens/home.dart';
 import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
 import 'screens/onlineChat.dart';
+import 'screens/onlineHome.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
 import 'screens/metgawzenPassword.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+import 'style/styles.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,22 +69,7 @@ class _MyAppState extends State<MyApp> {
             color: Colors.white,
           ),
         ),
-        tooltipTheme: TooltipThemeData(
-          decoration: BoxDecoration(
-            color: Color.fromARGB(155, 90, 45, 255),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: "TurkFont",
-            fontSize: 13,
-            // fontWeight: FontWeight.bold,
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-          waitDuration: Duration(milliseconds: 300),
-          showDuration: Duration(seconds: 3),
-          preferBelow: false,
-        ),
+        tooltipTheme: TurkStyle().themetooltip,
       ),
 
       // initialRoute: '/onboarding',
@@ -113,7 +101,11 @@ class _MyAppState extends State<MyApp> {
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/login': (ctx) => AuthPage(),
-        '/onlineChat': (ctx) => OnlineChatPage(),
+        '/onlineChat': (ctx) {
+          final args = ModalRoute.of(ctx)!.settings.arguments as String;
+          return OnlineChatPage(roomId: args);
+        },
+        '/onlineHome': (ctx) => OnlineHomePage(),
         '/onboarding': (ctx) => onBoarding(),
         '/metgawzen_password': (ctx) => metgawzenPassword(),
       },

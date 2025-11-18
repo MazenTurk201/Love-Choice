@@ -10,6 +10,8 @@ import '../modules/skileton.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../style/styles.dart';
+
 class CardsFactory extends StatefulWidget {
   final String tablee;
   final CardStyle style;
@@ -119,7 +121,7 @@ class _CardsFactoryState extends State<CardsFactory> {
             decoration: BoxDecoration(
               color: Colors.amber,
               gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 55, 0, 255), Colors.indigo],
+                colors: [TurkStyle().mainColor, Colors.indigo],
               ),
               borderRadius: BorderRadius.all(Radius.circular(25)),
               boxShadow: [
@@ -240,7 +242,7 @@ class _CardsFactoryState extends State<CardsFactory> {
             decoration: BoxDecoration(
               color: Colors.amber,
               gradient: LinearGradient(
-                colors: [Color.fromARGB(255, 55, 0, 255), Colors.indigo],
+                colors: [TurkStyle().mainColor, Colors.indigo],
               ),
               borderRadius: BorderRadius.all(Radius.circular(25)),
               boxShadow: [

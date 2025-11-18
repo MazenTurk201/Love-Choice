@@ -8,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
+import '../style/styles.dart';
+
 final supabase = Supabase.instance.client;
 
 class AuthPage extends StatefulWidget {
@@ -32,21 +34,8 @@ class _AuthPageState extends State<AuthPage> {
         OAuthProvider.google,
         redirectTo: 'com.turk.lovechoice://login-callback',
       );
-
-      // متتنقلش غير لما يرجع من OAuth
-      // النتيجة بترجع لما المستخدم يرجع ل app بعد ما يسجل
     } catch (e) {
       print("Error: $e");
-    }
-
-    // تحقق من نجاح تسجيل الدخول
-    final user = supabase.auth.currentUser;
-    if (user != null) {
-      await supabase.from('profiles').insert({
-        'id': user.id,
-        'username': user.email,
-        'avatar_url': user.userMetadata!['avatar_url'],
-      });
     }
   }
 
@@ -56,6 +45,7 @@ class _AuthPageState extends State<AuthPage> {
     // final username = usernameController.text;
 
     if (isLogin) {
+      if (email.isEmpty || pass.isEmpty) return;
       final res = await supabase.auth.signInWithPassword(
         email: email,
         password: pass,
@@ -89,10 +79,19 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
 
-    supabase.auth.onAuthStateChange.listen((data) {
+    supabase.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       if (event == AuthChangeEvent.signedIn) {
-        Navigator.of(context).pushReplacementNamed('/onlineChat');
+        Navigator.of(context).pushReplacementNamed('/onlineHome');
+        // تحقق من نجاح تسجيل الدخول
+        final user = supabase.auth.currentUser;
+        if (user != null) {
+          await supabase.from('profiles').upsert({
+            'id': user.id,
+            'username': user.email,
+            'avatar_url': user.userMetadata!['avatar_url'],
+          }, onConflict: 'id');
+        }
       }
     });
   }
@@ -101,70 +100,77 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pushReplacementNamed(context, "/main");
-            },
+      child: WillPopScope(
+        onWillPop: () {
+          return Future.value(false);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              color: Colors.white,
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, "/main");
+              },
+            ),
+            title: Text(isLogin ? 'Login' : 'Sign Up'),
+            centerTitle: true,
+            backgroundColor: TurkStyle().mainColor,
           ),
-          title: Text(isLogin ? 'Login' : 'Sign Up'),
-          centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 55, 0, 255),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              // if (!isLogin)
-              //   TextField(
-              //     controller: usernameController,
-              //     decoration: InputDecoration(labelText: "Username"),
-              //   ),
-              TextField(
-                controller: emailController,
-                decoration: InputDecoration(labelText: "Email"),
-              ),
-              TextField(
-                controller: passController,
-                decoration: InputDecoration(labelText: "Password"),
-                obscureText: true,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: auth,
-                child: Text(isLogin ? "Login" : "Sign Up"),
-              ),
-              SizedBox(
-                width: 205,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: authGoogle,
-                  style: ElevatedButton.styleFrom(),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "images/googleIcon.png",
-                        width: 30,
-                        height: 30,
-                      ),
-                      SizedBox(width: 10),
-                      Text(
-                        isLogin ? "Login With Google" : "Sign Up With Google",
-                      ),
-                    ],
+          body: Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                // if (!isLogin)
+                //   TextField(
+                //     controller: usernameController,
+                //     decoration: InputDecoration(labelText: "Username"),
+                //   ),
+                TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(labelText: "Email"),
+                ),
+                TextField(
+                  controller: passController,
+                  decoration: InputDecoration(labelText: "Password"),
+                  obscureText: true,
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: auth,
+                  child: Text(isLogin ? "Login" : "Sign Up"),
+                ),
+                SizedBox(
+                  width: 205,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: authGoogle,
+                    style: ElevatedButton.styleFrom(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "images/googleIcon.png",
+                          width: 30,
+                          height: 30,
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          isLogin ? "Login With Google" : "Sign Up With Google",
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              TextButton(
-                onPressed: () => setState(() => isLogin = !isLogin),
-                child: Text(isLogin ? "Create Account" : "Have Account? Login"),
-              ),
-            ],
+                TextButton(
+                  onPressed: () => setState(() => isLogin = !isLogin),
+                  child: Text(
+                    isLogin ? "Create Account" : "Have Account? Login",
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

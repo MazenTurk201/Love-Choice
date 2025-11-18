@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
+import '../style/styles.dart';
 
 class TurkDrawer extends StatelessWidget {
   const TurkDrawer({super.key});
@@ -32,10 +34,7 @@ class TurkDrawer extends StatelessWidget {
                     padding: EdgeInsets.only(top: 20),
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          Color.fromARGB(255, 55, 0, 255),
-                        ],
+                        colors: [Colors.transparent, TurkStyle().mainColor],
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                       ),
@@ -170,7 +169,12 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
         } else if (widget.url == 'rate') {
           _showRateDialog(context);
         } else if (widget.url == 'online') {
-          Navigator.pushReplacementNamed(context, "/login");
+          final session = Supabase.instance.client.auth.currentSession;
+          if (session != null) {
+            Navigator.of(context).pushReplacementNamed('/onlineHome');
+          } else {
+            Navigator.pushReplacementNamed(context, "/login");
+          }
         } else {
           _launchUrl(widget.url);
         }

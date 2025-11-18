@@ -16,6 +16,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
+import '../style/styles.dart';
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -117,7 +119,6 @@ class _homeState extends State<home> {
   void initState() {
     super.initState();
     getVersionText(context, currentVersion);
-    openAllFilesAccessSettings();
     loadSettings();
     DBHelper.init();
   }
@@ -221,7 +222,7 @@ class _homeState extends State<home> {
               ),
             ),
             centerTitle: true,
-            backgroundColor: Color.fromARGB(255, 55, 0, 255),
+            backgroundColor: TurkStyle().mainColor,
             iconTheme: IconThemeData(color: Colors.white),
           ),
           backgroundColor: Colors.black,

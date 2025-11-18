@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../style/styles.dart';
+
 class profile extends StatefulWidget {
   const profile({super.key});
 
@@ -39,7 +41,7 @@ class _profileState extends State<profile> {
                 Navigator.pushReplacementNamed(context, "/main");
               },
             ),
-            backgroundColor: Color.fromARGB(255, 55, 0, 255),
+            backgroundColor: TurkStyle().mainColor,
             elevation: 0,
             automaticallyImplyLeading: false,
           ),
@@ -150,14 +152,14 @@ class _profileState extends State<profile> {
       width: wedth.toDouble(),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-            color: Color.fromARGB(255, 55, 0, 255),
+            color: TurkStyle().mainColor,
             blurRadius: 12,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
-        color: const Color.fromARGB(255, 55, 0, 255),
+        color: TurkStyle().mainColor,
       ),
       child: Text(
         title,

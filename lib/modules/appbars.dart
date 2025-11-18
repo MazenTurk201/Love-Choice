@@ -6,9 +6,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/db_helper.dart';
 import '../screens/home.dart';
 import '../main.dart';
+import '../style/styles.dart';
 
 Color textColor = Color.fromARGB(255, 248, 206, 255);
-Color appBarColor = Color.fromARGB(255, 55, 0, 255);
+Color appBarColor = TurkStyle().mainColor;
 TextStyle iconTextS = TextStyle(
   fontFamily: "TurkFont",
   color: textColor,
@@ -89,21 +90,15 @@ class _TurkAppBarState extends State<TurkAppBar> {
           fun();
         }
       },
-      cursorColor: Color.fromARGB(255, 55, 0, 255),
+      cursorColor: TurkStyle().mainColor,
       textInputAction: next_node ? TextInputAction.next : TextInputAction.done,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color.fromARGB(255, 55, 0, 255),
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: TurkStyle().mainColor, width: 1.5),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color.fromARGB(255, 55, 0, 255),
-            width: 2,
-          ),
+          borderSide: BorderSide(color: TurkStyle().mainColor, width: 2),
           borderRadius: BorderRadius.circular(25),
         ),
         floatingLabelAlignment: FloatingLabelAlignment.center,
