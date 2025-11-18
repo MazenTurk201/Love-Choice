@@ -6,19 +6,26 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'modules/firebase_options.dart';
 import 'modules/carddisplay.dart';
 import 'data/db_helper.dart';
+import 'screens/auth.dart';
 import 'screens/home.dart';
 import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
+import 'screens/onlineChat.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
 import 'screens/metgawzenPassword.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await requestStoragePermission();
+  await dotenv.load(fileName: ".env");
+  final supabaseUrl = dotenv.env['SUPABASE_URL']!;
+  final supabaseKey = dotenv.env['SUPABASE_ANON_KEY']!;
+  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
   await requestNotificationPermission();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -105,6 +112,8 @@ class _MyAppState extends State<MyApp> {
             Gamepage(tablee: 'bestat_choices', style: CardStyle.towCard),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
+        '/login': (ctx) => AuthPage(),
+        '/onlineChat': (ctx) => OnlineChatPage(),
         '/onboarding': (ctx) => onBoarding(),
         '/metgawzen_password': (ctx) => metgawzenPassword(),
       },

@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +11,7 @@ import 'package:love_choice/data/db_helper.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 
 class setting extends StatefulWidget {
   const setting({super.key});
@@ -29,6 +30,50 @@ class _settingState extends State<setting> {
   TextEditingController controler = TextEditingController();
   TextEditingController font_controler = TextEditingController();
   TextEditingController spic_share_controler = TextEditingController();
+  List<Map<String, dynamic>> orderItems = [
+    {
+      "name": "أهل",
+      "isSelected": true,
+      "dis": "التجمع الحلو والقعدة الأحلى",
+      "root": "ahl",
+    },
+    {
+      "name": "شلة",
+      "isSelected": true,
+      "dis": "يلا بينا نفك الملل",
+      "root": "shella",
+    },
+    {
+      "name": "بيستات",
+      "isSelected": true,
+      "dis": "مين حبيب اخوه؟",
+      "root": "bestat",
+    },
+    {
+      "name": "تعارف",
+      "isSelected": true,
+      "dis": "الصحاب اللي على قلبك",
+      "root": "t3arof",
+    },
+    {
+      "name": "كابلز",
+      "isSelected": true,
+      "dis": "ايدي ف ايدك نرجع البدايات",
+      "root": "couples",
+    },
+    {
+      "name": "مخطوبين",
+      "isSelected": false,
+      "dis": "نفهم بعض قبل الجد",
+      "root": "ma5toben",
+    },
+    {
+      "name": "متجوزين",
+      "isSelected": false,
+      "dis": "يلّا نحيي حُبنا من جديد",
+      "root": "metgawzen",
+    },
+  ];
 
   @override
   void initState() {
@@ -43,6 +88,13 @@ class _settingState extends State<setting> {
       isSwitched2 = pref.getBool('switch_both') ?? true;
       isSwitched3 = pref.getBool('pin_image') ?? true;
       // isSwitched2 = pref.getBool('isSwitched2') ?? true;
+      List<String>? rawList = pref.getStringList('orderItems');
+
+      orderItems =
+          rawList
+              ?.map((item) => jsonDecode(item) as Map<String, dynamic>)
+              .toList() ??
+          [];
     });
   }
 
@@ -148,11 +200,163 @@ class _settingState extends State<setting> {
                       child: Divider(indent: 30, endIndent: 30),
                     ),
                     InkWell(
-                      onLongPress: () {
-                        BackUp_Restore_LoveChoice(false);
+                      onLongPress: () async {
+                        List<Map<String, dynamic>> orderItems = [
+                          {
+                            "name": "أهل",
+                            "isSelected": true,
+                            "dis": "التجمع الحلو والقعدة الأحلى",
+                            "root": "ahl",
+                          },
+                          {
+                            "name": "شلة",
+                            "isSelected": true,
+                            "dis": "يلا بينا نفك الملل",
+                            "root": "shella",
+                          },
+                          {
+                            "name": "بيستات",
+                            "isSelected": true,
+                            "dis": "مين حبيب اخوه؟",
+                            "root": "bestat",
+                          },
+                          {
+                            "name": "تعارف",
+                            "isSelected": true,
+                            "dis": "الصحاب اللي على قلبك",
+                            "root": "t3arof",
+                          },
+                          {
+                            "name": "كابلز",
+                            "isSelected": true,
+                            "dis": "ايدي ف ايدك نرجع البدايات",
+                            "root": "couples",
+                          },
+                          {
+                            "name": "مخطوبين",
+                            "isSelected": false,
+                            "dis": "نفهم بعض قبل الجد",
+                            "root": "ma5toben",
+                          },
+                          {
+                            "name": "متجوزين",
+                            "isSelected": false,
+                            "dis": "يلّا نحيي حُبنا من جديد",
+                            "root": "metgawzen",
+                          },
+                        ];
+                        final pref = SharedPreferences.getInstance();
+                        pref.then((pref) async {
+                          await pref.remove('orderItems');
+                          await pref.setStringList(
+                            'orderItems',
+                            orderItems.map((item) => jsonEncode(item)).toList(),
+                          );
+                        });
                         turkToast("تم الاسترجاع");
                       },
                       onDoubleTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "قائمة الأوردر",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 22,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              width: double.maxFinite,
+                              height: 300,
+                              child: StatefulBuilder(
+                                builder: (context, setStateDialog) {
+                                  return ReorderableListView(
+                                    onReorder: (oldIndex, newIndex) {
+                                      setStateDialog(() {
+                                        if (newIndex > oldIndex) newIndex -= 1;
+                                        final item = orderItems.removeAt(
+                                          oldIndex,
+                                        );
+                                        orderItems.insert(newIndex, item);
+                                      });
+                                    },
+                                    children: [
+                                      for (
+                                        int index = 0;
+                                        index < orderItems.length;
+                                        index++
+                                      )
+                                        CheckboxListTile(
+                                          key: ValueKey(
+                                            orderItems[index]["name"],
+                                          ),
+                                          title: Text(
+                                            orderItems[index]["name"],
+                                          ),
+                                          value:
+                                              orderItems[index]["isSelected"],
+                                          onChanged: (bool? value) {
+                                            setStateDialog(() {
+                                              orderItems[index]["isSelected"] =
+                                                  value!;
+                                            });
+                                          },
+                                        ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                  // [{name: Option 1, isSelected: true}, {name: Option 2, isSelected: true}, {name: Option 4, isSelected: true}, {name: Option 5, isSelected: false}, {name: Option 3, isSelected: false}]
+                                  // print(orderItems);
+                                  // print(supabase.auth.currentUser!.id);
+                                  final pref =
+                                      await SharedPreferences.getInstance();
+                                  await pref.setStringList(
+                                    'orderItems',
+                                    orderItems
+                                        .map((item) => jsonEncode(item))
+                                        .toList(),
+                                  );
+                                  turkToast("تم تغيير الفئات بنجاح");
+                                },
+                                child: Text("حفظ"),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      onTap: () {
+                        turkToast(
+                          "دوس مرتين عشان تعرض الفئات\nدوسة طويلة عشان ترجع الطبيعي",
+                        );
+                      },
+                      child: ListTile(
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Icon(Icons.chat_bubble_rounded, size: 40),
+                        ),
+                        title: Text(
+                          "التحكم في عرض الفئات؟",
+                          textAlign: TextAlign.right,
+                          style: TextStyle(fontFamily: "TurkFont"),
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onLongPress: () async {
+                        await requestStoragePermission();
+                        BackUp_Restore_LoveChoice(false);
+                        turkToast("تم الاسترجاع");
+                      },
+                      onDoubleTap: () async {
+                        await requestStoragePermission();
                         BackUp_Restore_LoveChoice(true);
                         turkToast("تم النسخ في ملفات الجهاز");
                         Fluttertoast.showToast(

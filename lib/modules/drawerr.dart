@@ -62,6 +62,11 @@ class TurkDrawer extends StatelessWidget {
                     url: 'setting',
                   ),
                   menuDrawerButton(
+                    title: 'أون لاين',
+                    icon: Icons.wifi_rounded,
+                    url: 'online',
+                  ),
+                  menuDrawerButton(
                     title: 'ملف المطور',
                     icon: Icons.person,
                     url: 'profile',
@@ -164,6 +169,8 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           );
         } else if (widget.url == 'rate') {
           _showRateDialog(context);
+        } else if (widget.url == 'online') {
+          Navigator.pushReplacementNamed(context, "/login");
         } else {
           _launchUrl(widget.url);
         }

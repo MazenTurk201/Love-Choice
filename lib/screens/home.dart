@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:love_choice/data/db_helper.dart';
 import 'package:love_choice/screens/setting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -109,16 +111,79 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  List<Map<String, dynamic>> orderItems = [];
+
   @override
   void initState() {
     super.initState();
     getVersionText(context, currentVersion);
     openAllFilesAccessSettings();
+    loadSettings();
     DBHelper.init();
+  }
+
+  Future<void> loadSettings() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      List<String>? rawList = pref.getStringList('orderItems');
+
+      orderItems =
+          rawList
+              ?.map((item) => jsonDecode(item) as Map<String, dynamic>)
+              .toList() ??
+          [
+            {
+              "name": "أهل",
+              "isSelected": true,
+              "dis": "التجمع الحلو والقعدة الأحلى",
+              "root": "ahl",
+            },
+            {
+              "name": "شلة",
+              "isSelected": true,
+              "dis": "يلا بينا نفك الملل",
+              "root": "shella",
+            },
+            {
+              "name": "بيستات",
+              "isSelected": true,
+              "dis": "مين حبيب اخوه؟",
+              "root": "bestat",
+            },
+            {
+              "name": "تعارف",
+              "isSelected": true,
+              "dis": "الصحاب اللي على قلبك",
+              "root": "t3arof",
+            },
+            {
+              "name": "كابلز",
+              "isSelected": true,
+              "dis": "ايدي ف ايدك نرجع البدايات",
+              "root": "couples",
+            },
+            {
+              "name": "مخطوبين",
+              "isSelected": false,
+              "dis": "نفهم بعض قبل الجد",
+              "root": "ma5toben",
+            },
+            {
+              "name": "متجوزين",
+              "isSelected": false,
+              "dis": "يلّا نحيي حُبنا من جديد",
+              "root": "metgawzen",
+            },
+          ];
+      // print(orderItems);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedItems = orderItems
+        .where((item) => item["isSelected"] == true)
+        .toList();
     return WillPopScope(
       onWillPop: () {
         Fluttertoast.showToast(
@@ -166,67 +231,64 @@ class _homeState extends State<home> {
               Positioned.fill(
                 child: Image.asset("images/main.jpg", fit: BoxFit.cover),
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Buildcard("أهل", "التجمع الحلو والقعدة الأحلى", "ahl", true),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Buildcard(
-                        "متجوزين",
-                        "يلّا نحيي حُبنا من جديد",
-                        "metgawzen",
-                        false,
-                      ),
-                      Buildcard(
-                        "مخطوبين",
-                        "نفهم بعض قبل الجد",
-                        "ma5toben",
-                        false,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Buildcard("تعارف", "نجرب نكتشف بعض", "t3arof", false),
-                      Buildcard(
-                        "كابلز",
-                        "ايدي ف ايدك نرجع البدايات",
-                        "couples",
-                        false,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Buildcard("بيستات", "مين حبيب اخوه؟", "bestat", false),
-                      Buildcard("شلة", "يلا بينا نفك الملل", "shella", false),
-                    ],
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: Text(
-                      "الحب اختيار، وانا اخترتك ❤️\"",
-                      style: TextStyle(
-                        fontFamily: "TurkD",
-                        shadows: [
-                          Shadow(
-                            color: Colors.black,
-                            offset: Offset(1, 1),
-                            blurRadius: 2,
+              selectedItems.isEmpty
+                  ? Center(child: Text("روح أعرض حاجة من الاعدادات"))
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Buildcard(
+                            selectedItems[0]["name"],
+                            selectedItems[0]["dis"],
+                            selectedItems[0]["root"],
+                            true,
                           ),
-                        ],
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                      textDirection: TextDirection.rtl,
+                        ),
+                        if (orderItems.length > 1)
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: const EdgeInsets.all(8),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 8,
+                                  mainAxisSpacing: 8,
+                                ),
+                            itemCount: selectedItems.length - 1,
+                            itemBuilder: (context, index) {
+                              return selectedItems[index + 1]["isSelected"]
+                                  ? Buildcard(
+                                      selectedItems[index + 1]["name"],
+                                      selectedItems[index + 1]["dis"],
+                                      selectedItems[index + 1]["root"],
+                                      false,
+                                    )
+                                  : SizedBox.shrink();
+                            },
+                          ),
+                        Container(
+                          margin: EdgeInsets.all(10),
+                          child: Text(
+                            "الحب اختيار، وانا اخترتك ❤️\"",
+                            style: TextStyle(
+                              fontFamily: "TurkD",
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 2,
+                                ),
+                              ],
+                              fontSize: 20,
+                              color: Colors.white,
+                            ),
+                            textDirection: TextDirection.rtl,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

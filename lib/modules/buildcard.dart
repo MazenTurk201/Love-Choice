@@ -155,6 +155,7 @@ class _BuildcardState extends State<Buildcard> {
           }
         },
         child: Stack(
+          alignment: AlignmentGeometry.center,
           children: [
             Positioned.fill(
               child: ClipRRect(
