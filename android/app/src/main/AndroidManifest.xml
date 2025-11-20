@@ -48,7 +48,7 @@
 
         <data android:host="mazenturk201.github.io" />
 
-        <data android:pathPrefix="/Love-Choice" />
+        <data android:pathPrefix="/Love-Choice/invite" />
       </intent-filter>
     </activity>
     <!-- Don't delete the meta-data below.

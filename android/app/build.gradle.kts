@@ -90,7 +90,8 @@ android {
             signingConfig = signingConfigs.getByName("release")
             
             // تفعيل الضغط والتشفير (اللي انت كنت كاتبه صح)
-            isMinifyEnabled = true
+            //isMinifyEnabled = true
+            isMinifyEnabled = false
             isShrinkResources = true
             
             proguardFiles(
