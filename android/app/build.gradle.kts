@@ -1,3 +1,12 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val keystoreProperties = Properties()
+val keystorePropertiesFile = rootProject.file("key.properties")
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -56,11 +65,46 @@ android {
     //        signingConfig = signingConfigs.getByName("debug")
     //    }
     //}
+
+    //buildTypes {
+    //    
+    //    release {
+    //        signingConfig = signingConfigs.getByName("debug")
+    //        isMinifyEnabled = true
+    //        isShrinkResources = true
+    //    }
+    //}
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
+
     buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("debug")
+        getByName("release") {
+            // هنا بنربط الـ signingConfig اللي عملناه فوق
+            signingConfig = signingConfigs.getByName("release")
+            
+            // تفعيل الضغط والتشفير (اللي انت كنت كاتبه صح)
             isMinifyEnabled = true
             isShrinkResources = true
+            
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        getByName("debug") {
+            // السطر ده هو اللي بيخلي الديباج يستخدم مفتاح الريليز
+            signingConfig = signingConfigs.getByName("release")
+            
+            // ملحوظة: خلي دول false في الديباج عشان السرعة
+            isMinifyEnabled = false 
+            isShrinkResources = false
         }
     }
 

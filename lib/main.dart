@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
         Navigator.pushReplacementNamed(context, "/login");
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("ٍسجل دخول الأول")));
+        ).showSnackBar(SnackBar(content: Text("سجل دخول الأول")));
       }
     } else {
       print('اللينك سليم بس مفيهوش roomid');

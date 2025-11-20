@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.turk.love_choice",
+      "sha256_cert_fingerprints": [
+        "E7:0A:73:92:99:DF:78:9B:BC:EE:5A:E7:92:99:8F:82:9E:AA:0F:B3:F3:A8:71:E0:88:C5:BB:AE:73:76:47:53"
+      ]
+    }
+  }
+]
