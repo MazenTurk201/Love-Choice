@@ -24,6 +24,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'style/styles.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
@@ -83,7 +85,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _handleLink(Uri uri) {
-    print('اللينك وصل يا ريس: $uri');
+    // print('اللينك وصل يا ريس: $uri');
 
     // دلوقت اللينك جاي كده: .../Love-Choice?roomid=201201
     // فمش محتاجين نعمل split ولا وجع قلب، الـ Uri class هتفهم لوحدها
@@ -92,27 +94,29 @@ class _MyAppState extends State<MyApp> {
     String? roomId = uri.queryParameters['roomid'];
 
     if (roomId != null) {
-      print('مسكنا الـ ID يا ترك: $roomId');
-
-      // هنا بقى الكود بتاعك عشان تدخل الروم
-      // navigateToRoom(roomId);
+      // print('مسكنا الـ ID يا ترك: $roomId');
       final session = Supabase.instance.client.auth.currentSession;
       if (session != null) {
-        Navigator.pushNamed(context, '/onlineChat', arguments: roomId);
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => OnlineChatPage(roomId: roomId),
+          ),
+        );
       } else {
-        Navigator.pushReplacementNamed(context, "/login");
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text("سجل دخول الأول")));
+        navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => AuthPage()),
+        );
       }
     } else {
-      print('اللينك سليم بس مفيهوش roomid');
+      // print('اللينك سليم بس مفيهوش roomid');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
+      title: 'Love Choice?',
       themeMode: ThemeMode.dark,
       darkTheme: ThemeData.dark().copyWith(
         textTheme: TextTheme(

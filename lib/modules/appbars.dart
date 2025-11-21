@@ -8,11 +8,10 @@ import '../screens/home.dart';
 import '../main.dart';
 import '../style/styles.dart';
 
-Color textColor = Color.fromARGB(255, 248, 206, 255);
 Color appBarColor = TurkStyle().mainColor;
 TextStyle iconTextS = TextStyle(
   fontFamily: "TurkFont",
-  color: textColor,
+  color: TurkStyle().textColor2,
   fontSize: 15,
 );
 

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TurkStyle {
-  final Color mainColor = Color.fromARGB(255, 55, 0, 255);
-  final Color hoverColor = Color.fromARGB(255, 70, 20, 255);
+  final Color mainColor = Color.fromARGB(255, 102, 16, 242);
+  final Color hoverColor = Color.fromARGB(255, 125, 55, 250);
   final Color textColor = Colors.white;
+  final Color textColor2 = Color.fromARGB(255, 248, 206, 255);
   final String turkFont = "TurkFont";
   final TooltipThemeData themetooltip = TooltipThemeData(
     decoration: BoxDecoration(
-      color: Color.fromARGB(155, 90, 45, 255),
+      color: Color.fromARGB(255, 102, 16, 242),
       borderRadius: BorderRadius.circular(8),
     ),
     textStyle: TextStyle(

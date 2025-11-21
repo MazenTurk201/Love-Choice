@@ -465,34 +465,19 @@ class _settingState extends State<setting> {
                                         spic_share_controler.text = "غلط";
                                       }
                                     },
-                                    cursorColor: Color.fromARGB(
-                                      255,
-                                      55,
-                                      0,
-                                      255,
-                                    ),
+                                    cursorColor: TurkStyle().mainColor,
                                     decoration: InputDecoration(
                                       prefixText: "+ ",
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 1.5,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(25),
@@ -617,33 +602,18 @@ class _settingState extends State<setting> {
                                         font_controler.text = "غلط";
                                       }
                                     },
-                                    cursorColor: Color.fromARGB(
-                                      255,
-                                      55,
-                                      0,
-                                      255,
-                                    ),
+                                    cursorColor: TurkStyle().mainColor,
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 1.5,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(25),
@@ -766,33 +736,18 @@ class _settingState extends State<setting> {
                                         controler.text = "غلط";
                                       }
                                     },
-                                    cursorColor: Color.fromARGB(
-                                      255,
-                                      55,
-                                      0,
-                                      255,
-                                    ),
+                                    cursorColor: TurkStyle().mainColor,
                                     decoration: InputDecoration(
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 1.5,
                                         ),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
-                                          color: Color.fromARGB(
-                                            255,
-                                            55,
-                                            0,
-                                            255,
-                                          ),
+                                          color: TurkStyle().mainColor,
                                           width: 2,
                                         ),
                                         borderRadius: BorderRadius.circular(25),
