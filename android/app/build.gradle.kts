@@ -25,6 +25,7 @@ dependencies {
   implementation("com.google.firebase:firebase-analytics")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22")
   coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+  implementation("com.google.android.gms:play-services-ads:24.8.0")
 
 
 

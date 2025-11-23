@@ -403,6 +403,7 @@ SizedBox defBubble(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
+              // Text(disName),
               widget,
               Text(
                 time,

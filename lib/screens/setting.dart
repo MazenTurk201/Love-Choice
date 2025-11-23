@@ -6,11 +6,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:love_choice/data/db_helper.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../data/adsManager.dart';
 import '../main.dart';
 import '../style/styles.dart';
 import 'home.dart';
@@ -23,6 +25,7 @@ class setting extends StatefulWidget {
 }
 
 class _settingState extends State<setting> {
+  BannerAd? _bannerAd;
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
@@ -81,6 +84,22 @@ class _settingState extends State<setting> {
   void initState() {
     super.initState();
     loadSettings();
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          print("Faild :${error.message}");
+          ad.dispose();
+        },
+      ),
+      request: AdRequest(),
+    ).load();
   }
 
   Future<void> loadSettings() async {
@@ -167,6 +186,18 @@ class _settingState extends State<setting> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
+                    SizedBox(height: 10),
+                    (_bannerAd != null)
+                        ? Align(
+                            alignment: AlignmentGeometry.topCenter,
+                            // ignore: sized_box_for_whitespace
+                            child: Container(
+                              width: _bannerAd!.size.width.toDouble(),
+                              height: _bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: _bannerAd!),
+                            ),
+                          )
+                        : SizedBox.shrink(),
                     settingTile(
                       title: "عرض الخيار التاني؟",
                       state: isSwitched,
@@ -229,16 +260,16 @@ class _settingState extends State<setting> {
                             "root": "t3arof",
                           },
                           {
-                            "name": "كابلز",
-                            "isSelected": true,
-                            "dis": "ايدي ف ايدك نرجع البدايات",
-                            "root": "couples",
-                          },
-                          {
                             "name": "مخطوبين",
-                            "isSelected": false,
+                            "isSelected": true,
                             "dis": "نفهم بعض قبل الجد",
                             "root": "ma5toben",
+                          },
+                          {
+                            "name": "كابلز",
+                            "isSelected": false,
+                            "dis": "ايدي ف ايدك نرجع البدايات",
+                            "root": "couples",
                           },
                           {
                             "name": "متجوزين",
