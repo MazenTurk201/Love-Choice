@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../data/adsManager.dart';
 import '../style/styles.dart';
 
 class profile extends StatefulWidget {
@@ -12,6 +14,14 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
+  BannerAd? _bannerAd;
+
+  @override
+  void initState() {
+    super.initState();
+    _bannerAd = AdHelper.createBanner();
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: no_leading_underscores_for_local_identifiers
@@ -47,6 +57,8 @@ class _profileState extends State<profile> {
           ),
           body: Column(
             children: [
+              SizedBox(height: 10),
+              AdHelper.TurkAD(_bannerAd),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

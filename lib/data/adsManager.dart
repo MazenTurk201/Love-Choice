@@ -6,8 +6,58 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class AdHelper {
   static String get bannerAdUnitId {
-    return kDebugMode
-        ? "ca-app-pub-3940256099942544/9214589741" // test ad
-        : "ca-app-pub-5128290475212632/9315334960"; // real ad
+    if (kDebugMode) {
+      return "ca-app-pub-3940256099942544/9214589741";
+    } else {
+      return "ca-app-pub-5128290475212632/9315334960";
+    }
+  }
+
+  static String get rewardAdUnitId {
+    if (kDebugMode) {
+      return "ca-app-pub-3940256099942544/5224354917";
+    } else {
+      return "ca-app-pub-5128290475212632/6578217338";
+    }
+  }
+
+  static String get binyRewardAdUnitId {
+    if (kDebugMode) {
+      return "ca-app-pub-3940256099942544/5354046379";
+    } else {
+      return "ca-app-pub-5128290475212632/7626864683";
+    }
+  }
+
+  static BannerAd createBanner() {
+    return BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          print('Banner loaded');
+        },
+        onAdFailedToLoad: (ad, error) {
+          print("Failed: ${error.message}");
+          ad.dispose();
+        },
+      ),
+      request: AdRequest(),
+    )..load();
+  }
+
+  static Widget TurkAD(BannerAd? bannerAd) {
+    if (bannerAd != null) {
+      return Align(
+        alignment: AlignmentGeometry.topCenter,
+        child: SizedBox(
+          width: bannerAd.size.width.toDouble(),
+          height: bannerAd.size.height.toDouble(),
+          child: AdWidget(ad: bannerAd),
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
   }
 }

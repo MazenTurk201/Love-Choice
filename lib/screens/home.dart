@@ -1,10 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:love_choice/data/db_helper.dart';
+import 'package:love_choice/screens/auth.dart';
+import 'package:love_choice/screens/onlineChat.dart';
 import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -113,6 +117,7 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+  late AppLinks _appLinks;
   List<Map<String, dynamic>> orderItems = [];
 
   @override
@@ -121,6 +126,56 @@ class _homeState extends State<home> {
     getVersionText(context, currentVersion);
     loadSettings();
     DBHelper.init();
+    _initDeepLinks();
+  }
+
+  void _initDeepLinks() {
+    _appLinks = AppLinks();
+
+    // دي عشان لو التطبيق كان مقفول واتفتح عن طريق اللينك
+    _appLinks.getInitialLink().then((uri) {
+      if (uri != null) {
+        _handleLink(uri);
+      }
+    });
+
+    // دي عشان لو التطبيق شغال في الخلفية واللينك اتداس عليه
+    _appLinks.uriLinkStream.listen(
+      (uri) {
+        _handleLink(uri);
+      },
+      onError: (err) {
+        print('يا ساتر، حصل إيرور: $err');
+      },
+    );
+  }
+
+  void _handleLink(Uri uri) {
+    // print('اللينك وصل يا ريس: $uri');
+
+    // دلوقت اللينك جاي كده: .../Love-Choice?roomid=201201
+    // فمش محتاجين نعمل split ولا وجع قلب، الـ Uri class هتفهم لوحدها
+
+    // بنسأل الـ URI: هل معاك query parameter اسمه roomid؟
+    String? roomId = uri.queryParameters['roomid'];
+
+    if (roomId != null) {
+      // print('مسكنا الـ ID يا ترك: $roomId');
+      final session = Supabase.instance.client.auth.currentSession;
+      if (session != null) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => OnlineChatPage(roomId: roomId),
+          ),
+        );
+      } else {
+        Navigator.of(
+          context,
+        ).pushReplacement(MaterialPageRoute(builder: (context) => AuthPage()));
+      }
+    } else {
+      // print('اللينك سليم بس مفيهوش roomid');
+    }
   }
 
   Future<void> loadSettings() async {
@@ -158,16 +213,16 @@ class _homeState extends State<home> {
               "root": "t3arof",
             },
             {
-              "name": "كابلز",
-              "isSelected": true,
-              "dis": "ايدي ف ايدك نرجع البدايات",
-              "root": "couples",
-            },
-            {
               "name": "مخطوبين",
-              "isSelected": false,
+              "isSelected": true,
               "dis": "نفهم بعض قبل الجد",
               "root": "ma5toben",
+            },
+            {
+              "name": "كابلز",
+              "isSelected": false,
+              "dis": "ايدي ف ايدك نرجع البدايات",
+              "root": "couples",
             },
             {
               "name": "متجوزين",

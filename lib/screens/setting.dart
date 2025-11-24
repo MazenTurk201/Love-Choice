@@ -84,22 +84,23 @@ class _settingState extends State<setting> {
   void initState() {
     super.initState();
     loadSettings();
-    BannerAd(
-      adUnitId: AdHelper.bannerAdUnitId,
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _bannerAd = ad as BannerAd;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          print("Faild :${error.message}");
-          ad.dispose();
-        },
-      ),
-      request: AdRequest(),
-    ).load();
+    _bannerAd = AdHelper.createBanner();
+    // BannerAd(
+    //   adUnitId: AdHelper.bannerAdUnitId,
+    //   size: AdSize.banner,
+    //   listener: BannerAdListener(
+    //     onAdLoaded: (ad) {
+    //       setState(() {
+    //         _bannerAd = ad as BannerAd;
+    //       });
+    //     },
+    //     onAdFailedToLoad: (ad, error) {
+    //       print("Faild :${error.message}");
+    //       ad.dispose();
+    //     },
+    //   ),
+    //   request: AdRequest(),
+    // ).load();
   }
 
   Future<void> loadSettings() async {
@@ -115,7 +116,50 @@ class _settingState extends State<setting> {
           rawList
               ?.map((item) => jsonDecode(item) as Map<String, dynamic>)
               .toList() ??
-          [];
+          [
+            {
+              "name": "أهل",
+              "isSelected": true,
+              "dis": "التجمع الحلو والقعدة الأحلى",
+              "root": "ahl",
+            },
+            {
+              "name": "شلة",
+              "isSelected": true,
+              "dis": "يلا بينا نفك الملل",
+              "root": "shella",
+            },
+            {
+              "name": "بيستات",
+              "isSelected": true,
+              "dis": "مين حبيب اخوه؟",
+              "root": "bestat",
+            },
+            {
+              "name": "تعارف",
+              "isSelected": true,
+              "dis": "الصحاب اللي على قلبك",
+              "root": "t3arof",
+            },
+            {
+              "name": "مخطوبين",
+              "isSelected": true,
+              "dis": "نفهم بعض قبل الجد",
+              "root": "ma5toben",
+            },
+            {
+              "name": "كابلز",
+              "isSelected": false,
+              "dis": "ايدي ف ايدك نرجع البدايات",
+              "root": "couples",
+            },
+            {
+              "name": "متجوزين",
+              "isSelected": false,
+              "dis": "يلّا نحيي حُبنا من جديد",
+              "root": "metgawzen",
+            },
+          ];
     });
   }
 
@@ -187,17 +231,18 @@ class _settingState extends State<setting> {
                 child: Column(
                   children: [
                     SizedBox(height: 10),
-                    (_bannerAd != null)
-                        ? Align(
-                            alignment: AlignmentGeometry.topCenter,
-                            // ignore: sized_box_for_whitespace
-                            child: Container(
-                              width: _bannerAd!.size.width.toDouble(),
-                              height: _bannerAd!.size.height.toDouble(),
-                              child: AdWidget(ad: _bannerAd!),
-                            ),
-                          )
-                        : SizedBox.shrink(),
+                    AdHelper.TurkAD(_bannerAd),
+                    // (_bannerAd != null)
+                    //     ? Align(
+                    //         alignment: AlignmentGeometry.topCenter,
+                    //         // ignore: sized_box_for_whitespace
+                    //         child: Container(
+                    //           width: _bannerAd!.size.width.toDouble(),
+                    //           height: _bannerAd!.size.height.toDouble(),
+                    //           child: AdWidget(ad: _bannerAd!),
+                    //         ),
+                    //       )
+                    //     : SizedBox.shrink(),
                     settingTile(
                       title: "عرض الخيار التاني؟",
                       state: isSwitched,
@@ -233,7 +278,7 @@ class _settingState extends State<setting> {
                       child: Divider(indent: 30, endIndent: 30),
                     ),
                     InkWell(
-                      onLongPress: () async {
+                      onDoubleTap: () async {
                         List<Map<String, dynamic>> orderItems = [
                           {
                             "name": "أهل",
@@ -288,7 +333,7 @@ class _settingState extends State<setting> {
                         });
                         turkToast("تم الاسترجاع");
                       },
-                      onDoubleTap: () {
+                      onLongPress: () {
                         showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
@@ -327,6 +372,9 @@ class _settingState extends State<setting> {
                                           ),
                                           title: Text(
                                             orderItems[index]["name"],
+                                            style: TextStyle(
+                                              fontFamily: "TurkFont",
+                                            ),
                                           ),
                                           value:
                                               orderItems[index]["isSelected"],
@@ -359,7 +407,10 @@ class _settingState extends State<setting> {
                                   );
                                   turkToast("تم تغيير الفئات بنجاح");
                                 },
-                                child: Text("حفظ"),
+                                child: Text(
+                                  "حفظ",
+                                  style: TextStyle(fontFamily: "TurkFont"),
+                                ),
                               ),
                             ],
                           ),
@@ -367,7 +418,7 @@ class _settingState extends State<setting> {
                       },
                       onTap: () {
                         turkToast(
-                          "دوس مرتين عشان تعرض الفئات\nدوسة طويلة عشان ترجع الطبيعي",
+                          "دوس مرتين عشان ترجع طبيعي\nدوسة طويلة عشان تعرض الفئات",
                         );
                       },
                       child: ListTile(

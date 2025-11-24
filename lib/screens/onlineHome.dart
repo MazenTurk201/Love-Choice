@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:d_dialog/d_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:love_choice/data/adsManager.dart';
 import 'package:love_choice/modules/popMenu.dart';
 import 'package:love_choice/style/styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -17,11 +19,13 @@ class OnlineHomePage extends StatefulWidget {
 
 class _OnlineHomePageState extends State<OnlineHomePage> {
   List chats = [];
+  BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     loadchats();
+    _bannerAd = AdHelper.createBanner();
   }
 
   void loadchats() async {
@@ -76,7 +80,8 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
           ),
           body: Column(
             children: [
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              AdHelper.TurkAD(_bannerAd),
               // استخدمنا Expanded عشان الليست تاخد باقي المساحة المتاحة ومتضربش
               Expanded(
                 child: chats.isEmpty
