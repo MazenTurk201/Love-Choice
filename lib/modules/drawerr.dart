@@ -1,4 +1,4 @@
-// ignore_for_file: unrelated_type_equality_checks
+// ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'dart:io';
 import 'dart:math';
@@ -9,6 +9,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
 import '../style/styles.dart';
+
+Future<bool> checkRealConnection() async {
+  try {
+    final result = await InternetAddress.lookup('google.com');
+    return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+  } catch (e) {
+    return false;
+  }
+}
 
 class TurkDrawer extends StatelessWidget {
   const TurkDrawer({super.key});
@@ -143,7 +152,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (widget.url == '') {
           Fluttertoast.showToast(
             msg: exit_tablee[Random().nextInt(exit_tablee.length)],
@@ -169,11 +178,17 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
         } else if (widget.url == 'rate') {
           _showRateDialog(context);
         } else if (widget.url == 'online') {
-          final session = Supabase.instance.client.auth.currentSession;
-          if (session != null) {
-            Navigator.of(context).pushReplacementNamed('/onlineHome');
+          if (await checkRealConnection()) {
+            final session = Supabase.instance.client.auth.currentSession;
+            if (session != null) {
+              Navigator.of(context).pushReplacementNamed('/onlineHome');
+            } else {
+              Navigator.pushReplacementNamed(context, "/login");
+            }
           } else {
-            Navigator.pushReplacementNamed(context, "/login");
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text("لازم تكون متصل بالنت")));
           }
         } else {
           _launchUrl(widget.url);

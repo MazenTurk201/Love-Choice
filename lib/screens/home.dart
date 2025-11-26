@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:love_choice/data/db_helper.dart';
+import 'package:love_choice/data/room_service.dart';
 import 'package:love_choice/screens/auth.dart';
 import 'package:love_choice/screens/onlineChat.dart';
 import 'package:love_choice/screens/setting.dart';
@@ -163,6 +164,7 @@ class _homeState extends State<home> {
       // print('مسكنا الـ ID يا ترك: $roomId');
       final session = Supabase.instance.client.auth.currentSession;
       if (session != null) {
+        RoomService().joinGroup(roomId);
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder: (context) => OnlineChatPage(roomId: roomId),

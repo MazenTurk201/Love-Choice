@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class TurkStyle {
@@ -63,4 +65,18 @@ class TextUtils {
     }
     return TextDirection.ltr;
   }
+}
+
+Color randomColor() {
+  return Color.fromARGB(
+    255,
+    Random().nextInt(256),
+    Random().nextInt(256),
+    Random().nextInt(256),
+  );
+}
+
+Color randomMaterialColor() {
+  final colors = Colors.primaries;
+  return colors[Random().nextInt(colors.length)];
 }

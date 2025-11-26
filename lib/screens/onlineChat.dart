@@ -33,17 +33,26 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
     await supabase.from('messages').insert({
       'room_id': widget.roomId,
       'sender': TurkUserID,
-      'text': "السؤال:\n${data["choice"]}\n\nالتحدي:\n${data["dare"]}",
+      // 'text': "السؤال:\n${data["choice"]}\n\nالتحدي:\n${data["dare"]}",
+      'text': "السؤال:\n${data["choice"]}",
+      'disname': "The Turk",
     });
     setState(() {});
   }
 
   Future sendMessage() async {
+    String disname =
+        supabase.auth.currentUser!.userMetadata?['display_name'] ??
+        supabase.auth.currentUser!.userMetadata?['name'] ??
+        supabase.auth.currentUser!.userMetadata?['full_name'] ??
+        supabase.auth.currentUser!.email!.split("@")[0];
+
     if (msgController.text.isEmpty) return;
     await supabase.from('messages').insert({
       'room_id': widget.roomId,
       'sender': userId,
       'text': msgController.text,
+      'disname': disname,
     });
     msgController.clear();
     setState(() {});
@@ -249,6 +258,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                                   msg['created_at'],
                                 ).add(Duration(hours: 2)),
                               ),
+                              msg["disname"].toString(),
                               Text(
                                 msg["text"],
                                 style: TextStyle(color: Colors.white),
@@ -354,6 +364,7 @@ SizedBox defBubble(
   BuildContext context,
   String message,
   String time,
+  String disname,
   Widget widget,
 ) {
   return SizedBox(
@@ -376,7 +387,7 @@ SizedBox defBubble(
             border: Border.all(color: Color.fromARGB(150, 0, 0, 0), width: 2),
             gradient: isUser == TurkBubbleType.right
                 ? const LinearGradient(
-                    colors: [Colors.black, Color.fromARGB(150, 0, 180, 150)],
+                    colors: [Colors.black, Color.fromARGB(150, 150, 0, 0)],
                   )
                 : isUser == TurkBubbleType.center
                 ? const LinearGradient(
@@ -403,10 +414,9 @@ SizedBox defBubble(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              // Text(disName),
               widget,
               Text(
-                time,
+                "$disname $time",
                 textAlign: TextAlign.right,
                 style: TextStyle(
                   fontFamily: TurkStyle().turkFont,
