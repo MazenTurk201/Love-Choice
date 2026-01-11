@@ -2,12 +2,13 @@ import 'dart:ffi';
 
 import 'package:d_dialog/d_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:love_choice/data/adsManager.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:love_choice/data/adsManager.dart';
 import 'package:love_choice/modules/popMenu.dart';
 import 'package:love_choice/style/styles.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 import '../data/room_service.dart';
 import '../modules/drawerr.dart';
@@ -23,15 +24,21 @@ class OnlineHomePage extends StatefulWidget {
 
 class _OnlineHomePageState extends State<OnlineHomePage> {
   List<Map<String, dynamic>> chats = [];
-  BannerAd? _bannerAd;
+  // BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     loadchats();
+    UnityAds.load(
+      placementId: 'Banner_Android',
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
     // var myRooms = RoomService().getMyGroups();
     // print("الجروبات بتاعتي: $myRooms");
-    _bannerAd = AdHelper.createBanner();
+    // _bannerAd = AdHelper.createBanner();
   }
 
   void loadchats() async {
@@ -138,9 +145,18 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
           ),
           body: Column(
             children: [
-              const SizedBox(height: 10),
-              AdHelper.TurkAD(_bannerAd),
-              // استخدمنا Expanded عشان الليست تاخد باقي المساحة المتاحة ومتضربش
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 10),
+                child: UnityBannerAd(
+                  placementId: 'Banner_Android',
+                  onLoad: (placementId) => print('Banner loaded: $placementId'),
+                  onClick: (placementId) =>
+                      print('Banner clicked: $placementId'),
+                  onShown: (placementId) => print('Banner shown: $placementId'),
+                  onFailed: (placementId, error, message) =>
+                      print('Banner Ad $placementId failed: $error $message'),
+                ),
+              ),
               Expanded(
                 child: chats.isEmpty
                     ? const Center(

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../data/adsManager.dart';
+// import '../data/adsManager.dart';
 import '../style/styles.dart';
 
 class profile extends StatefulWidget {
@@ -14,12 +15,18 @@ class profile extends StatefulWidget {
 }
 
 class _profileState extends State<profile> {
-  BannerAd? _bannerAd;
+  // BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
-    _bannerAd = AdHelper.createBanner();
+    UnityAds.load(
+      placementId: 'Banner_Android',
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+    // _bannerAd = AdHelper.createBanner();
   }
 
   @override
@@ -57,8 +64,18 @@ class _profileState extends State<profile> {
           ),
           body: Column(
             children: [
-              SizedBox(height: 10),
-              AdHelper.TurkAD(_bannerAd),
+              Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 10),
+                child: UnityBannerAd(
+                  placementId: 'Banner_Android',
+                  onLoad: (placementId) => print('Banner loaded: $placementId'),
+                  onClick: (placementId) =>
+                      print('Banner clicked: $placementId'),
+                  onShown: (placementId) => print('Banner shown: $placementId'),
+                  onFailed: (placementId, error, message) =>
+                      print('Banner Ad $placementId failed: $error $message'),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

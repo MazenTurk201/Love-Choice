@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,6 +10,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_links/app_links.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'modules/firebase_options.dart';
 import 'modules/carddisplay.dart';
 import 'data/db_helper.dart';
@@ -38,7 +40,14 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("all_users");
   final pref = await SharedPreferences.getInstance();
-  MobileAds.instance.initialize();
+  // MobileAds.instance.initialize();
+  UnityAds.init(
+    gameId: '5996823',
+    testMode: kDebugMode,
+    onComplete: () => print('Unity Ads Initialized'),
+    onFailed: (error, message) =>
+        print('Unity Ads Initialization Failed: $error $message'),
+  );
   // await DBHelper.init();
 
   runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));

@@ -28,8 +28,8 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
   late final userId = supabase.auth.currentUser!.id;
   String? userImageUrl;
 
-  Future TurkMessage() async {
-    final data = (await DBHelper.getRandUsers("bestat_choices")).first;
+  Future TurkMessage(String table) async {
+    final data = (await DBHelper.getRandUsers(table)).first;
     await supabase.from('messages').insert({
       'room_id': widget.roomId,
       'sender': TurkUserID,
@@ -252,7 +252,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                                   ? TurkBubbleType.center
                                   : TurkBubbleType.left,
                               context,
-                              msg["text"],
+                              msg["id"],
                               DateFormat('h:mm a').format(
                                 DateTime.parse(
                                   msg['created_at'],
@@ -289,14 +289,14 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                     child: Row(
                       children: [
                         InkWell(
-                          onDoubleTap: () {
+                          onLongPress: () {
                             showDialog(
                               context: context,
                               builder: (context) =>
-                                  AlertDialog(title: Text("data")),
+                                  AlertDialog(title: Text("اختار الداتا")),
                             );
                           },
-                          onTap: () => TurkMessage(),
+                          onTap: () => TurkMessage("bestat_choices"),
                           child: CircleAvatar(
                             radius: 20,
                             backgroundColor: Colors.transparent,
@@ -362,76 +362,101 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
 SizedBox defBubble(
   TurkBubbleType isUser,
   BuildContext context,
-  String message,
+  String messageid,
   String time,
   String disname,
   Widget widget,
 ) {
   return SizedBox(
     width: double.infinity,
-    child: Container(
-      margin: const EdgeInsets.all(10),
-      alignment: isUser == TurkBubbleType.right
-          ? Alignment.centerRight
-          : isUser == TurkBubbleType.left
-          ? Alignment.centerLeft
-          : Alignment.center,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          // العرض هيكون على قد الكلام لحد 3/4 الشاشة كحد أقصى
-          maxWidth: MediaQuery.of(context).size.width * 0.75,
-        ),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          decoration: BoxDecoration(
-            border: Border.all(color: Color.fromARGB(150, 0, 0, 0), width: 2),
-            gradient: isUser == TurkBubbleType.right
-                ? const LinearGradient(
-                    colors: [Colors.black, Color.fromARGB(150, 150, 0, 0)],
-                  )
-                : isUser == TurkBubbleType.center
-                ? const LinearGradient(
-                    colors: [
-                      Color.fromARGB(150, 255, 0, 0),
-                      Color.fromARGB(150, 255, 247, 0),
-                    ],
-                  )
-                : const LinearGradient(
-                    colors: [Color.fromARGB(150, 0, 0, 150), Colors.black],
-                  ),
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(25),
-              topRight: const Radius.circular(25),
-              bottomLeft: isUser == TurkBubbleType.left
-                  ? Radius.zero
-                  : const Radius.circular(25),
-              bottomRight: isUser == TurkBubbleType.right
-                  ? Radius.zero
-                  : const Radius.circular(25),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              widget,
-              Text(
-                "$disname $time",
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  fontFamily: TurkStyle().turkFont,
-                  fontSize: 10,
-                  color: Colors.white70,
-                  shadows: const [
-                    Shadow(
-                      color: Colors.black,
-                      offset: Offset.zero,
-                      blurRadius: 5,
-                    ),
-                  ],
+    child: GestureDetector(
+      onLongPress: () {
+        if (isUser == TurkBubbleType.right) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("حذف الرسالة؟"),
+              actions: [
+                TextButton(
+                  onPressed: () async {
+                    await supabase
+                        .from('messages')
+                        .delete()
+                        .eq("id", messageid);
+                    // ignore: use_build_context_synchronously
+                    Navigator.of(context).pop();
+                  },
+                  child: Text("حذف"),
                 ),
+              ],
+            ),
+          );
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        alignment: isUser == TurkBubbleType.right
+            ? Alignment.centerRight
+            : isUser == TurkBubbleType.left
+            ? Alignment.centerLeft
+            : Alignment.center,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            // العرض هيكون على قد الكلام لحد 3/4 الشاشة كحد أقصى
+            maxWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Color.fromARGB(150, 0, 0, 0), width: 2),
+              gradient: isUser == TurkBubbleType.right
+                  ? const LinearGradient(
+                      colors: [Colors.black, Color.fromARGB(150, 150, 0, 0)],
+                    )
+                  : isUser == TurkBubbleType.center
+                  ? const LinearGradient(
+                      colors: [
+                        Color.fromARGB(150, 255, 0, 0),
+                        Color.fromARGB(150, 255, 247, 0),
+                      ],
+                    )
+                  : const LinearGradient(
+                      colors: [Color.fromARGB(150, 0, 0, 150), Colors.black],
+                    ),
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(25),
+                topRight: const Radius.circular(25),
+                bottomLeft: isUser == TurkBubbleType.left
+                    ? Radius.zero
+                    : const Radius.circular(25),
+                bottomRight: isUser == TurkBubbleType.right
+                    ? Radius.zero
+                    : const Radius.circular(25),
               ),
-            ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                widget,
+                Text(
+                  "$disname $time",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    fontFamily: TurkStyle().turkFont,
+                    fontSize: 10,
+                    color: Colors.white70,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black,
+                        offset: Offset.zero,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -4,7 +4,11 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:love_choice/data/adsManager.dart';
+import 'package:love_choice/main.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
@@ -19,8 +23,38 @@ Future<bool> checkRealConnection() async {
   }
 }
 
-class TurkDrawer extends StatelessWidget {
+class TurkDrawer extends StatefulWidget {
   const TurkDrawer({super.key});
+
+  @override
+  State<TurkDrawer> createState() => _TurkDrawerState();
+}
+
+class _TurkDrawerState extends State<TurkDrawer> {
+  // bool onlinestatus = true;
+  // bool settingstatus = true;
+  bool onlinestatus = true;
+  bool settingstatus = true;
+
+  void loadSettings() async {
+    final pref = await SharedPreferences.getInstance();
+    setState(() {
+      onlinestatus = pref.getBool('onlinestatus') ?? true;
+      settingstatus = pref.getBool('settingstatus') ?? true;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    UnityAds.load(
+      placementId: 'Rewarded_Android',
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+    loadSettings();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +102,13 @@ class TurkDrawer extends StatelessWidget {
                     title: 'اعدادات',
                     icon: Icons.settings,
                     url: 'setting',
+                    disable: settingstatus,
                   ),
                   menuDrawerButton(
                     title: 'أون لاين',
                     icon: Icons.wifi_rounded,
                     url: 'online',
+                    disable: onlinestatus,
                   ),
                   menuDrawerButton(
                     title: 'ملف المطور',
@@ -128,12 +164,14 @@ class menuDrawerButton extends StatefulWidget {
   final String title;
   final IconData icon;
   final String url;
+  final bool? disable;
 
   const menuDrawerButton({
     super.key,
     required this.title,
     required this.icon,
     required this.url,
+    this.disable,
   });
   @override
   State<menuDrawerButton> createState() => _menuDrawerButtonState();
@@ -166,8 +204,39 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           );
           Future.value(true);
           exit(0);
-        } else if (widget.url == 'setting' || widget.url == 'profile') {
-          Navigator.pushReplacementNamed(context, "/${widget.url}");
+        } else if (widget.url == 'setting') {
+          if (widget.disable == true) {
+            UnityAds.showVideoAd(
+              placementId: 'Rewarded_Android',
+              onStart: (placementId) => print('Video Ad $placementId started'),
+              onClick: (placementId) => print('Video Ad $placementId click'),
+              onSkipped: (placementId) =>
+                  print('Video Ad $placementId skipped'),
+              onComplete: (placementId) {
+                print('Video Ad $placementId completed');
+                setState(() async {
+                  final pref = await SharedPreferences.getInstance();
+                  pref.setBool('settingstatus', false);
+                  Navigator.pushReplacementNamed(context, "/setting");
+                });
+              },
+              onFailed: (placementId, error, message) =>
+                  print('Video Ad $placementId failed: $error $message'),
+            );
+            // TurkRewarded.show(
+            //   onReward: (rewarded) {
+            //     setState(() async {
+            //       final pref = await SharedPreferences.getInstance();
+            //       await pref.setBool('settingstatus', false);
+            //       Navigator.pushReplacementNamed(context, "/setting");
+            //     });
+            //   },
+            // );
+          } else {
+            Navigator.pushReplacementNamed(context, "/setting");
+          }
+        } else if (widget.url == 'profile') {
+          Navigator.pushReplacementNamed(context, "/profile");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(
@@ -179,26 +248,71 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           _showRateDialog(context);
         } else if (widget.url == 'online') {
           if (await checkRealConnection()) {
-            final session = Supabase.instance.client.auth.currentSession;
-            if (session != null) {
-              Navigator.of(context).pushReplacementNamed('/onlineHome');
+            if (widget.disable == true) {
+              UnityAds.showVideoAd(
+                placementId: 'Rewarded_Android',
+                onStart: (placementId) =>
+                    print('Video Ad $placementId started'),
+                onClick: (placementId) => print('Video Ad $placementId click'),
+                onSkipped: (placementId) =>
+                    print('Video Ad $placementId skipped'),
+                onComplete: (placementId) {
+                  print('Video Ad $placementId completed');
+                  setState(() async {
+                    final pref = await SharedPreferences.getInstance();
+                    pref.setBool('onlinestatus', false);
+                    Navigator.pushReplacementNamed(context, "/login");
+                  });
+                },
+                onFailed: (placementId, error, message) =>
+                    print('Video Ad $placementId failed: $error $message'),
+              );
+              // TurkRewarded.show(
+              //   onReward: (rewarded) {
+
+              //   },
+              // );
             } else {
-              Navigator.pushReplacementNamed(context, "/login");
+              final session = Supabase.instance.client.auth.currentSession;
+              if (session != null) {
+                Navigator.of(context).pushReplacementNamed('/onlineHome');
+              } else {
+                Navigator.pushReplacementNamed(context, "/login");
+              }
             }
           } else {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text("لازم تكون متصل بالنت")));
+            // Navigator.of(context).pop();
+            Scaffold.of(context).closeDrawer();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  "لازم تكون متصل بالنت",
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            );
           }
         } else {
           _launchUrl(widget.url);
         }
       },
       child: ListTile(
-        leading: Icon(widget.icon, size: 30),
+        leading: Icon(
+          widget.disable == true ? Icons.lock_rounded : widget.icon,
+          size: 30,
+          color: widget.disable == true
+              ? const Color.fromARGB(255, 102, 102, 102)
+              : Colors.white,
+        ),
         title: Text(
           widget.title,
-          style: TextStyle(fontWeight: FontWeight.bold, fontFamily: "TurkFont"),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: "TurkFont",
+            color: widget.disable == true
+                ? const Color.fromARGB(255, 102, 102, 102)
+                : Colors.white,
+          ),
           textAlign: TextAlign.center,
         ),
       ),

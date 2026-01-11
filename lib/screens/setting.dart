@@ -6,12 +6,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:http/http.dart' as http;
 import 'package:love_choice/data/db_helper.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import '../data/adsManager.dart';
 import '../main.dart';
 import '../style/styles.dart';
@@ -25,13 +26,14 @@ class setting extends StatefulWidget {
 }
 
 class _settingState extends State<setting> {
-  BannerAd? _bannerAd;
+  // BannerAd? _bannerAd;
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
   bool switch1 = true;
   bool switch2 = false;
   int? metgawzen_password_num;
+  bool test = false;
   TextEditingController controler = TextEditingController();
   TextEditingController font_controler = TextEditingController();
   TextEditingController spic_share_controler = TextEditingController();
@@ -84,7 +86,19 @@ class _settingState extends State<setting> {
   void initState() {
     super.initState();
     loadSettings();
-    _bannerAd = AdHelper.createBanner();
+    UnityAds.load(
+      placementId: 'Rewarded_Android',
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+    UnityAds.load(
+      placementId: 'Banner_Android',
+      onComplete: (placementId) => print('Load Complete $placementId'),
+      onFailed: (placementId, error, message) =>
+          print('Load Failed $placementId: $error $message'),
+    );
+    // _bannerAd = AdHelper.createBanner();
     // BannerAd(
     //   adUnitId: AdHelper.bannerAdUnitId,
     //   size: AdSize.banner,
@@ -105,6 +119,7 @@ class _settingState extends State<setting> {
 
   Future<void> loadSettings() async {
     final pref = await SharedPreferences.getInstance();
+    TurkRewarded.load();
     setState(() {
       isSwitched = pref.getBool('isDare') ?? true;
       isSwitched2 = pref.getBool('switch_both') ?? true;
@@ -199,6 +214,7 @@ class _settingState extends State<setting> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
       child: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacementNamed(context, "/main");
@@ -230,19 +246,21 @@ class _settingState extends State<setting> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
-                    SizedBox(height: 10),
-                    AdHelper.TurkAD(_bannerAd),
-                    // (_bannerAd != null)
-                    //     ? Align(
-                    //         alignment: AlignmentGeometry.topCenter,
-                    //         // ignore: sized_box_for_whitespace
-                    //         child: Container(
-                    //           width: _bannerAd!.size.width.toDouble(),
-                    //           height: _bannerAd!.size.height.toDouble(),
-                    //           child: AdWidget(ad: _bannerAd!),
-                    //         ),
-                    //       )
-                    //     : SizedBox.shrink(),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20, bottom: 10),
+                      child: UnityBannerAd(
+                        placementId: 'Banner_Android',
+                        onLoad: (placementId) =>
+                            print('Banner loaded: $placementId'),
+                        onClick: (placementId) =>
+                            print('Banner clicked: $placementId'),
+                        onShown: (placementId) =>
+                            print('Banner shown: $placementId'),
+                        onFailed: (placementId, error, message) => print(
+                          'Banner Ad $placementId failed: $error $message',
+                        ),
+                      ),
+                    ),
                     settingTile(
                       title: "عرض الخيار التاني؟",
                       state: isSwitched,
