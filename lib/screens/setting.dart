@@ -93,7 +93,7 @@ class _settingState extends State<setting> {
           print('Load Failed $placementId: $error $message'),
     );
     UnityAds.load(
-      placementId: 'Banner_Android',
+      placementId: 'ABNR',
       onComplete: (placementId) => print('Load Complete $placementId'),
       onFailed: (placementId, error, message) =>
           print('Load Failed $placementId: $error $message'),
@@ -249,7 +249,7 @@ class _settingState extends State<setting> {
                     Padding(
                       padding: const EdgeInsets.only(top: 20, bottom: 10),
                       child: UnityBannerAd(
-                        placementId: 'Banner_Android',
+                        placementId: 'ABNR',
                         onLoad: (placementId) =>
                             print('Banner loaded: $placementId'),
                         onClick: (placementId) =>

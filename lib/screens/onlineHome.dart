@@ -31,7 +31,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
     super.initState();
     loadchats();
     UnityAds.load(
-      placementId: 'Banner_Android',
+      placementId: 'ABNR',
       onComplete: (placementId) => print('Load Complete $placementId'),
       onFailed: (placementId, error, message) =>
           print('Load Failed $placementId: $error $message'),
@@ -148,7 +148,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 10),
                 child: UnityBannerAd(
-                  placementId: 'Banner_Android',
+                  placementId: 'ABNR',
                   onLoad: (placementId) => print('Banner loaded: $placementId'),
                   onClick: (placementId) =>
                       print('Banner clicked: $placementId'),

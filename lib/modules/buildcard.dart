@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:love_choice/main.dart';
 import 'package:redacted/redacted.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../data/localAuth.dart';
 import '../data/toastdata.dart';
 
 class Buildcard extends StatefulWidget {
@@ -45,87 +49,97 @@ class _BuildcardState extends State<Buildcard> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           Navigator.pushReplacementNamed(context, "/${widget.route}");
           if (widget.route == "ahl") {
             turkToast(
               ahl_enter_tablee[Random().nextInt(ahl_enter_tablee.length)],
             );
           } else if (widget.route == "metgawzen") {
-            warning18
-                ? showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(
-                        "تنويه هام",
-                        style: TextStyle(fontFamily: "TurkFont", fontSize: 20),
-                        textAlign: TextAlign.center,
-                      ),
-                      content: Text(
-                        "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18} وفي أي حالة ارجاع هذا التحذير الرجاء حذف الباسورد من الاعدادات، استمتعوا.",
-                        style: TextStyle(fontSize: 17),
-                        textAlign: TextAlign.center,
-                        textDirection: TextDirection.rtl,
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            final pref = await SharedPreferences.getInstance();
-                            await pref.setBool('warning18', false);
-                            if (context.mounted) {
+            final isAvalibalAuth = await LocalAuthManager.authenticat();
+            if (isAvalibalAuth) {
+              warning18
+                  ? showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(
+                          "تنويه هام",
+                          style: TextStyle(
+                            fontFamily: "TurkFont",
+                            fontSize: 20,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        content: Text(
+                          "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18} وفي أي حالة ارجاع هذا التحذير الرجاء حذف الباسورد من الاعدادات، استمتعوا.",
+                          style: TextStyle(fontSize: 17),
+                          textAlign: TextAlign.center,
+                          textDirection: TextDirection.rtl,
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () async {
+                              final pref =
+                                  await SharedPreferences.getInstance();
+                              await pref.setBool('warning18', false);
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: Text(
+                              "عدم العرض",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 15,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                context,
+                                "/metgawzen_password",
+                              );
+                            },
+                            child: Text(
+                              "باسورد",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 15,
+                                color: Colors.deepPurpleAccent,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
                               Navigator.of(context).pop();
-                            }
-                          },
-                          child: Text(
-                            "عدم العرض",
-                            style: TextStyle(
-                              fontFamily: "TurkFont",
-                              fontSize: 15,
-                              color: Colors.deepPurpleAccent,
+                            },
+                            child: Text(
+                              "فهمت",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 15,
+                                color: Colors.deepPurpleAccent,
+                              ),
                             ),
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              "/metgawzen_password",
-                            );
-                          },
-                          child: Text(
-                            "باسورد",
-                            style: TextStyle(
-                              fontFamily: "TurkFont",
-                              fontSize: 15,
-                              color: Colors.deepPurpleAccent,
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            "فهمت",
-                            style: TextStyle(
-                              fontFamily: "TurkFont",
-                              fontSize: 15,
-                              color: Colors.deepPurpleAccent,
-                            ),
-                          ),
-                        ),
-                      ],
-                      actionsAlignment: MainAxisAlignment.spaceEvenly,
-                    ),
-                  )
-                : metgawzen_password
-                ? Navigator.pushReplacementNamed(context, "/metgawzen_password")
-                : null;
-            turkToast(
-              metgawzen_enter_tablee[Random().nextInt(
-                metgawzen_enter_tablee.length,
-              )],
-            );
+                        ],
+                        actionsAlignment: MainAxisAlignment.spaceEvenly,
+                      ),
+                    )
+                  : metgawzen_password
+                  ? Navigator.pushReplacementNamed(
+                      context,
+                      "/metgawzen_password",
+                    )
+                  : null;
+              turkToast(
+                metgawzen_enter_tablee[Random().nextInt(
+                  metgawzen_enter_tablee.length,
+                )],
+              );
+            }
           } else if (widget.route == "ma5toben") {
             turkToast(
               ma5toben_enter_tablee[Random().nextInt(

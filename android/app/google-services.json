@@ -12,7 +12,20 @@
           "package_name": "com.turk.love_choice"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "405627178641-nbuqglau888mo9njudpnopqi6d76bld1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.turk.love_choice",
+            "certificate_hash": "18b9bc545b9c33f61ae4c375fdfc207628b57d73"
+          }
+        },
+        {
+          "client_id": "405627178641-lh4ai3ub9apfnim293pdufrkmptanonp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBHGmtrz8VE_VvEPV3bVEpPbCezRoYvvGQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
