@@ -241,7 +241,7 @@ class _settingState extends State<setting> {
           body: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height - 150,
+                minHeight: MediaQuery.of(context).size.height * 0.88,
               ),
               child: IntrinsicHeight(
                 child: Column(

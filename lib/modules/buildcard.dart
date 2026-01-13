@@ -50,7 +50,6 @@ class _BuildcardState extends State<Buildcard> {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         onTap: () async {
-          Navigator.pushReplacementNamed(context, "/${widget.route}");
           if (widget.route == "ahl") {
             turkToast(
               ahl_enter_tablee[Random().nextInt(ahl_enter_tablee.length)],
@@ -58,6 +57,7 @@ class _BuildcardState extends State<Buildcard> {
           } else if (widget.route == "metgawzen") {
             final isAvalibalAuth = await LocalAuthManager.authenticat();
             if (isAvalibalAuth) {
+              Navigator.pushReplacementNamed(context, "/${widget.route}");
               warning18
                   ? showDialog(
                       context: context,
@@ -139,7 +139,9 @@ class _BuildcardState extends State<Buildcard> {
                   metgawzen_enter_tablee.length,
                 )],
               );
-            }
+              } else {
+                turkToast("محاولة فاشلة.. لازم تحمي جهازك بباسورد من اعدادات جهازك يا ريس! 🔞❤️.");
+              }
           } else if (widget.route == "ma5toben") {
             turkToast(
               ma5toben_enter_tablee[Random().nextInt(
@@ -166,6 +168,10 @@ class _BuildcardState extends State<Buildcard> {
             );
           } else {
             turkToast("طب مثا من عندي");
+          }
+
+          if (widget.route != "metgawzen") {
+            Navigator.pushReplacementNamed(context, "/${widget.route}");
           }
         },
         child: Stack(

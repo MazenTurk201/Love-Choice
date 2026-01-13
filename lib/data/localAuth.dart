@@ -11,7 +11,8 @@ class LocalAuthManager {
     try {
       // canCheckBiometrics + isDeviceSupported عشان نضمن ان الجهاز بيدعمها فعلاً
       final bool canAuthenticateWithBiometrics = await _auth.canCheckBiometrics;
-      final bool canAuthenticate = canAuthenticateWithBiometrics || await _auth.isDeviceSupported();
+      final bool canAuthenticate =
+          canAuthenticateWithBiometrics || await _auth.isDeviceSupported();
       return canAuthenticate;
     } on PlatformException catch (e) {
       return false;
@@ -25,17 +26,35 @@ class LocalAuthManager {
     try {
       return await _auth.authenticate(
         localizedReason: "لتجنب دخول الأطفال بس",
-        persistAcrossBackgrounding: true,
         biometricOnly: false,
+        persistAcrossBackgrounding: true,
         authMessages: const <AuthMessages>[
           AndroidAuthMessages(
-            signInTitle: 'لازم للأسف بصمة',
+            signInTitle: 'لازم للأسف فك الرمز',
             cancelButton: 'فاكس',
           ),
         ],
       );
     } on PlatformException catch (e) {
-      print("Error: $e");
+      // هنا بقى "الزتونة" يا ترك
+      if (e.code == 'noCredentialsSet') {
+        print("يا ترك اليوزر مش عامل باسورد للموبايل أصلاً!");
+        // ممكن هنا ترجع 'false' وتظهر SnackBar لليوزر تقوله "فعل حماية الموبايل الأول"
+      } else if (e.code == 'NotAvailable') {
+        print("الخاصية مقفولة أو مش متاحة حالياً");
+      }
+
+      print("Error Code: ${e.code} - Message: ${e.message}");
+      return false;
+    } on LocalAuthException catch (e) {
+      if (e.code == 'noCredentialsSet') {
+        print("يا ترك اليوزر مش عامل باسورد للموبايل أصلاً!");
+        // ممكن هنا ترجع 'false' وتظهر SnackBar لليوزر تقوله "فعل حماية الموبايل الأول"
+      } else if (e.code == 'NotAvailable') {
+        print("الخاصية مقفولة أو مش متاحة حالياً");
+      }
+
+      print("Error Code: ${e.code}");
       return false;
     }
   }
