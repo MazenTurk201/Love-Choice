@@ -52,7 +52,7 @@ class _CardsFactoryState extends State<CardsFactory>
   late AnimationController _uptextController;
   late AnimationController _downtextController;
   double textDrag = 0.0;
-  final double swipeThreshold = 0.5;
+  final double swipeThreshold = 0.3;
   TurkAnimType _animTypeDare = TurkAnimType.toLeft;
   TurkAnimType _animTypeChoice = TurkAnimType.toLeft;
 
@@ -271,22 +271,22 @@ class _CardsFactoryState extends State<CardsFactory>
 
               await _uptextController.animateTo(
                 1.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOut,
               );
               await _uptextController.animateBack(
                 0.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeIn,
               );
               await _downtextController.animateTo(
                 1.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOut,
               );
               await _downtextController.animateBack(
                 0.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeIn,
               );
 
@@ -308,12 +308,12 @@ class _CardsFactoryState extends State<CardsFactory>
 
               await _uptextController.animateTo(
                 1,
-                duration: const Duration(seconds: 2),
+                duration: const Duration(milliseconds: 220),
                 curve: Curves.easeIn,
               );
               await _downtextController.animateTo(
                 1,
-                duration: const Duration(seconds: 2),
+                duration: const Duration(milliseconds: 220),
                 curve: Curves.easeIn,
               );
 
@@ -332,23 +332,23 @@ class _CardsFactoryState extends State<CardsFactory>
 
               _uptextController.animateTo(
                 1.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
               );
               _downtextController.animateTo(
                 1.0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeOutCubic,
               );
             } else {
               await _uptextController.animateBack(
                 0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeInCubic,
               );
               await _downtextController.animateBack(
                 0,
-                duration: const Duration(seconds: 1),
+                duration: const Duration(milliseconds: 180),
                 curve: Curves.easeInCubic,
               );
             }
@@ -381,22 +381,22 @@ class _CardsFactoryState extends State<CardsFactory>
 
                     await _uptextController.animateTo(
                       1,
-                      duration: const Duration(seconds: 2),
+                      duration: const Duration(milliseconds: 220),
                       curve: Curves.easeInCubic,
                     );
                     await _downtextController.animateBack(
                       0,
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOutCubic,
                     );
                     await _uptextController.animateTo(
                       1,
-                      duration: const Duration(seconds: 2),
+                      duration: const Duration(milliseconds: 220),
                       curve: Curves.easeInCubic,
                     );
                     await _downtextController.animateBack(
                       0,
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOutCubic,
                     );
                     spic_share
@@ -436,13 +436,13 @@ class _CardsFactoryState extends State<CardsFactory>
 
                     await _uptextController.animateTo(
                       1,
-                      duration: const Duration(seconds: 2),
+                      duration: const Duration(milliseconds: 220),
                       curve: Curves.easeInCubic,
                     );
 
                     await _downtextController.animateTo(
                       1,
-                      duration: const Duration(seconds: 2),
+                      duration: const Duration(milliseconds: 220),
                       curve: Curves.easeInCubic,
                     );
 
@@ -467,12 +467,12 @@ class _CardsFactoryState extends State<CardsFactory>
 
                     _uptextController.animateTo(
                       1.0,
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOutCubic,
                     );
                     _downtextController.animateTo(
                       1.0,
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOutCubic,
                     );
                   },
@@ -993,12 +993,12 @@ class _CardsFactoryState extends State<CardsFactory>
 
           await controller.animateTo(
             1.0,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 180),
             curve: Curves.easeOut,
           );
           await controller.animateBack(
             0.0,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 180),
             curve: Curves.easeIn,
           );
           spic_share
@@ -1028,7 +1028,7 @@ class _CardsFactoryState extends State<CardsFactory>
 
           await controller.animateTo(
             1,
-            duration: const Duration(seconds: 2),
+            duration: const Duration(milliseconds: 220),
             curve: Curves.easeIn,
           );
 
@@ -1047,7 +1047,7 @@ class _CardsFactoryState extends State<CardsFactory>
 
           controller.animateTo(
             1.0,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 180),
             curve: Curves.easeOutCubic,
           );
         } else {
@@ -1056,7 +1056,7 @@ class _CardsFactoryState extends State<CardsFactory>
               : _uptextController;
           await controller.animateBack(
             0,
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 180),
             curve: Curves.easeInCubic,
           );
         }
@@ -1192,12 +1192,12 @@ class _CardsFactoryState extends State<CardsFactory>
 
                           await controller.animateTo(
                             1,
-                            duration: const Duration(seconds: 2),
+                            duration: const Duration(milliseconds: 220),
                             curve: Curves.easeInCubic,
                           );
                           await controller.animateBack(
                             0,
-                            duration: const Duration(seconds: 1),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeOutCubic,
                           );
                           spic_share
@@ -1247,7 +1247,7 @@ class _CardsFactoryState extends State<CardsFactory>
 
                           await controller.animateTo(
                             1,
-                            duration: const Duration(seconds: 2),
+                            duration: const Duration(milliseconds: 220),
                             curve: Curves.easeInCubic,
                           );
 
@@ -1270,7 +1270,7 @@ class _CardsFactoryState extends State<CardsFactory>
 
                           controller.animateTo(
                             1.0,
-                            duration: const Duration(seconds: 1),
+                            duration: const Duration(milliseconds: 180),
                             curve: Curves.easeOutCubic,
                           );
                         },
