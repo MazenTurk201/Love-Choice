@@ -1,4 +1,4 @@
-// ignore_for_file: unused_catch_clause
+// ignore_for_file: unused_catch_clause, unrelated_type_equality_checks
 
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
