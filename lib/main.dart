@@ -8,7 +8,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:app_links/app_links.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'modules/firebase_options.dart';
@@ -32,9 +31,6 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  final supabaseUrl = dotenv.env['SUPABASE_URL']!;
-  final supabaseKey = dotenv.env['SUPABASE_ANON_KEY']!;
-  await Supabase.initialize(url: supabaseUrl, anonKey: supabaseKey);
   await requestNotificationPermission();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

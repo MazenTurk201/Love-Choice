@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'dart:math';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:love_choice/data/adsManager.dart';
@@ -10,7 +11,6 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
 import '../style/styles.dart';
 
@@ -273,7 +273,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
               //   },
               // );
             } else {
-              final session = Supabase.instance.client.auth.currentSession;
+              final session = FirebaseAuth.instance.currentUser;
               if (session != null) {
                 Navigator.of(context).pushReplacementNamed('/onlineHome');
               } else {

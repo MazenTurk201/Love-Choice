@@ -1,176 +1,144 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
-import 'package:d_dialog/d_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:love_choice/modules/appbars.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../style/styles.dart';
-
-final supabase = Supabase.instance.client;
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AuthPageState createState() => _AuthPageState();
+  State<AuthPage> createState() => _AuthPageState();
 }
 
 class _AuthPageState extends State<AuthPage> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
-  // final usernameController = TextEditingController();
+
+  final auth = FirebaseAuth.instance;
+  final db = FirebaseFirestore.instance;
 
   bool isLogin = true;
 
-  Future authGoogle() async {
+  // 🔹 Google Auth
+  Future<void> authGoogle() async {
     try {
-      // ignore: unused_local_variable
-      final res = await supabase.auth.signInWithOAuth(
-        OAuthProvider.google,
-        redirectTo: 'com.turk.lovechoice://login-callback',
-      );
-    } catch (e) {
-      print("Error: $e");
-    }
-  }
+      // 1. استخدمنا authenticate() زي ما شفنا في الصورة
+      final googleUser = await GoogleSignIn.instance.authenticate();
 
-  Future auth() async {
-    final email = emailController.text;
-    final pass = passController.text;
-    // final username = usernameController.text;
+      if (googleUser == null) return;
 
-    if (isLogin) {
-      if (email.isEmpty || pass.isEmpty) return;
-      final res = await supabase.auth.signInWithPassword(
-        email: email,
-        password: pass,
-      );
-      if (res.user != null) {
-        Navigator.of(context).pushReplacementNamed('/onlineChat');
-      }
-    } else {
-      final res = await supabase.auth.signUp(
-        email: email,
-        password: pass,
-        emailRedirectTo: 'com.turk.lovechoice://login-callback',
+      // 2. شيلنا الـ await لأنها مبقتش Future في النسخة دي
+      final googleAuth = googleUser.authentication;
+
+      // 3. بنعمل الـ Credential (لو accessToken لسه معترض، اتأكد إنك عامل Import لـ firebase_auth)
+      // ملاحظة: لو بتجرب ويب، الـ accessToken ساعات مش بيكون متاح، فبنعتمد على idToken
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
       );
 
-      final user = res.user;
+      final userCred = await auth.signInWithCredential(credential);
+      final user = userCred.user;
 
       if (user != null) {
-        await supabase.from('profiles').insert({
-          'id': user.id, // مهم جدًا
-          'username': email,
-          'avatar_url': null,
-        }).maybeSingle();
+        await createProfileIfNotExists(user);
 
-        isLogin = true;
-        setState(() {});
+        if (!mounted) return;
+        Navigator.pushReplacementNamed(context, "/onlineHome");
       }
+    } catch (e) {
+      print("حصلت مشكلة يا ترك: $e");
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
+  // 🔹 Email Auth
+  Future authEmail() async {
+    final email = emailController.text.trim();
+    final pass = passController.text.trim();
 
-    supabase.auth.onAuthStateChange.listen((data) async {
-      final event = data.event;
-      if (event == AuthChangeEvent.signedIn) {
-        Navigator.of(context).pushReplacementNamed('/onlineHome');
-        // تحقق من نجاح تسجيل الدخول
-        final user = supabase.auth.currentUser;
-        if (user != null) {
-          await supabase.from('profiles').upsert({
-            'id': user.id,
-            'username': user.email,
-            'avatar_url': user.userMetadata!['avatar_url'],
-          }, onConflict: 'id');
-        }
-      }
-    });
+    if (email.isEmpty || pass.isEmpty) return;
+
+    if (isLogin) {
+      final cred = await auth.signInWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      await createProfileIfNotExists(cred.user!);
+      Navigator.pushReplacementNamed(context, "/onlineChat");
+    } else {
+      final cred = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: pass,
+      );
+
+      await createProfileIfNotExists(cred.user!);
+
+      setState(() => isLogin = true);
+    }
+  }
+
+  // 🔹 Create Profile
+  Future createProfileIfNotExists(User user) async {
+    final ref = db.collection("profiles").doc(user.uid);
+    final snap = await ref.get();
+
+    if (!snap.exists) {
+      await ref.set({
+        "username": user.email,
+        "avatar_url": user.photoURL,
+        "created_at": FieldValue.serverTimestamp(),
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      top: false,
-      child: WillPopScope(
-        onWillPop: () {
-          return Future.value(false);
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, "/main");
-              },
-            ),
-            title: Text(isLogin ? 'Login' : 'Sign Up'),
-            centerTitle: true,
-            backgroundColor: TurkStyle().mainColor,
-          ),
-          body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              children: [
-                // if (!isLogin)
-                //   TextField(
-                //     controller: usernameController,
-                //     decoration: InputDecoration(labelText: "Username"),
-                //   ),
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(labelText: "Email"),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: TurkStyle().mainColor,
+          title: Text(isLogin ? "Login" : "Sign Up"),
+          centerTitle: true,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(labelText: "Email"),
+              ),
+              TextField(
+                controller: passController,
+                decoration: const InputDecoration(labelText: "Password"),
+                obscureText: true,
+              ),
+              const SizedBox(height: 20),
+
+              ElevatedButton(
+                onPressed: authEmail,
+                child: Text(isLogin ? "Login" : "Sign Up"),
+              ),
+
+              const SizedBox(height: 10),
+
+              ElevatedButton.icon(
+                onPressed: authGoogle,
+                icon: Image.asset("images/googleIcon.png", width: 24),
+                label: Text(
+                  isLogin ? "Login With Google" : "Sign Up With Google",
                 ),
-                TextField(
-                  controller: passController,
-                  decoration: InputDecoration(labelText: "Password"),
-                  obscureText: true,
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: auth,
-                  child: Text(isLogin ? "Login" : "Sign Up"),
-                ),
-                SizedBox(
-                  width: 205,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: authGoogle,
-                    style: ElevatedButton.styleFrom(),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "images/googleIcon.png",
-                          width: 30,
-                          height: 30,
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          isLogin ? "Login With Google" : "Sign Up With Google",
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => setState(() => isLogin = !isLogin),
-                  child: Text(
-                    isLogin ? "Create Account" : "Have Account? Login",
-                  ),
-                ),
-              ],
-            ),
+              ),
+
+              TextButton(
+                onPressed: () => setState(() => isLogin = !isLogin),
+                child: Text(isLogin ? "Create Account" : "Have Account? Login"),
+              ),
+            ],
           ),
         ),
       ),

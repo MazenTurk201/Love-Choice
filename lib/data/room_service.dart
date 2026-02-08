@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class RoomService {
-  final supabase = Supabase.instance.client;
+  final db = FirebaseFirestore.instance;
+  final auth = FirebaseAuth.instance;
 
-  // 4. فنكشن تعمل جروب جديد وتخليك الأدمن بتاعه
+  /// 4️⃣ إنشاء جروب جديد وتبقى Admin
   Future<void> createRoom(
     BuildContext context,
     String roomName,
@@ -12,83 +15,92 @@ class RoomService {
     String? avatar,
   ) async {
     try {
-      final userId = supabase.auth.currentUser!.id;
+      final user = auth.currentUser!;
+      final uid = user.uid;
 
-      // أ: بنكريت الجروب وبنرجع الداتا بتاعته
-      final data = await supabase
-          .from('rooms')
-          .insert({
-            'name': roomName,
-            'dis': dis,
-            'avatar_url': avatar,
-            // 'created_by': userId, // لو كنت ضفت العمود ده في الجدول، شيل الكومنت
-          })
-          .select()
-          .single(); // مهمة جداً عشان ترجعلك صف واحد مش لستة
-
-      // ب: بناخد الـ ID بتاع الجروب الجديد
-      final newRoomId = data['id'];
-
-      // ج: بنضيفك كـ "أدمن" في الجروب ده
-      await supabase.from('room_members').insert({
-        'room_id': newRoomId,
-        'user_id': userId,
-        'role': 'admin', // بص يا باشا، بقيت أدمن أهو
+      // أ: إنشاء الغرفة
+      final roomRef = await db.collection("rooms").add({
+        "name": roomName,
+        "dis": dis,
+        "avatar_url": avatar,
+        "created_at": FieldValue.serverTimestamp(),
+        "created_by": uid, // اختياري
       });
+
+      // ب: إضافة المستخدم كـ Admin
+      await roomRef.collection("members").doc(uid).set({
+        "role": "admin",
+        "joined_at": FieldValue.serverTimestamp(),
+      });
+
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("الجروب اتعمل وأنت بقيت الكبير بتاعه!")),
+        const SnackBar(content: Text("الجروب اتعمل وأنت الأدمن 👑")),
       );
-      print("الجروب اتعمل وأنت بقيت الكبير بتاعه!");
+
+      print("Room created successfully");
     } catch (e) {
-      print("في حاجة غلط حصلت وأنت بتعمل الجروب: $e");
+      print("خطأ أثناء إنشاء الجروب: $e");
     }
   }
 
-  // 1. فنكشن عشان تدخل جروب جديد (Join Group)
-  Future<void> joinGroup(String roomId) async {
+  /// 1️⃣ الانضمام لجروب
+  Future<void> joinGroup(String roomId, String uid) async {
     try {
-      final userId = supabase.auth.currentUser!.id;
+      await db
+          .collection("rooms")
+          .doc(roomId)
+          .collection("members")
+          .doc(uid)
+          .set({
+        "role": "member",
+        "joined_at": FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
 
-      await supabase.from('room_members').insert({
-        'room_id': roomId,
-        'user_id': userId,
-        'role': 'member', // الديفولت بتاعنا
-      });
-
-      print("تم الانضمام للجروب بنجاح يا ريس!");
+      print("تم الانضمام للجروب بنجاح");
     } catch (e) {
-      print("حصل مشكلة وأنت بتدخل الجروب: $e");
+      print("مشكلة أثناء الانضمام للجروب: $e");
     }
   }
 
-  // 2. فنكشن تجيب الجروبات اللي أنا مشترك فيها بس (My Groups)
+  /// 2️⃣ جلب الجروبات اللي المستخدم عضو فيها (My Groups)
   Future<List<Map<String, dynamic>>> getMyGroups() async {
     try {
-      final userId = supabase.auth.currentUser!.id;
+      final uid = auth.currentUser!.uid;
 
-      // التريكاية هنا: بنقوله هات الـ rooms بشرط إن جدول الـ room_members يكون فيه اليوزر ده
-      // كلمة !inner دي معناها (Hate rooms ONLY IF connection exists)
-      final data = await supabase
-          .from('rooms')
-          .select('*, room_members!inner(*)')
-          .eq('room_members.user_id', userId);
+      final roomsSnapshot = await db.collection("rooms").get();
 
-      return List<Map<String, dynamic>>.from(data);
+      List<Map<String, dynamic>> myRooms = [];
+
+      for (var room in roomsSnapshot.docs) {
+        final memberDoc =
+            await room.reference.collection("members").doc(uid).get();
+
+        if (memberDoc.exists) {
+          myRooms.add({
+            "id": room.id,
+            ...room.data(),
+            "role": memberDoc["role"],
+          });
+        }
+      }
+
+      return myRooms;
     } catch (e) {
-      print("مش عارف اجيب الجروبات: $e");
+      print("مش عارف أجيب الجروبات: $e");
       return [];
     }
   }
 
-  // 3. فنكشن تخرج من الجروب (Leave Group)
+  /// 3️⃣ الخروج من الجروب
   Future<void> leaveGroup(String roomId) async {
-    final userId = supabase.auth.currentUser!.id;
+    final uid = auth.currentUser!.uid;
 
-    await supabase
-        .from('room_members')
-        .delete()
-        .eq('room_id', roomId)
-        .eq('user_id', userId);
+    await db
+        .collection("rooms")
+        .doc(roomId)
+        .collection("members")
+        .doc(uid)
+        .delete();
   }
 }

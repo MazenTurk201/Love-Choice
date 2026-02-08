@@ -1,19 +1,21 @@
 import 'dart:ffi';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d_dialog/d_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 // import 'package:love_choice/data/adsManager.dart';
 import 'package:love_choice/modules/popMenu.dart';
 import 'package:love_choice/style/styles.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 import '../data/room_service.dart';
 import '../modules/drawerr.dart';
 
-final supabase = Supabase.instance.client;
+final firebase = FirebaseFirestore.instance;
 
 class OnlineHomePage extends StatefulWidget {
   const OnlineHomePage({super.key});
@@ -68,10 +70,8 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
   @override
   Widget build(BuildContext context) {
     String disName =
-        supabase.auth.currentUser!.userMetadata?['display_name'] ??
-        supabase.auth.currentUser!.userMetadata?['name'] ??
-        supabase.auth.currentUser!.userMetadata?['full_name'] ??
-        supabase.auth.currentUser!.email!.split("@")[0];
+        FirebaseAuth.instance.currentUser!.displayName ??
+        FirebaseAuth.instance.currentUser!.email!.split("@")[0];
     return SafeArea(
       top: false,
       child: WillPopScope(

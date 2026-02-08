@@ -1,5 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../style/styles.dart';
 
 enum TurkPopMenuType { home, chat }
@@ -30,7 +31,7 @@ class TurkPopMenu extends StatelessWidget {
             } else if (value == 'delete') {
               // Navigator.of(context).pushReplacementNamed(Routes().home);
             } else if (value == 'logout') {
-              Supabase.instance.client.auth.signOut();
+              FirebaseAuth.instance.signOut();
               Navigator.pushReplacementNamed(context, "/main");
             }
           },

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:app_links/app_links.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:love_choice/data/db_helper.dart';
 import 'package:love_choice/data/room_service.dart';
@@ -9,7 +10,6 @@ import 'package:love_choice/screens/auth.dart';
 import 'package:love_choice/screens/onlineChat.dart';
 import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../data/toastdata.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -34,7 +34,7 @@ void initializeNotifications() {
     android: androidInitializationSettings,
   );
 
-  flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
 }
 
 final double currentVersion = 1.0;
@@ -151,32 +151,28 @@ class _homeState extends State<home> {
     );
   }
 
-  void _handleLink(Uri uri) {
-    // print('اللينك وصل يا ريس: $uri');
+  void _handleLink(Uri uri) async {
+    // مثال:
+    // lovechoice://Love-Choice?roomid=201201
 
-    // دلوقت اللينك جاي كده: .../Love-Choice?roomid=201201
-    // فمش محتاجين نعمل split ولا وجع قلب، الـ Uri class هتفهم لوحدها
+    final roomId = uri.queryParameters['roomid'];
 
-    // بنسأل الـ URI: هل معاك query parameter اسمه roomid؟
-    String? roomId = uri.queryParameters['roomid'];
+    if (roomId == null) return;
 
-    if (roomId != null) {
-      // print('مسكنا الـ ID يا ترك: $roomId');
-      final session = Supabase.instance.client.auth.currentSession;
-      if (session != null) {
-        RoomService().joinGroup(roomId);
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => OnlineChatPage(roomId: roomId),
-          ),
-        );
-      } else {
-        Navigator.of(
-          context,
-        ).pushReplacement(MaterialPageRoute(builder: (context) => AuthPage()));
-      }
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // المستخدم عامل Login
+      await RoomService().joinGroup(roomId, user.uid);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => OnlineChatPage(roomId: roomId)),
+      );
     } else {
-      // print('اللينك سليم بس مفيهوش roomid');
+      // مش عامل Login
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
     }
   }
 
@@ -357,10 +353,10 @@ class _homeState extends State<home> {
 
 Future<void> showNotification(RemoteMessage message) async {
   await flutterLocalNotificationsPlugin.show(
-    message.hashCode,
-    message.notification?.title ?? 'عنوان',
-    message.notification?.body ?? 'محتوى',
-    NotificationDetails(
+    id: message.hashCode,
+    title: message.notification?.title ?? 'عنوان',
+    body: message.notification?.body ?? 'محتوى',
+    notificationDetails: NotificationDetails(
       android: AndroidNotificationDetails(
         'channel_id',
         'channel_name',

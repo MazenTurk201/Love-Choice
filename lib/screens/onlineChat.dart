@@ -1,13 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import '../data/db_helper.dart';
 import '../style/styles.dart';
 
-final supabase = Supabase.instance.client;
+final db = FirebaseFirestore.instance;
+final user = FirebaseAuth.instance.currentUser;
+final firebaseauth = FirebaseAuth.instance;
 final TurkUserID = "20120120-2011-2011-2011-201201201201";
 
 enum TurkBubbleType { left, right, center }
@@ -25,50 +28,60 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
   // final roomId = widget.roomId; // ثابت لمثال واحد على واحد
   final msgController = TextEditingController();
   final picker = ImagePicker();
-  late final userId = supabase.auth.currentUser!.id;
+  late final userId = firebaseauth.currentUser!.uid;
   String? userImageUrl;
 
   Future TurkMessage(String table) async {
     final data = (await DBHelper.getRandUsers(table)).first;
-    await supabase.from('messages').insert({
-      'room_id': widget.roomId,
-      'sender': TurkUserID,
-      // 'text': "السؤال:\n${data["choice"]}\n\nالتحدي:\n${data["dare"]}",
-      'text': "السؤال:\n${data["choice"]}",
-      'disname': "The Turk",
-    });
-    setState(() {});
+
+    try {
+      await db
+          .collection("rooms")
+          .doc(widget.roomId)
+          .collection("messages")
+          .add({
+            'sender': TurkUserID, // الـ UID اللي متعرف فوق
+            'text': "السؤال:\n${data["choice"]}",
+            // 'text': "السؤال:\n${data["choice"]}\n\nالتحدي:\n${data["dare"]}",
+            'disname': "The Turk",
+            'created_at': FieldValue.serverTimestamp(), // وحدنا الاسم هنا
+          });
+      msgController.clear();
+      setState(() {});
+    } catch (e) {
+      print("خطأ في الإرسال: $e");
+    }
   }
 
   Future sendMessage() async {
-    String disname =
-        supabase.auth.currentUser!.userMetadata?['display_name'] ??
-        supabase.auth.currentUser!.userMetadata?['name'] ??
-        supabase.auth.currentUser!.userMetadata?['full_name'] ??
-        supabase.auth.currentUser!.email!.split("@")[0];
-
+    // FocusScope.of(context).unfocus();
     if (msgController.text.isEmpty) return;
-    await supabase.from('messages').insert({
-      'room_id': widget.roomId,
-      'sender': userId,
-      'text': msgController.text,
-      'disname': disname,
-    });
-    msgController.clear();
-    setState(() {});
+    String disname = user!.displayName ?? user!.email!.split("@")[0];
+    try {
+      await db
+          .collection("rooms")
+          .doc(widget.roomId)
+          .collection("messages")
+          .add({
+            'sender': userId, // الـ UID اللي متعرف فوق
+            'text': msgController.text.trim(),
+            'disname': disname,
+            'created_at': FieldValue.serverTimestamp(), // وحدنا الاسم هنا
+          });
+      msgController.clear();
+      setState(() {});
+    } catch (e) {
+      print("خطأ في الإرسال: $e");
+    }
   }
 
-  Stream<List<Map<String, dynamic>>> messagesStream() {
-    return supabase
-        .from('messages')
-        .stream(primaryKey: ['id'])
-        .eq('room_id', widget.roomId)
-        .order('created_at')
-        .map((rows) {
-          return rows.map<Map<String, dynamic>>((row) {
-            return Map<String, dynamic>.from(row as Map);
-          }).toList();
-        });
+  Stream<QuerySnapshot<Map<String, dynamic>>> messagesStream() {
+    return db
+        .collection("rooms")
+        .doc(widget.roomId)
+        .collection("messages")
+        .orderBy("created_at", descending: true)
+        .snapshots();
   }
 
   Future pickAvatar() async {
@@ -76,21 +89,21 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
     if (picked != null) {
       final file = File(picked.path);
 
-      final storagePath =
-          'avatars/${supabase.auth.currentUser!.email!.split("@")[0]}.jpg';
+      // final storagePath =
+      //     'avatars/${supabase.auth.currentUser!.email!.split("@")[0]}.jpg';
 
-      // رفع الملف
-      await supabase.storage.from('avatars').upload(storagePath, file);
+      // // رفع الملف
+      // await supabase.storage.from('avatars').upload(storagePath, file);
 
-      // الحصول على الرابط العام
-      final url = supabase.storage.from('avatars').getPublicUrl(storagePath);
-      // print("URL → $url");
+      // // الحصول على الرابط العام
+      // final url = supabase.storage.from('avatars').getPublicUrl(storagePath);
+      // // print("URL → $url");
 
-      // تحديث profile
-      await supabase
-          .from('profiles')
-          .update({'avatar_url': url})
-          .eq('id', supabase.auth.currentUser!.id);
+      // // تحديث profile
+      // await supabase
+      //     .from('profiles')
+      //     .update({'avatar_url': url})
+      //     .eq('id', supabase.auth.currentUser!.id);
       setState(() {});
     }
   }
@@ -98,17 +111,17 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
   @override
   void initState() {
     super.initState();
-    supabase
-        .from('profiles')
-        .select("avatar_url")
-        .eq('username', supabase.auth.currentUser!.email as Object)
-        .then((value) {
-          setState(() {
-            userImageUrl = value[0]['avatar_url'];
-          });
-          // userImageUrl = value[0]['avatar_url'];
-          // print("USER IMAGE URL → $userImageUrl");
-        });
+    // supabase
+    //     .from('profiles')
+    //     .select("avatar_url")
+    //     .eq('username', supabase.auth.currentUser!.email as Object)
+    //     .then((value) {
+    //       setState(() {
+    //         userImageUrl = value[0]['avatar_url'];
+    //       });
+    //       // userImageUrl = value[0]['avatar_url'];
+    //       // print("USER IMAGE URL → $userImageUrl");
+    //     });
   }
 
   @override
@@ -235,16 +248,37 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
 
                         final messages = snapshot.data!;
 
+                        //                   return ListView(
+                        // children: snapshot.data!.docs.map((doc) {
+                        //   final data = doc.data() as Map<String, dynamic>;
+                        //   return ListTile(
+                        //     title: Text(data["disname"]),
+                        //     subtitle: Text(data["text"]),
+                        //   );
+                        // }).toList(),
+
                         return ListView.builder(
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
                           reverse: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: messages.length,
+                          itemCount: messages.size,
                           itemBuilder: (context, index) {
-                            final msg = messages[index];
+                            final doc =
+                                messages.docs[index]; // هنجيب الـ Document نفسه
+                            final msg = doc.data();
+                            final String messageId =
+                                doc.id; // هنا الـ ID الحقيقي مش Null
 
-                            // print("ROW → $msg (${msg.runtimeType})");
+                            // معالجة الوقت عشان ميبقاش Null ويضرب
+                            DateTime? createdAt;
+                            if (msg['created_at'] != null) {
+                              createdAt = (msg['created_at'] as Timestamp)
+                                  .toDate();
+                            } else {
+                              createdAt =
+                                  DateTime.now(); // حل مؤقت لحد ما السيرفر يرد
+                            }
 
-                            // return Text("${msg.toString()} \n");
                             return defBubble(
                               msg["sender"] == userId
                                   ? TurkBubbleType.right
@@ -252,24 +286,19 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                                   ? TurkBubbleType.center
                                   : TurkBubbleType.left,
                               context,
-                              msg["id"],
-                              DateFormat('h:mm a').format(
-                                DateTime.parse(
-                                  msg['created_at'],
-                                ).add(Duration(hours: 2)),
-                              ),
-                              msg["disname"].toString(),
+                              messageId, // بعتنا الـ ID الصح
+                              DateFormat(
+                                'h:mm a',
+                              ).format(createdAt), // تحويل الوقت لـ String
+                              msg["disname"]?.toString() ?? "Unknown",
                               Text(
-                                msg["text"],
-                                style: TextStyle(color: Colors.white),
+                                msg["text"] ?? "",
+                                style: const TextStyle(color: Colors.white),
                                 textAlign: msg["sender"] == userId
                                     ? TextAlign.right
                                     : msg["sender"] == TurkUserID
                                     ? TextAlign.center
                                     : TextAlign.left,
-                                textDirection: TextUtils.getTextDirection(
-                                  msg["text"],
-                                ),
                               ),
                             );
                           },
@@ -379,10 +408,10 @@ SizedBox defBubble(
               actions: [
                 TextButton(
                   onPressed: () async {
-                    await supabase
-                        .from('messages')
-                        .delete()
-                        .eq("id", messageid);
+                    // await supabase
+                    //     .from('messages')
+                    //     .delete()
+                    //     .eq("id", messageid);
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   },
