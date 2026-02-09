@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:love_choice/data/room_service.dart';
+import 'package:love_choice/modules/authGate.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
@@ -106,13 +107,13 @@ class _MyAppState extends State<MyApp> {
       // المستخدم عامل Login
       await RoomService().joinGroup(roomId, user.uid);
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => OnlineHomePage()),
+      navigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(builder: (context) => AuthGate()),
       );
     } else {
       // مش عامل Login
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AuthPage()),
+      navigatorKey.currentState!.pushReplacement(
+        MaterialPageRoute(builder: (context) => const AuthGate()),
       );
     }
   }
