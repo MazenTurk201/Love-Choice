@@ -1,11 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:love_choice/data/room_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
@@ -59,12 +61,60 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  late AppLinks _appLinks;
   @override
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen((message) {
       showNotification(message);
     });
+    _initDeepLinks();
+  }
+
+  void _initDeepLinks() {
+    _appLinks = AppLinks();
+
+    // دي عشان لو التطبيق كان مقفول واتفتح عن طريق اللينك
+    _appLinks.getInitialLink().then((uri) {
+      if (uri != null) {
+        _handleLink(uri);
+      }
+    });
+
+    // دي عشان لو التطبيق شغال في الخلفية واللينك اتداس عليه
+    _appLinks.uriLinkStream.listen(
+      (uri) {
+        _handleLink(uri);
+      },
+      onError: (err) {
+        print('يا ساتر، حصل إيرور: $err');
+      },
+    );
+  }
+
+  void _handleLink(Uri uri) async {
+    // مثال:
+    // lovechoice://Love-Choice?roomid=201201
+
+    final roomId = uri.queryParameters['roomid'];
+
+    if (roomId == null) return;
+
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // المستخدم عامل Login
+      await RoomService().joinGroup(roomId, user.uid);
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => OnlineHomePage()),
+      );
+    } else {
+      // مش عامل Login
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const AuthPage()),
+      );
+    }
   }
 
   @override
@@ -151,8 +201,15 @@ class _MyAppState extends State<MyApp> {
         '/setting': (ctx) => setting(),
         '/login': (ctx) => AuthPage(),
         '/onlineChat': (ctx) {
-          final args = ModalRoute.of(ctx)!.settings.arguments as String;
-          return OnlineChatPage(roomId: args);
+          // بنستقبل الـ arguments كـ Map عشان فيها كذا معلومة
+          final Map<String, dynamic> args =
+              ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;
+
+          return OnlineChatPage(
+            roomId: args['roomId'], // تأكد إن الـ key ده هو اللي بتبعت بيه
+            roomName: args['roomName'],
+            roomImage: args['roomImage'],
+          );
         },
         '/onlineHome': (ctx) => OnlineHomePage(),
         '/onboarding': (ctx) => onBoarding(),

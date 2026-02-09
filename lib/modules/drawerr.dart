@@ -13,6 +13,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/toastdata.dart';
 import '../style/styles.dart';
+import 'authGate.dart';
 
 Future<bool> checkRealConnection() async {
   try {
@@ -273,12 +274,13 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
               //   },
               // );
             } else {
-              final session = FirebaseAuth.instance.currentUser;
-              if (session != null) {
-                Navigator.of(context).pushReplacementNamed('/onlineHome');
-              } else {
-                Navigator.pushReplacementNamed(context, "/login");
-              }
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthGate()));
+              // final session = FirebaseAuth.instance.currentUser;
+              // if (session != null) {
+              //   Navigator.of(context).pushReplacementNamed('/onlineHome');
+              // } else {
+              //   Navigator.pushReplacementNamed(context, "/login");
+              // }
             }
           } else {
             // Navigator.of(context).pop();

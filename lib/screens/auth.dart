@@ -25,34 +25,35 @@ class _AuthPageState extends State<AuthPage> {
 
   // 🔹 Google Auth
   Future<void> authGoogle() async {
-    try {
-      // 1. استخدمنا authenticate() زي ما شفنا في الصورة
-      final googleUser = await GoogleSignIn.instance.authenticate();
+  try {
+    // عرف المتغير هنا بوضوح
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+       // الـ Client ID اللي جبناه من الـ Console
+      serverClientId: '405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com',
+    );
 
-      if (googleUser == null) return;
+    // سجل دخول
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-      // 2. شيلنا الـ await لأنها مبقتش Future في النسخة دي
-      final googleAuth = googleUser.authentication;
+    if (googleUser == null) return;
 
-      // 3. بنعمل الـ Credential (لو accessToken لسه معترض، اتأكد إنك عامل Import لـ firebase_auth)
-      // ملاحظة: لو بتجرب ويب، الـ accessToken ساعات مش بيكون متاح، فبنعتمد على idToken
-      final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
+    // هنا الـ Error بتاع الـ await: 
+    // في النسخ الجديدة هي Future، لو لسه بيطلع Error شيل الـ await
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      final userCred = await auth.signInWithCredential(credential);
-      final user = userCred.user;
+    // تأكد إن الأسماء مكتوبة صح (Case-sensitive)
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
 
-      if (user != null) {
-        await createProfileIfNotExists(user);
+    await FirebaseAuth.instance.signInWithCredential(credential);
+    print("Done!");
 
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(context, "/onlineHome");
-      }
-    } catch (e) {
-      print("حصلت مشكلة يا ترك: $e");
-    }
+  } catch (e) {
+    print("Error: $e");
   }
+}
 
   // 🔹 Email Auth
   Future authEmail() async {
@@ -68,7 +69,6 @@ class _AuthPageState extends State<AuthPage> {
       );
 
       await createProfileIfNotExists(cred.user!);
-      Navigator.pushReplacementNamed(context, "/onlineChat");
     } else {
       final cred = await auth.createUserWithEmailAndPassword(
         email: email,

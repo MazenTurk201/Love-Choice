@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 import '../data/db_helper.dart';
+import '../main.dart';
 import '../style/styles.dart';
 
 final db = FirebaseFirestore.instance;
@@ -17,7 +19,14 @@ enum TurkBubbleType { left, right, center }
 
 class OnlineChatPage extends StatefulWidget {
   final String roomId;
-  const OnlineChatPage({super.key, required this.roomId});
+  final String roomName;
+  final String? roomImage;
+  const OnlineChatPage({
+    super.key,
+    required this.roomId,
+    required this.roomName,
+    required this.roomImage,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -30,8 +39,47 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
   final picker = ImagePicker();
   late final userId = firebaseauth.currentUser!.uid;
   String? userImageUrl;
+  String tablee = "ahl_choices";
+  List<Map<String, dynamic>> orderItems = [
+    {
+      "name": "أهل",
+      "dis": "التجمع الحلو والقعدة الأحلى",
+      "root": "ahl_choices",
+    },
+    {
+      "name": "شلة",
+      "dis": "يلا بينا نفك الملل",
+      "root": "shella_choices",
+    },
+    {
+      "name": "بيستات",
+      "dis": "مين حبيب اخوه؟",
+      "root": "bestat_choices",
+    },
+    {
+      "name": "تعارف",
+      "dis": "الصحاب اللي على قلبك",
+      "root": "t3arof_choices",
+    },
+    {
+      "name": "كابلز",
+      "dis": "ايدي ف ايدك نرجع البدايات",
+      "root": "couples_choices",
+    },
+    {
+      "name": "مخطوبين",
+      "dis": "نفهم بعض قبل الجد",
+      "root": "ma5toben_choices",
+    },
+    {
+      "name": "متجوزين",
+      "dis": "يلّا نحيي حُبنا من جديد",
+      "root": "metgawzen_choices",
+    },
+  ];
 
   Future TurkMessage(String table) async {
+    table = tablee; // تأكد إنك بتستخدم المتغير اللي بيتغير مش ثابت
     final data = (await DBHelper.getRandUsers(table)).first;
 
     try {
@@ -84,45 +132,39 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
         .snapshots();
   }
 
-  Future pickAvatar() async {
-    final picked = await picker.pickImage(source: ImageSource.gallery);
-    if (picked != null) {
-      final file = File(picked.path);
+  // Future pickAvatar() async {
+  //   final picked = await picker.pickImage(source: ImageSource.gallery);
+  //   if (picked == null) return;
 
-      // final storagePath =
-      //     'avatars/${supabase.auth.currentUser!.email!.split("@")[0]}.jpg';
+  //   final file = File(picked.path);
 
-      // // رفع الملف
-      // await supabase.storage.from('avatars').upload(storagePath, file);
+  //   final user = FirebaseAuth.instance.currentUser!;
+  //   final uid = user.uid;
 
-      // // الحصول على الرابط العام
-      // final url = supabase.storage.from('avatars').getPublicUrl(storagePath);
-      // // print("URL → $url");
+  //   // مسار التخزين (أفضل من الإيميل)
+  //   final storageRef = FirebaseStorage.instance
+  //       .ref()
+  //       .child('avatars')
+  //       .child('$uid.jpg');
 
-      // // تحديث profile
-      // await supabase
-      //     .from('profiles')
-      //     .update({'avatar_url': url})
-      //     .eq('id', supabase.auth.currentUser!.id);
-      setState(() {});
-    }
-  }
+  //   // رفع الصورة
+  //   await storageRef.putFile(file);
 
-  @override
-  void initState() {
-    super.initState();
-    // supabase
-    //     .from('profiles')
-    //     .select("avatar_url")
-    //     .eq('username', supabase.auth.currentUser!.email as Object)
-    //     .then((value) {
-    //       setState(() {
-    //         userImageUrl = value[0]['avatar_url'];
-    //       });
-    //       // userImageUrl = value[0]['avatar_url'];
-    //       // print("USER IMAGE URL → $userImageUrl");
-    //     });
-  }
+  //   // الحصول على الرابط
+  //   final avatarUrl = await storageRef.getDownloadURL();
+
+  //   // تحديث profile
+  //   await FirebaseFirestore.instance.collection('profiles').doc(uid).update({
+  //     'avatar_url': avatarUrl,
+  //   });
+
+  //   setState(() {});
+  // }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +187,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
             ),
             centerTitle: true,
             backgroundColor: TurkStyle().mainColor,
-            title: Text("Chat Room"),
+            title: Text(widget.roomName),
             actions: [
               PopupMenuButton<String>(
                 color: TurkStyle().hoverColor.withOpacity(0.7), // خلفية المنيو
@@ -209,19 +251,18 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                 ],
                 child: Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: ClipOval(
-                    child: Image.network(
-                      userImageUrl ?? "",
-                      fit: BoxFit.cover,
-                      width: 40,
-                      height: 40,
-                      errorBuilder: (context, error, stackTrace) {
-                        return IconButton(
-                          icon: Icon(Icons.account_circle, size: 40),
-                          onPressed: pickAvatar,
-                        );
-                      },
-                    ),
+                  child: CircleAvatar(
+                    backgroundColor: randomMaterialColor(),
+                    backgroundImage: widget.roomImage != null
+                        ? NetworkImage(widget.roomImage!)
+                        : null,
+                    // لو مفيش صورة، حط أول حرف من اسم الجروب
+                    child: widget.roomImage == null
+                        ? Text(
+                            widget.roomName[0].toUpperCase(),
+                            style: TextStyle(color: Colors.white),
+                          )
+                        : null,
                   ),
                 ),
               ),
@@ -300,6 +341,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                                     ? TextAlign.center
                                     : TextAlign.left,
                               ),
+                              widget.roomId,
                             );
                           },
                         );
@@ -320,12 +362,69 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                         InkWell(
                           onLongPress: () {
                             showDialog(
-                              context: context,
-                              builder: (context) =>
-                                  AlertDialog(title: Text("اختار الداتا")),
-                            );
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text(
+                              "أنواع الأسئلة",
+                              style: TextStyle(
+                                fontFamily: "TurkFont",
+                                fontSize: 22,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            content: SizedBox(
+                              width: double.maxFinite,
+                              height: 300,
+                              child: ListView(
+                                children: [
+                                  for (
+                                    int index = 0;
+                                    index < orderItems.length;
+                                    index++
+                                  )
+                                    ListTile(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        setState(() {
+                                          tablee = orderItems[index]["root"];
+                                        });
+                                      },
+                                      title: Text(
+                                        orderItems[index]["name"],
+                                        textDirection: TextUtils.getTextDirection(
+                                          orderItems[index]["name"],
+                                        ),
+                                        style: TextStyle(
+                                          fontFamily: "TurkFont",
+                                          color: TurkStyle().textColor2,
+                                        ),
+                                      ),
+                                      subtitle: Text(
+                                        orderItems[index]["dis"],
+                                        style: TextStyle(
+                                          fontFamily: "TurkFont",
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "فاكس",
+                                  style: TextStyle(fontFamily: "TurkFont"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                           },
-                          onTap: () => TurkMessage("bestat_choices"),
+                          onTap: () => TurkMessage(tablee),
                           child: CircleAvatar(
                             radius: 20,
                             backgroundColor: Colors.transparent,
@@ -395,12 +494,13 @@ SizedBox defBubble(
   String time,
   String disname,
   Widget widget,
+  String roomId,
 ) {
   return SizedBox(
     width: double.infinity,
     child: GestureDetector(
       onLongPress: () {
-        if (isUser == TurkBubbleType.right) {
+        if (isUser != TurkBubbleType.left) {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
@@ -408,10 +508,14 @@ SizedBox defBubble(
               actions: [
                 TextButton(
                   onPressed: () async {
-                    // await supabase
-                    //     .from('messages')
-                    //     .delete()
-                    //     .eq("id", messageid);
+                    // تأكد إنك عامل import للـ cloud_firestore
+                    await db
+                        .collection("rooms")
+                        .doc(roomId)
+                        .collection("messages")
+                        .doc(messageid)
+                        .delete();
+
                     // ignore: use_build_context_synchronously
                     Navigator.of(context).pop();
                   },

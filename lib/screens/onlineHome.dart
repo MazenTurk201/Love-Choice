@@ -87,7 +87,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
               TextEditingController avatarController = TextEditingController();
               showDialog(
                 builder: (context) => AlertDialog(
-                  title: Text("صناعة جروب"),
+                  title: Text("إنشاء جروب"),
                   content: SizedBox(
                     height: 250,
                     child: Column(
@@ -242,9 +242,14 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                 : null,
                             onTap: () {
                               // التصحيح هنا: بنبعت اسم الروم المتغيرة مش الثابتة
+                              // return OnlineChatPage(roomId: args, roomName: roomName, roomImage: roomImage);
                               Navigator.of(context).pushNamed(
                                 '/onlineChat',
-                                arguments: chats[index]['id'],
+                                arguments: {
+                                  'roomId': chats[index]['id'],
+                                  'roomName': chats[index]['name'],
+                                  'roomImage': chats[index]['avatar_url'],
+                                },
                               );
                             },
                             onLongPress: () => showDialog(

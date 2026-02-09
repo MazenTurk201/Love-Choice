@@ -8,6 +8,7 @@ import 'package:love_choice/data/db_helper.dart';
 import 'package:love_choice/data/room_service.dart';
 import 'package:love_choice/screens/auth.dart';
 import 'package:love_choice/screens/onlineChat.dart';
+import 'package:love_choice/screens/onlineHome.dart';
 import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/toastdata.dart';
@@ -118,7 +119,7 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  late AppLinks _appLinks;
+  
   List<Map<String, dynamic>> orderItems = [];
 
   @override
@@ -127,54 +128,9 @@ class _homeState extends State<home> {
     getVersionText(context, currentVersion);
     loadSettings();
     DBHelper.init();
-    _initDeepLinks();
   }
 
-  void _initDeepLinks() {
-    _appLinks = AppLinks();
-
-    // دي عشان لو التطبيق كان مقفول واتفتح عن طريق اللينك
-    _appLinks.getInitialLink().then((uri) {
-      if (uri != null) {
-        _handleLink(uri);
-      }
-    });
-
-    // دي عشان لو التطبيق شغال في الخلفية واللينك اتداس عليه
-    _appLinks.uriLinkStream.listen(
-      (uri) {
-        _handleLink(uri);
-      },
-      onError: (err) {
-        print('يا ساتر، حصل إيرور: $err');
-      },
-    );
-  }
-
-  void _handleLink(Uri uri) async {
-    // مثال:
-    // lovechoice://Love-Choice?roomid=201201
-
-    final roomId = uri.queryParameters['roomid'];
-
-    if (roomId == null) return;
-
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      // المستخدم عامل Login
-      await RoomService().joinGroup(roomId, user.uid);
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => OnlineChatPage(roomId: roomId)),
-      );
-    } else {
-      // مش عامل Login
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const AuthPage()),
-      );
-    }
-  }
+  
 
   Future<void> loadSettings() async {
     final pref = await SharedPreferences.getInstance();

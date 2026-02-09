@@ -24,7 +24,7 @@ dependencies:
   firebase_core: ^4.0.0
   firebase_auth: ^6.1.4
   cloud_firestore: ^6.1.2
-  google_sign_in: ^7.2.0
+  google_sign_in: ^6.2.1
   flutter_local_notifications: ^20.0.0
   fluttertoast: ^9.0.0
   redacted: ^1.0.13
@@ -40,6 +40,7 @@ dependencies:
   unity_ads_plugin: ^0.3.28
   local_auth: ^3.0.0
   local_auth_android: ^2.0.4
+  firebase_storage: ^13.0.6
 
 dev_dependencies:
   flutter_test:
