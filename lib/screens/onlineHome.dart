@@ -1,17 +1,12 @@
 import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:d_dialog/d_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
-// import 'package:love_choice/data/adsManager.dart';
 import 'package:love_choice/modules/popMenu.dart';
 import 'package:love_choice/style/styles.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart';
-
 import '../data/room_service.dart';
 import '../modules/drawerr.dart';
 
@@ -26,21 +21,12 @@ class OnlineHomePage extends StatefulWidget {
 
 class _OnlineHomePageState extends State<OnlineHomePage> {
   List<Map<String, dynamic>> chats = [];
-  // BannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
     loadchats();
-    UnityAds.load(
-      placementId: 'ABNR',
-      onComplete: (placementId) => print('Load Complete $placementId'),
-      onFailed: (placementId, error, message) =>
-          print('Load Failed $placementId: $error $message'),
-    );
     // var myRooms = RoomService().getMyGroups();
-    // print("الجروبات بتاعتي: $myRooms");
-    // _bannerAd = AdHelper.createBanner();
   }
 
   void loadchats() async {
@@ -52,19 +38,6 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
         chats = List<Map<String, dynamic>>.from(myRooms);
       });
     }
-
-    // final data = await supabase
-    //     .from('messages')
-    //     .select("room_id")
-    //     .eq('sender', supabase.auth.currentUser!.id);
-    // // لو عايز تشيل التكرار بعد ما الداتا تيجي
-    // final uniqueRooms = data.map((e) => e['room_id']).toSet().toList();
-
-    // [{id: c2e769e2-87ec-4a28-940e-6a7cc1f33069, name: شلة ترك الجديدة, created_at: 2025-11-25T16:34:05.927307+00:00, dis: وادي تجربة, avatar_url: null, room_members: [{role: admin, room_id: c2e769e2-87ec-4a28-940e-6a7cc1f33069, user_id: 1f347697-7e63-4268-b465-8174c3fb92cf, joined_at: 2025-11-25T16:34:06.134329+00:00}]}]
-
-    // setState(() {
-    //   // chats = uniqueRooms;
-    // });
   }
 
   @override
@@ -87,7 +60,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
               TextEditingController avatarController = TextEditingController();
               showDialog(
                 builder: (context) => AlertDialog(
-                  title: Text("إنشاء جروب"),
+                  title: Text("لمة جديدة؟"),
                   content: SizedBox(
                     height: 250,
                     child: Column(
@@ -120,7 +93,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                         Navigator.of(context).pop();
                         loadchats();
                       },
-                      child: Text("انشاء"),
+                      child: Text("كرييت"),
                     ),
                   ],
                 ),
@@ -145,18 +118,6 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
           ),
           body: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 10),
-                child: UnityBannerAd(
-                  placementId: 'ABNR',
-                  onLoad: (placementId) => print('Banner loaded: $placementId'),
-                  onClick: (placementId) =>
-                      print('Banner clicked: $placementId'),
-                  onShown: (placementId) => print('Banner shown: $placementId'),
-                  onFailed: (placementId, error, message) =>
-                      print('Banner Ad $placementId failed: $error $message'),
-                ),
-              ),
               Expanded(
                 child: chats.isEmpty
                     ? const Center(
@@ -171,37 +132,43 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                       chats[index]['dis'],
                                     ) ==
                                     TextDirection.ltr
-                                ? CircleAvatar(
-                                    backgroundColor: randomMaterialColor(),
-                                    backgroundImage:
-                                        chats[index]['avatar_url'] != null
-                                        ? NetworkImage(
-                                            chats[index]['avatar_url'],
-                                          )
-                                        : null,
-                                    // لو مفيش صورة، حط أول حرف من اسم الجروب
-                                    child: chats[index]['avatar_url'] == null
-                                        ? Text(
-                                            chats[index]['name'][0]
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        : null,
-                                  )
+                                ? Hero(
+                                  tag: "avatar_${chats[index]['id']}",
+                                  child: CircleAvatar(
+                                      backgroundColor: randomMaterialColor(),
+                                      backgroundImage:
+                                          chats[index]['avatar_url'] != null
+                                          ? NetworkImage(
+                                              chats[index]['avatar_url'],
+                                            )
+                                          : null,
+                                      // لو مفيش صورة، حط أول حرف من اسم الجروب
+                                      child: chats[index]['avatar_url'] == null
+                                          ? Text(
+                                              chats[index]['name'][0]
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                )
                                 : null,
-                            title: Text(
-                              chats[index]['name'],
-                              style: const TextStyle(
-                                fontFamily: "TurkFont",
-                                fontSize: 24,
-                                color: Colors
-                                    .white, // تأكد ان الخلفية مش بيضا عشان الكلام يبان
-                              ),
-                              // تأكد ان كلاس TextUtils شغال معاك تمام
-                              textDirection: TextUtils.getTextDirection(
+                            title: Hero(
+                              tag: "name_${chats[index]['id']}",
+                              child: Text(
                                 chats[index]['name'],
+                                style: const TextStyle(
+                                  fontFamily: "TurkFont",
+                                  fontSize: 24,
+                                  color: Colors
+                                      .white, // تأكد ان الخلفية مش بيضا عشان الكلام يبان
+                                ),
+                                // تأكد ان كلاس TextUtils شغال معاك تمام
+                                textDirection: TextUtils.getTextDirection(
+                                  chats[index]['name'],
+                                ),
                               ),
                             ),
                             subtitle: Text(
@@ -220,25 +187,28 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                       chats[index]['dis'],
                                     ) ==
                                     TextDirection.rtl
-                                ? CircleAvatar(
-                                    backgroundColor: randomMaterialColor(),
-                                    backgroundImage:
-                                        chats[index]['avatar_url'] != null
-                                        ? NetworkImage(
-                                            chats[index]['avatar_url'],
-                                          )
-                                        : null,
-                                    // لو مفيش صورة، حط أول حرف من اسم الجروب
-                                    child: chats[index]['avatar_url'] == null
-                                        ? Text(
-                                            chats[index]['name'][0]
-                                                .toUpperCase(),
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          )
-                                        : null,
-                                  )
+                                ? Hero(
+                                  tag: "avatar_${chats[index]['id']}",
+                                  child: CircleAvatar(
+                                      backgroundColor: randomMaterialColor(),
+                                      backgroundImage:
+                                          chats[index]['avatar_url'] != null
+                                          ? NetworkImage(
+                                              chats[index]['avatar_url'],
+                                            )
+                                          : null,
+                                      // لو مفيش صورة، حط أول حرف من اسم الجروب
+                                      child: chats[index]['avatar_url'] == null
+                                          ? Text(
+                                              chats[index]['name'][0]
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                )
                                 : null,
                             onTap: () {
                               // التصحيح هنا: بنبعت اسم الروم المتغيرة مش الثابتة
@@ -248,6 +218,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                 arguments: {
                                   'roomId': chats[index]['id'],
                                   'roomName': chats[index]['name'],
+                                  'roomBio': chats[index]['dis'],
                                   'roomImage': chats[index]['avatar_url'],
                                 },
                               );

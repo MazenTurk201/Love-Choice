@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'dart:io';
 import '../data/db_helper.dart';
 import '../main.dart';
+import '../modules/popMenu.dart';
 import '../style/styles.dart';
 
 final db = FirebaseFirestore.instance;
@@ -20,12 +21,14 @@ enum TurkBubbleType { left, right, center }
 class OnlineChatPage extends StatefulWidget {
   final String roomId;
   final String roomName;
+  final String roomBio;
   final String? roomImage;
   const OnlineChatPage({
     super.key,
     required this.roomId,
     required this.roomName,
     required this.roomImage,
+    required this.roomBio,
   });
 
   @override
@@ -46,36 +49,15 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
       "dis": "التجمع الحلو والقعدة الأحلى",
       "root": "ahl_choices",
     },
-    {
-      "name": "شلة",
-      "dis": "يلا بينا نفك الملل",
-      "root": "shella_choices",
-    },
-    {
-      "name": "بيستات",
-      "dis": "مين حبيب اخوه؟",
-      "root": "bestat_choices",
-    },
-    {
-      "name": "تعارف",
-      "dis": "الصحاب اللي على قلبك",
-      "root": "t3arof_choices",
-    },
+    {"name": "شلة", "dis": "يلا بينا نفك الملل", "root": "shella_choices"},
+    {"name": "بيستات", "dis": "مين حبيب اخوه؟", "root": "bestat_choices"},
+    {"name": "تعارف", "dis": "الصحاب اللي على قلبك", "root": "t3arof_choices"},
     {
       "name": "كابلز",
       "dis": "ايدي ف ايدك نرجع البدايات",
       "root": "couples_choices",
     },
-    {
-      "name": "مخطوبين",
-      "dis": "نفهم بعض قبل الجد",
-      "root": "ma5toben_choices",
-    },
-    {
-      "name": "متجوزين",
-      "dis": "يلّا نحيي حُبنا من جديد",
-      "root": "metgawzen_choices",
-    },
+    {"name": "مخطوبين", "dis": "نفهم بعض قبل الجد", "root": "ma5toben_choices"},
   ];
 
   Future TurkMessage(String table) async {
@@ -132,40 +114,6 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
         .snapshots();
   }
 
-  // Future pickAvatar() async {
-  //   final picked = await picker.pickImage(source: ImageSource.gallery);
-  //   if (picked == null) return;
-
-  //   final file = File(picked.path);
-
-  //   final user = FirebaseAuth.instance.currentUser!;
-  //   final uid = user.uid;
-
-  //   // مسار التخزين (أفضل من الإيميل)
-  //   final storageRef = FirebaseStorage.instance
-  //       .ref()
-  //       .child('avatars')
-  //       .child('$uid.jpg');
-
-  //   // رفع الصورة
-  //   await storageRef.putFile(file);
-
-  //   // الحصول على الرابط
-  //   final avatarUrl = await storageRef.getDownloadURL();
-
-  //   // تحديث profile
-  //   await FirebaseFirestore.instance.collection('profiles').doc(uid).update({
-  //     'avatar_url': avatarUrl,
-  //   });
-
-  //   setState(() {});
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -187,84 +135,17 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
             ),
             centerTitle: true,
             backgroundColor: TurkStyle().mainColor,
-            title: Text(widget.roomName),
+            title: Hero(
+              tag: "name_${widget.roomId}",
+              child: Text(widget.roomName),
+            ),
             actions: [
-              PopupMenuButton<String>(
-                color: TurkStyle().hoverColor.withOpacity(0.7), // خلفية المنيو
-                onSelected: (value) {
-                  if (value == 'settings') {
-                    //
-                  } else if (value == 'report') {
-                    //
-                  } else if (value == 'delete') {
-                    //
-                  } else if (value == 'share') {
-                    SharePlus.instance.share(
-                      ShareParams(
-                        text:
-                            "تعال الجروب بتاعنا نفك عن نفسنا شوية 👽.\n* https://mazenturk201.github.io/Love-Choice/invite/?roomid=${widget.roomId}",
-                      ),
-                    );
-                  }
-                },
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 'settings',
-                    child: Row(
-                      children: [
-                        Icon(Icons.settings_rounded, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text("Settings", style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'contacts',
-                    child: Row(
-                      children: [
-                        Icon(Icons.pest_control, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text("Contacts", style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'website',
-                    child: Row(
-                      children: [
-                        Icon(Icons.insert_link_rounded, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text("Website", style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        Icon(Icons.share_rounded, color: Colors.white),
-                        SizedBox(width: 8),
-                        Text("share", style: TextStyle(color: Colors.white)),
-                      ],
-                    ),
-                  ),
-                ],
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: CircleAvatar(
-                    backgroundColor: randomMaterialColor(),
-                    backgroundImage: widget.roomImage != null
-                        ? NetworkImage(widget.roomImage!)
-                        : null,
-                    // لو مفيش صورة، حط أول حرف من اسم الجروب
-                    child: widget.roomImage == null
-                        ? Text(
-                            widget.roomName[0].toUpperCase(),
-                            style: TextStyle(color: Colors.white),
-                          )
-                        : null,
-                  ),
-                ),
+              TurkPopMenu(
+                popMenuType: TurkPopMenuType.chat,
+                id: widget.roomId,
+                name: widget.roomName,
+                bio: widget.roomBio,
+                img: widget.roomImage,
               ),
             ],
           ),
@@ -362,67 +243,69 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                         InkWell(
                           onLongPress: () {
                             showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(
-                              "أنواع الأسئلة",
-                              style: TextStyle(
-                                fontFamily: "TurkFont",
-                                fontSize: 22,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            content: SizedBox(
-                              width: double.maxFinite,
-                              height: 300,
-                              child: ListView(
-                                children: [
-                                  for (
-                                    int index = 0;
-                                    index < orderItems.length;
-                                    index++
-                                  )
-                                    ListTile(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        setState(() {
-                                          tablee = orderItems[index]["root"];
-                                        });
-                                      },
-                                      title: Text(
-                                        orderItems[index]["name"],
-                                        textDirection: TextUtils.getTextDirection(
-                                          orderItems[index]["name"],
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text(
+                                  "أنواع الأسئلة",
+                                  style: TextStyle(
+                                    fontFamily: "TurkFont",
+                                    fontSize: 22,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                content: SizedBox(
+                                  width: double.maxFinite,
+                                  height: 300,
+                                  child: ListView(
+                                    children: [
+                                      for (
+                                        int index = 0;
+                                        index < orderItems.length;
+                                        index++
+                                      )
+                                        ListTile(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              tablee =
+                                                  orderItems[index]["root"];
+                                            });
+                                          },
+                                          title: Text(
+                                            orderItems[index]["name"],
+                                            textDirection:
+                                                TextUtils.getTextDirection(
+                                                  orderItems[index]["name"],
+                                                ),
+                                            style: TextStyle(
+                                              fontFamily: "TurkFont",
+                                              color: TurkStyle().textColor2,
+                                            ),
+                                          ),
+                                          subtitle: Text(
+                                            orderItems[index]["dis"],
+                                            style: TextStyle(
+                                              fontFamily: "TurkFont",
+                                              fontSize: 12,
+                                            ),
+                                          ),
                                         ),
-                                        style: TextStyle(
-                                          fontFamily: "TurkFont",
-                                          color: TurkStyle().textColor2,
-                                        ),
-                                      ),
-                                      subtitle: Text(
-                                        orderItems[index]["dis"],
-                                        style: TextStyle(
-                                          fontFamily: "TurkFont",
-                                          fontSize: 12,
-                                        ),
-                                      ),
+                                    ],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      "فاكس",
+                                      style: TextStyle(fontFamily: "TurkFont"),
                                     ),
+                                  ),
                                 ],
                               ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "فاكس",
-                                  style: TextStyle(fontFamily: "TurkFont"),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
+                            );
                           },
                           onTap: () => TurkMessage(tablee),
                           child: CircleAvatar(

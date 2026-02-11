@@ -22,6 +22,7 @@ import 'screens/home.dart';
 import 'screens/gamepage.dart';
 import 'screens/onboarding.dart';
 import 'screens/onlineChat.dart';
+import 'screens/onlineChatInfo.dart';
 import 'screens/onlineHome.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
@@ -131,26 +132,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   Route<dynamic> _onGenerateRoute(RouteSettings settings) {
-  // 👇 Cold start + Deep Link
-  if (pendingDeepLink != null) {
-    // final uri = pendingDeepLink!;
-    pendingDeepLink = null;
+    // 👇 Cold start + Deep Link
+    if (pendingDeepLink != null) {
+      // final uri = pendingDeepLink!;
+      pendingDeepLink = null;
 
-    // final roomId = uri.queryParameters['roomid'];
+      // final roomId = uri.queryParameters['roomid'];
 
-    return MaterialPageRoute(
-      builder: (_) => AuthGate(),
-    );
+      return MaterialPageRoute(builder: (_) => AuthGate());
+    }
+
+    // 👇 تشغيل عادي
+    if (widget.skipfirstPage) {
+      return MaterialPageRoute(builder: (_) => home());
+    } else {
+      return MaterialPageRoute(builder: (_) => onBoarding());
+    }
   }
-
-  // 👇 تشغيل عادي
-  if (widget.skipfirstPage) {
-    return MaterialPageRoute(builder: (_) => home());
-  } else {
-    return MaterialPageRoute(builder: (_) => onBoarding());
-  }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -245,10 +243,22 @@ class _MyAppState extends State<MyApp> {
           return OnlineChatPage(
             roomId: args['roomId'], // تأكد إن الـ key ده هو اللي بتبعت بيه
             roomName: args['roomName'],
+            roomBio: args['roomBio'],
             roomImage: args['roomImage'],
           );
         },
         '/onlineHome': (ctx) => OnlineHomePage(),
+        '/onlineChatInfo': (ctx) {
+          final Map<String, dynamic> args =
+              ModalRoute.of(ctx)!.settings.arguments as Map<String, dynamic>;
+
+          return Onlinechatinfo(
+            roomId: args['roomId'], // تأكد إن الـ key ده هو اللي بتبعت بيه
+            roomName: args['roomName'],
+            roomBio: args['roomBio'],
+            roomImage: args['roomImage'],
+          );
+        },
         '/onboarding': (ctx) => onBoarding(),
         '/metgawzen_password': (ctx) => metgawzenPassword(),
       },

@@ -12,7 +12,6 @@ import 'package:love_choice/data/db_helper.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import '../data/adsManager.dart';
 import '../main.dart';
 import '../style/styles.dart';
@@ -86,18 +85,6 @@ class _settingState extends State<setting> {
   void initState() {
     super.initState();
     loadSettings();
-    UnityAds.load(
-      placementId: 'Rewarded_Android',
-      onComplete: (placementId) => print('Load Complete $placementId'),
-      onFailed: (placementId, error, message) =>
-          print('Load Failed $placementId: $error $message'),
-    );
-    UnityAds.load(
-      placementId: 'ABNR',
-      onComplete: (placementId) => print('Load Complete $placementId'),
-      onFailed: (placementId, error, message) =>
-          print('Load Failed $placementId: $error $message'),
-    );
     // _bannerAd = AdHelper.createBanner();
     // BannerAd(
     //   adUnitId: AdHelper.bannerAdUnitId,
@@ -246,21 +233,6 @@ class _settingState extends State<setting> {
               child: IntrinsicHeight(
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 10),
-                      child: UnityBannerAd(
-                        placementId: 'ABNR',
-                        onLoad: (placementId) =>
-                            print('Banner loaded: $placementId'),
-                        onClick: (placementId) =>
-                            print('Banner clicked: $placementId'),
-                        onShown: (placementId) =>
-                            print('Banner shown: $placementId'),
-                        onFailed: (placementId, error, message) => print(
-                          'Banner Ad $placementId failed: $error $message',
-                        ),
-                      ),
-                    ),
                     settingTile(
                       title: "عرض الخيار التاني؟",
                       state: isSwitched,
@@ -414,7 +386,6 @@ class _settingState extends State<setting> {
                                   Navigator.pop(context);
                                   // [{name: Option 1, isSelected: true}, {name: Option 2, isSelected: true}, {name: Option 4, isSelected: true}, {name: Option 5, isSelected: false}, {name: Option 3, isSelected: false}]
                                   // print(orderItems);
-                                  // print(supabase.auth.currentUser!.id);
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   await pref.setStringList(
