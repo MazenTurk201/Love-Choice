@@ -202,7 +202,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                     SharePlus.instance.share(
                       ShareParams(
                         text:
-                            "تعال الروم بتاعنا\nhttps://mazenturk201.github.io/Love-Choice/invite/?roomid=${widget.roomId}",
+                            "تعال الجروب بتاعنا نفك عن نفسنا شوية 👽.\n* https://mazenturk201.github.io/Love-Choice/invite/?roomid=${widget.roomId}",
                       ),
                     );
                   }

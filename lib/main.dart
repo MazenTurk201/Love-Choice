@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -49,13 +50,22 @@ void main() async {
   );
   // await DBHelper.init();
 
-  runApp(MyApp(skipfirstPage: pref.getBool("skipfirstPage") ?? false));
+  final initialUri = await AppLinks().getInitialLink();
+
+  runApp(
+    MyApp(
+      skipfirstPage: pref.getBool("skipfirstPage") ?? false,
+      initialDeepLink: initialUri,
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
   final bool skipfirstPage;
+  final Uri? initialDeepLink;
   // ignore: use_super_parameters
-  const MyApp({Key? key, required this.skipfirstPage}) : super(key: key);
+  const MyApp({Key? key, required this.skipfirstPage, this.initialDeepLink})
+    : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -63,60 +73,84 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late AppLinks _appLinks;
+  StreamSubscription<Uri>?
+  _linkSubscription; // ضفنا الـ Subscription زي الـ Example
+  // bool _handlingLink = false;
+
   @override
   void initState() {
     super.initState();
+
+    // إشعارات Firebase
     FirebaseMessaging.onMessage.listen((message) {
       showNotification(message);
     });
+
+    // تشغيل الـ Deep Links
     _initDeepLinks();
-  }
-
-  void _initDeepLinks() {
-    _appLinks = AppLinks();
-
-    // دي عشان لو التطبيق كان مقفول واتفتح عن طريق اللينك
-    _appLinks.getInitialLink().then((uri) {
-      if (uri != null) {
-        _handleLink(uri);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.initialDeepLink != null) {
+        _handleLink(widget.initialDeepLink!);
       }
     });
+  }
 
-    // دي عشان لو التطبيق شغال في الخلفية واللينك اتداس عليه
-    _appLinks.uriLinkStream.listen(
+  @override
+  void dispose() {
+    // مهم جداً نقفل الـ stream لما التطبيق يقفل زي الـ example
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    _linkSubscription = _appLinks.uriLinkStream.listen(
       (uri) {
         _handleLink(uri);
       },
       onError: (err) {
-        print('يا ساتر، حصل إيرور: $err');
+        debugPrint('Error on Link Stream: $err');
       },
     );
   }
 
+  Uri? pendingDeepLink;
+
   void _handleLink(Uri uri) async {
-    // مثال:
-    // lovechoice://Love-Choice?roomid=201201
+    pendingDeepLink = uri;
 
     final roomId = uri.queryParameters['roomid'];
-
     if (roomId == null) return;
 
     final user = FirebaseAuth.instance.currentUser;
-
     if (user != null) {
-      // المستخدم عامل Login
       await RoomService().joinGroup(roomId, user.uid);
-
-      navigatorKey.currentState!.pushReplacement(
-        MaterialPageRoute(builder: (context) => AuthGate()),
-      );
-    } else {
-      // مش عامل Login
-      navigatorKey.currentState!.pushReplacement(
-        MaterialPageRoute(builder: (context) => const AuthGate()),
-      );
+      turkToast("منور الدنيا 🥳❤️.");
     }
   }
+
+  Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+  // 👇 Cold start + Deep Link
+  if (pendingDeepLink != null) {
+    // final uri = pendingDeepLink!;
+    pendingDeepLink = null;
+
+    // final roomId = uri.queryParameters['roomid'];
+
+    return MaterialPageRoute(
+      builder: (_) => AuthGate(),
+    );
+  }
+
+  // 👇 تشغيل عادي
+  if (widget.skipfirstPage) {
+    return MaterialPageRoute(builder: (_) => home());
+  } else {
+    return MaterialPageRoute(builder: (_) => onBoarding());
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -172,8 +206,10 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
 
-      // initialRoute: '/onboarding',
-      initialRoute: widget.skipfirstPage ? '/main' : '/onboarding',
+      onGenerateRoute: _onGenerateRoute,
+
+      // // initialRoute: '/onboarding',
+      // initialRoute: widget.skipfirstPage ? '/main' : '/onboarding',
       routes: {
         '/main': (ctx) => home(),
         '/ahl': (ctx) =>

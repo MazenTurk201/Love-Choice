@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:love_choice/data/adsManager.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/db_helper.dart';
 import '../screens/home.dart';
@@ -36,9 +37,33 @@ class _TurkAppBarState extends State<TurkAppBar> {
     loadUsers();
   }
 
+  void showInterstitialAd() {
+    // 1. تحميل الإعلان أولاً (Load)
+    UnityAds.load(
+      placementId:
+          'Interstitial_Android', // اتأكد إنه نفس الاسم في الـ Dashboard
+      onComplete: (placementId) {
+        // 2. أول ما التحميل يخلص.. إظهار الإعلان (Show)
+        UnityAds.showVideoAd(
+          placementId: placementId,
+          onStart: (placementId) => print('Ad Started'),
+          onClick: (placementId) => print('Ad Clicked'),
+          onSkipped: (placementId) => print('Ad Skipped'),
+          onComplete: (placementId) =>
+              print('Ad Finished!'), // هنا السنتات بتتحسب
+          onFailed: (placementId, error, message) =>
+              print('Ad Show Failed: $message'),
+        );
+      },
+      onFailed: (placementId, error, message) =>
+          print('Ad Load Failed: $message'),
+    );
+  }
+
   void deleteUser(String index) async {
     await DBHelper.deleteUser(widget.tablee, index);
     loadUsers();
+    showInterstitialAd();
   }
 
   void loadUsers() async {
@@ -51,12 +76,14 @@ class _TurkAppBarState extends State<TurkAppBar> {
     await DBHelper.insertUser(widget.tablee, quiz, dare);
     clearFields();
     loadUsers();
+    showInterstitialAd();
   }
 
   void editUser(String quiz, String dare, int index) async {
     await DBHelper.updateUser(widget.tablee, quiz, dare, index);
     clearFields();
     loadUsers();
+    showInterstitialAd();
   }
 
   Future<Map<String, dynamic>?> geteditUser(int index) async {
@@ -152,6 +179,7 @@ class _TurkAppBarState extends State<TurkAppBar> {
       actions: [
         IconButton(
           onPressed: () {
+            showInterstitialAd();
             showDialog(
               context: context,
               builder: (_) => CupertinoAlertDialog(
