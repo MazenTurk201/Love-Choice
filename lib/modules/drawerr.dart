@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../data/toastdata.dart';
 import '../style/styles.dart';
 import 'authGate.dart';
+import 'changelogSheet.dart';
 
 Future<bool> checkRealConnection() async {
   try {
@@ -137,6 +138,11 @@ class _TurkDrawerState extends State<TurkDrawer> {
                     url:
                         'https://mazenturk201.github.io/Love-Choice/make-a-donation.html',
                   ),
+                  menuDrawerButton(
+                    title: 'سجل التغيرات والشكر',
+                    icon: Icons.history_edu_rounded,
+                    url: 'changelog',
+                  ),
                   Expanded(child: Container()),
                   Divider(endIndent: 30, indent: 30),
                   // SizedBox(height: MediaQuery.of(context).size.height / 11),
@@ -247,6 +253,11 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           );
         } else if (widget.url == 'rate') {
           _showRateDialog(context);
+        } else if (widget.url == 'changelog') {
+          Scaffold.of(context).closeDrawer();
+          Scaffold.of(context).showBottomSheet((context) {
+            return ChangeLogSheet();
+          },);
         } else if (widget.url == 'online') {
           if (await checkRealConnection()) {
             if (widget.disable == true) {

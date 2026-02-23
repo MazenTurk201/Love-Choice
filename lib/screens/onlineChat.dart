@@ -137,7 +137,10 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
             backgroundColor: TurkStyle().mainColor,
             title: Hero(
               tag: "name_${widget.roomId}",
-              child: Text(widget.roomName),
+              child: Material(
+                color: Colors.transparent,
+                child: Text(widget.roomName),
+              ),
             ),
             actions: [
               TurkPopMenu(

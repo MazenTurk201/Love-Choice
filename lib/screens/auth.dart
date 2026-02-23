@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,35 +27,36 @@ class _AuthPageState extends State<AuthPage> {
 
   // 🔹 Google Auth
   Future<void> authGoogle() async {
-  try {
-    // عرف المتغير هنا بوضوح
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-       // الـ Client ID اللي جبناه من الـ Console
-      serverClientId: '405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com',
-    );
+    try {
+      // عرف المتغير هنا بوضوح
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        // الـ Client ID اللي جبناه من الـ Console
+        serverClientId:
+            '405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com',
+      );
 
-    // سجل دخول
-    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      // سجل دخول
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
-    if (googleUser == null) return;
+      if (googleUser == null) return;
 
-    // هنا الـ Error بتاع الـ await: 
-    // في النسخ الجديدة هي Future، لو لسه بيطلع Error شيل الـ await
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      // هنا الـ Error بتاع الـ await:
+      // في النسخ الجديدة هي Future، لو لسه بيطلع Error شيل الـ await
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    // تأكد إن الأسماء مكتوبة صح (Case-sensitive)
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      // تأكد إن الأسماء مكتوبة صح (Case-sensitive)
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    print("Done!");
-
-  } catch (e) {
-    print("Error: $e");
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      print("Done!");
+    } catch (e) {
+      print("Error: $e");
+    }
   }
-}
 
   // 🔹 Email Auth
   Future authEmail() async {
@@ -102,44 +105,92 @@ class _AuthPageState extends State<AuthPage> {
         appBar: AppBar(
           backgroundColor: TurkStyle().mainColor,
           title: Text(isLogin ? "Login" : "Sign Up"),
+          leading: IconButton(
+            onPressed: () => Navigator.pushReplacementNamed(context, '/main'),
+            icon: Icon(Icons.arrow_back),
+          ),
           centerTitle: true,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(labelText: "Email"),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                "images/onlineBackground.jpg",
+                fit: BoxFit.cover,
               ),
-              TextField(
-                controller: passController,
-                decoration: const InputDecoration(labelText: "Password"),
-                obscureText: true,
-              ),
-              const SizedBox(height: 20),
+            ),
+            Center(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                height: MediaQuery.of(context).size.height * 0.5,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: TurkStyle().mainColor, width: 2),
+                  color: Colors.black.withOpacity(0.5),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: 10, 
+                      sigmaY: 10,
+                      ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: emailController,
+                            decoration: const InputDecoration(labelText: "Email"),
+                            textInputAction: TextInputAction.next,
+                          ),
+                          TextField(
+                            controller: passController,
+                            decoration: const InputDecoration(
+                              labelText: "Password",
+                            ),
+                            obscureText: true,
+                            onSubmitted: (_) => authEmail(),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: authEmail,
+                            child: Text(isLogin ? "Login" : "Sign Up"),
+                          ),
+                  
+                          const SizedBox(height: 10),
+                          Text('or', style: TextStyle(color: Colors.grey, fontSize: 16)),
+                          const SizedBox(height: 10),
+                  
+                  
+                          ElevatedButton.icon(
+                            onPressed: authGoogle,
+                            icon: Image.asset("images/googleIcon.png", width: 24),
+                            label: Text(
+                              isLogin
+                                  ? "Login With Google"
+                                  : "Sign Up With Google",
+                            ),
+                          ),
 
-              ElevatedButton(
-                onPressed: authEmail,
-                child: Text(isLogin ? "Login" : "Sign Up"),
-              ),
-
-              const SizedBox(height: 10),
-
-              ElevatedButton.icon(
-                onPressed: authGoogle,
-                icon: Image.asset("images/googleIcon.png", width: 24),
-                label: Text(
-                  isLogin ? "Login With Google" : "Sign Up With Google",
+                          Expanded(child: SizedBox()),
+                  
+                          TextButton(
+                            onPressed: () => setState(() => isLogin = !isLogin),
+                            child: Text(
+                              isLogin ? "Create Account?" : "Have Account? Login",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-
-              TextButton(
-                onPressed: () => setState(() => isLogin = !isLogin),
-                child: Text(isLogin ? "Create Account" : "Have Account? Login"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -62,12 +62,7 @@ class TurkPopMenu extends StatelessWidget {
           ],
         );
       case TurkPopMenuType.chat:
-        return PopupMenuButton<String>(
-          icon: Icon(
-            Icons.more_vert_rounded,
-            color: Colors.white,
-            size: 30,
-          ),
+        return PopupMenuButton(
           // ignore: deprecated_member_use
           color: TurkStyle().hoverColor.withOpacity(0.7), // خلفية المنيو
           onSelected: (value) {

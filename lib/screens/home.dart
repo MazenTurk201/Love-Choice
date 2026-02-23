@@ -12,6 +12,7 @@ import 'package:love_choice/screens/onlineHome.dart';
 import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/toastdata.dart';
+import '../modules/changelogSheet.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
 import 'package:http/http.dart' as http;
@@ -235,6 +236,7 @@ class _homeState extends State<home> {
             iconTheme: IconThemeData(color: Colors.white),
           ),
           backgroundColor: Colors.black,
+          // bottomSheet: ChangeLogSheet(),
           body: Stack(
             fit: StackFit.expand,
             children: [
