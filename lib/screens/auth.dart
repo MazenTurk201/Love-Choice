@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:love_choice/modules/appBarRouter.dart';
 
 import '../style/styles.dart';
 
@@ -104,7 +105,10 @@ class _AuthPageState extends State<AuthPage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: TurkStyle().mainColor,
-          title: Text(isLogin ? "Login" : "Sign Up"),
+          title: Text(
+            isLogin ? "Login" : "Sign Up",
+            style: TextStyle(fontFamily: "TurkLogo", fontSize: 35),
+          ),
           leading: IconButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/main'),
             icon: Icon(Icons.arrow_back),
@@ -133,17 +137,16 @@ class _AuthPageState extends State<AuthPage> {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: 10, 
-                      sigmaY: 10,
-                      ),
+                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                     child: Padding(
                       padding: const EdgeInsets.all(20),
                       child: Column(
                         children: [
                           TextField(
                             controller: emailController,
-                            decoration: const InputDecoration(labelText: "Email"),
+                            decoration: const InputDecoration(
+                              labelText: "Email",
+                            ),
                             textInputAction: TextInputAction.next,
                           ),
                           TextField(
@@ -159,15 +162,20 @@ class _AuthPageState extends State<AuthPage> {
                             onPressed: authEmail,
                             child: Text(isLogin ? "Login" : "Sign Up"),
                           ),
-                  
+
                           const SizedBox(height: 10),
-                          Text('or', style: TextStyle(color: Colors.grey, fontSize: 16)),
+                          Text(
+                            'or',
+                            style: TextStyle(color: Colors.grey, fontSize: 16),
+                          ),
                           const SizedBox(height: 10),
-                  
-                  
+
                           ElevatedButton.icon(
                             onPressed: authGoogle,
-                            icon: Image.asset("images/googleIcon.png", width: 24),
+                            icon: Image.asset(
+                              "images/googleIcon.png",
+                              width: 24,
+                            ),
                             label: Text(
                               isLogin
                                   ? "Login With Google"
@@ -176,11 +184,13 @@ class _AuthPageState extends State<AuthPage> {
                           ),
 
                           Expanded(child: SizedBox()),
-                  
+
                           TextButton(
                             onPressed: () => setState(() => isLogin = !isLogin),
                             child: Text(
-                              isLogin ? "Create Account?" : "Have Account? Login",
+                              isLogin
+                                  ? "Create Account?"
+                                  : "Have Account? Login",
                             ),
                           ),
                         ],

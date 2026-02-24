@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:love_choice/modules/appBarRouter.dart';
 import 'appbars.dart';
 import 'package:lottie/lottie.dart';
 
 class soonWidget extends StatelessWidget {
-  final String tablee;
-  const soonWidget({super.key, required this.tablee});
+  const soonWidget({super.key,});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class soonWidget extends StatelessWidget {
         return Future.value(false);
       },
       child: Scaffold(
-        appBar: TurkAppBar(tablee: tablee),
+        appBar: AppBarRouter(),
         body: SafeArea(
           child: Center(
             child: Column(

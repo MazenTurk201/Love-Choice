@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:love_choice/data/room_service.dart';
 import 'package:love_choice/modules/authGate.dart';
+import 'package:love_choice/modules/soon.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
@@ -211,11 +212,11 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/main': (ctx) => home(),
         '/ahl': (ctx) =>
-            Gamepage(tablee: 'ahl_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 'ahl_choices', title: 'أهل', style: CardStyle.towCard),
         '/metgawzen': (ctx) =>
-            Gamepage(tablee: 'metgawzen_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 'metgawzen_choices', title: 'متجوزين', style: CardStyle.towCard),
         '/ma5toben': (ctx) =>
-            Gamepage(tablee: 'ma5toben_choices', style: CardStyle.oneCard),
+            Gamepage(tablee: 'ma5toben_choices', title: 'مخطوبين', style: CardStyle.oneCard),
         // '/shella': (ctx) =>
         //     Gamepage(tablee: 'shella_choices', style: CardStyle.towCardRandom),
         // '/t3arof': (ctx) =>
@@ -225,13 +226,13 @@ class _MyAppState extends State<MyApp> {
         // '/bestat': (ctx) =>
         //     Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
         '/shella': (ctx) =>
-            Gamepage(tablee: 'shella_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 'shella_choices', title: 'شِلّا', style: CardStyle.towCard),
         '/t3arof': (ctx) =>
-            Gamepage(tablee: 't3arof_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 't3arof_choices', title: 'تعارف', style: CardStyle.towCard),
         '/couples': (ctx) =>
-            Gamepage(tablee: 'couples_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 'couples_choices', title: 'كابلز', style: CardStyle.towCard),
         '/bestat': (ctx) =>
-            Gamepage(tablee: 'bestat_choices', style: CardStyle.towCard),
+            Gamepage(tablee: 'bestat_choices', title: 'بستات', style: CardStyle.towCard),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/login': (ctx) => AuthPage(),
@@ -261,6 +262,7 @@ class _MyAppState extends State<MyApp> {
         },
         '/onboarding': (ctx) => onBoarding(),
         '/metgawzen_password': (ctx) => metgawzenPassword(),
+        '/soon': (ctx) => soonWidget(),
       },
       debugShowCheckedModeBanner: false,
     );

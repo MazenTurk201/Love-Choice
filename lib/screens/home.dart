@@ -12,6 +12,7 @@ import 'package:love_choice/screens/onlineHome.dart';
 import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/toastdata.dart';
+import '../modules/appBarRouter.dart';
 import '../modules/changelogSheet.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
@@ -213,28 +214,7 @@ class _homeState extends State<home> {
         top: false,
         child: Scaffold(
           drawer: TurkDrawer(),
-          appBar: AppBar(
-            title: Text(
-              "Love Choice",
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: "TurkLogo",
-                fontSize: 35,
-              ),
-            ),
-            leading: Builder(
-              builder: (context) => IconButton(
-                icon: Icon(Icons.menu, size: 30),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: "قائمة الخيارات",
-              ),
-            ),
-            centerTitle: true,
-            backgroundColor: TurkStyle().mainColor,
-            iconTheme: IconThemeData(color: Colors.white),
-          ),
+          appBar: AppBarRouter(),
           backgroundColor: Colors.black,
           // bottomSheet: ChangeLogSheet(),
           body: Stack(

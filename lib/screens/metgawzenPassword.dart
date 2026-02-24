@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:love_choice/modules/appBarRouter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../style/styles.dart';
@@ -42,22 +43,7 @@ class _metgawzenPasswordState extends State<metgawzenPassword> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "Password",
-              style: TextStyle(fontFamily: "TurkLogo", fontSize: 35),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, "/main");
-              },
-            ),
-            backgroundColor: TurkStyle().mainColor,
-            automaticallyImplyLeading: false,
-          ),
+          appBar: AppBarRouter(),
           backgroundColor: Colors.black,
 
           body: Stack(

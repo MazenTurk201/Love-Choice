@@ -14,6 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/adsManager.dart';
 import '../main.dart';
+import '../modules/appBarRouter.dart';
 import '../style/styles.dart';
 import 'home.dart';
 
@@ -208,27 +209,12 @@ class _settingState extends State<setting> {
           return Future.value(false);
         },
         child: Scaffold(
-          appBar: AppBar(
-            title: Text(
-              "Setting",
-              style: TextStyle(fontFamily: "TurkLogo", fontSize: 35),
-            ),
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.arrow_back),
-              color: Colors.white,
-              onPressed: () {
-                Navigator.pushReplacementNamed(context, "/main");
-              },
-            ),
-            backgroundColor: TurkStyle().mainColor,
-            automaticallyImplyLeading: false,
-          ),
+          appBar: AppBarRouter(),
           resizeToAvoidBottomInset: true,
           body: SingleChildScrollView(
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height * 0.88,
+                minHeight: MediaQuery.of(context).size.height * 0.825,
               ),
               child: IntrinsicHeight(
                 child: Column(

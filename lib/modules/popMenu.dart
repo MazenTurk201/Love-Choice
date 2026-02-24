@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:love_choice/data/room_service.dart';
+import 'package:share_plus/share_plus.dart';
 import '../style/styles.dart';
 
 enum TurkPopMenuType { home, chat }
@@ -35,12 +37,8 @@ class TurkPopMenu extends StatelessWidget {
           // ignore: deprecated_member_use
           color: TurkStyle().hoverColor.withOpacity(0.7), // خلفية المنيو
           onSelected: (value) async {
-            if (value == 'settings') {
-              // Navigator.of(context).pushReplacementNamed(Routes().settings);
-            } else if (value == 'report') {
-              //
-            } else if (value == 'delete') {
-              // Navigator.of(context).pushReplacementNamed(Routes().home);
+            if (value == 'edit') {
+              Navigator.of(context).pushReplacementNamed('/soon');
             } else if (value == 'logout') {
               FirebaseAuth.instance.signOut();
               final googleSignIn = GoogleSignIn();
@@ -76,10 +74,27 @@ class TurkPopMenu extends StatelessWidget {
                   'roomImage': img, // لو عندك صورة للجروب حط الرابط هنا
                 },
               );
-            } else if (value == 'report') {
-              //
-            } else if (value == 'delete') {
-              // Navigator.of(context).pushReplacementNamed(Routes().home);
+            } else if (value == 'share') {
+              SharePlus.instance.share(
+                ShareParams(
+                  text:
+                      "تعال الروم بتاعنا\nhttps://mazenturk201.github.io/Love-Choice/invite/?roomid=$id",
+                ),
+              );
+            } else if (value == 'leave') {
+              RoomService().leaveGroup(id!);
+              RoomService().getMyGroups();
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    "تم مغادرة الجروب",
+                    style: TextStyle(color: Colors.white),
+                    textDirection: TextDirection.rtl,
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
             }
           },
           itemBuilder: (context) => [
@@ -94,12 +109,12 @@ class TurkPopMenu extends StatelessWidget {
               ),
             ),
             PopupMenuItem(
-              value: 'contacts',
+              value: 'share',
               child: Row(
                 children: [
-                  Icon(Icons.pest_control, color: Colors.white),
+                  Icon(Icons.share_rounded, color: Colors.white),
                   SizedBox(width: 8),
-                  Text("Contacts", style: TextStyle(color: Colors.white)),
+                  Text("Share", style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
@@ -114,12 +129,12 @@ class TurkPopMenu extends StatelessWidget {
               ),
             ),
             PopupMenuItem(
-              value: 'delete',
+              value: 'leave',
               child: Row(
                 children: [
-                  Icon(Icons.delete_rounded, color: Colors.red),
+                  Icon(Icons.logout_rounded, color: Colors.red),
                   SizedBox(width: 8),
-                  Text("Delete", style: TextStyle(color: Colors.red)),
+                  Text("Leave", style: TextStyle(color: Colors.red)),
                 ],
               ),
             ),
@@ -130,9 +145,7 @@ class TurkPopMenu extends StatelessWidget {
               tag: "avatar_$id", // تأكد إن الـ tag ده فريد لكل جروب
               child: CircleAvatar(
                 backgroundColor: randomMaterialColor(),
-                backgroundImage: img != null
-                    ? NetworkImage(img!)
-                    : null,
+                backgroundImage: img != null ? NetworkImage(img!) : null,
                 // لو مفيش صورة، حط أول حرف من اسم الجروب
                 child: img == null
                     ? Text(
@@ -141,7 +154,8 @@ class TurkPopMenu extends StatelessWidget {
                       )
                     : null,
               ),
-            ),),
+            ),
+          ),
         );
     }
   }

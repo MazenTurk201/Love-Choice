@@ -20,8 +20,9 @@ TextStyle iconTextS = TextStyle(
 
 class TurkAppBar extends StatefulWidget implements PreferredSizeWidget {
   final String tablee;
+  final String title;
 
-  const TurkAppBar({super.key, required this.tablee});
+  const TurkAppBar({super.key, required this.tablee, required this.title});
 
   @override
   State<TurkAppBar> createState() => _TurkAppBarState();
@@ -166,12 +167,15 @@ class _TurkAppBarState extends State<TurkAppBar> {
           Navigator.pushReplacementNamed(context, "/main");
         },
       ),
-      title: Text(
-        "Love Choice",
-        style: TextStyle(
-          fontFamily: "TurkLogo",
-          fontSize: 35,
-          color: Colors.white,
+      title: Padding(
+        padding: const EdgeInsets.only(top: 30.0),
+        child: Text(
+          widget.title,
+          style: TextStyle(
+            fontFamily: "TurkD",
+            fontSize: 35,
+            color: Colors.white,
+          ),
         ),
       ),
       backgroundColor: appBarColor,

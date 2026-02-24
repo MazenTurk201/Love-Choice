@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:love_choice/style/styles.dart';
 
-enum ChangeLogType {
-  feature,
-  del,
-  bugfix,
-}
+enum ChangeLogType { feature, imporvment, bugfix }
 
 class ChangeLogSheet extends StatelessWidget {
   const ChangeLogSheet({super.key});
@@ -55,7 +51,10 @@ class ChangeLogSheet extends StatelessWidget {
                   children: const [
                     Text(
                       'شكر خاص:',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textDirection: TextDirection.rtl,
                     ),
                     SizedBox(width: 8),
@@ -70,12 +69,11 @@ class ChangeLogSheet extends StatelessWidget {
                 '\nمختبر: ياسين'
                 '\n قاعدة البيانات: ياسين'
                 '\nالديزاين: شهد'
-                '\nاختبار الموقع: فويد'
-                ,
+                '\nاختبار الموقع: فويد',
                 style: TextStyle(fontSize: 18, color: Colors.white70),
                 textDirection: TextDirection.rtl,
               ),
-              
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Row(
@@ -83,7 +81,10 @@ class ChangeLogSheet extends StatelessWidget {
                   children: const [
                     Text(
                       'سجل التغيرات:',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textDirection: TextDirection.rtl,
                     ),
                     SizedBox(width: 8),
@@ -92,11 +93,12 @@ class ChangeLogSheet extends StatelessWidget {
                 ),
               ),
               ChangeLogItem('اونلاين', ChangeLogType.feature),
+              ChangeLogItem('التحكم بعرض الصفحات', ChangeLogType.feature),
               ChangeLogItem('انميشن', ChangeLogType.feature),
               ChangeLogItem('اعلانات', ChangeLogType.feature),
               ChangeLogItem('سجل التغيرات والشكر', ChangeLogType.feature),
               ChangeLogItem('الصلاحيات', ChangeLogType.bugfix),
-              ChangeLogItem('تيست', ChangeLogType.del),
+              ChangeLogItem('ملف المطور', ChangeLogType.imporvment),
               // Add more changelog entries here
             ],
           ),
@@ -107,23 +109,47 @@ class ChangeLogSheet extends StatelessWidget {
 
   Padding ChangeLogItem(String title, ChangeLogType type) {
     return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 18),
-                    textDirection: TextDirection.rtl,
-                  ),
-                  const SizedBox(width: 8),
-                  switch (type) {
-                    ChangeLogType.feature => const Icon(Icons.add_rounded, color: Colors.greenAccent),
-                    ChangeLogType.del => const Icon(Icons.close_rounded, color: Colors.redAccent),
-                    ChangeLogType.bugfix => const Icon(Icons.build, color: Colors.grey),
-                  },
-                ],
-              ),
-            );
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontSize: 18),
+            textDirection: TextDirection.rtl,
+          ),
+          const SizedBox(width: 8),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+            margin: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: switch (type) {
+                ChangeLogType.feature => Colors.greenAccent,
+                ChangeLogType.imporvment => Colors.orangeAccent,
+                ChangeLogType.bugfix => Colors.grey,
+              },
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                SizedBox(width: 4),
+                Text(switch (type) {
+                  ChangeLogType.feature => 'ميزة',
+                  ChangeLogType.imporvment => 'تحسين',
+                  ChangeLogType.bugfix => 'تصليح',
+                }, style: TextStyle(fontSize: 12, color: Colors.white)),
+
+                SizedBox(width: 4),
+                switch (type) {
+                  ChangeLogType.feature => const Icon(Icons.add_rounded),
+                  ChangeLogType.imporvment => const Icon(Icons.update, size: 20),
+                  ChangeLogType.bugfix => const Icon(Icons.build, size: 20),
+                },
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

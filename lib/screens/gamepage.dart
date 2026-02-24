@@ -6,8 +6,9 @@ import '../modules/carddisplay.dart';
 
 class Gamepage extends StatefulWidget {
   final String tablee;
+  final String title;
   final CardStyle style;
-  const Gamepage({Key? key, required this.tablee, required this.style})
+  const Gamepage({Key? key, required this.tablee, required this.title, required this.style})
     : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class _GamepageState extends State<Gamepage> {
         return Future.value(false);
       },
       child: Scaffold(
-        appBar: TurkAppBar(tablee: widget.tablee),
+        appBar: TurkAppBar(tablee: widget.tablee, title: widget.title),
         body: SafeArea(
           child: Stack(
             children: [

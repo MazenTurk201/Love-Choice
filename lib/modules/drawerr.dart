@@ -67,7 +67,7 @@ class _TurkDrawerState extends State<TurkDrawer> {
         child: SingleChildScrollView(
           child: ConstrainedBox(
             constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
+              minHeight: (MediaQuery.of(context).size.height - 56.0),
             ),
             child: IntrinsicHeight(
               child: Column(
@@ -252,6 +252,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
             ),
           );
         } else if (widget.url == 'rate') {
+          Scaffold.of(context).closeDrawer();
           _showRateDialog(context);
         } else if (widget.url == 'changelog') {
           Scaffold.of(context).closeDrawer();
