@@ -1,14 +1,9 @@
 // ignore_for_file: unused_element
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:love_choice/data/adsManager.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../data/db_helper.dart';
-import '../screens/home.dart';
-import '../main.dart';
 import '../style/styles.dart';
 
 Color appBarColor = TurkStyle().mainColor;
@@ -47,17 +42,17 @@ class _TurkAppBarState extends State<TurkAppBar> {
         // 2. أول ما التحميل يخلص.. إظهار الإعلان (Show)
         UnityAds.showVideoAd(
           placementId: placementId,
-          onStart: (placementId) => print('Ad Started'),
-          onClick: (placementId) => print('Ad Clicked'),
-          onSkipped: (placementId) => print('Ad Skipped'),
+          onStart: (placementId) => debugPrint('Ad Started'),
+          onClick: (placementId) => debugPrint('Ad Clicked'),
+          onSkipped: (placementId) => debugPrint('Ad Skipped'),
           onComplete: (placementId) =>
-              print('Ad Finished!'), // هنا السنتات بتتحسب
+              debugPrint('Ad Finished!'), // هنا السنتات بتتحسب
           onFailed: (placementId, error, message) =>
-              print('Ad Show Failed: $message'),
+              debugPrint('Ad Show Failed: $message'),
         );
       },
       onFailed: (placementId, error, message) =>
-          print('Ad Load Failed: $message'),
+          debugPrint('Ad Load Failed: $message'),
     );
   }
 

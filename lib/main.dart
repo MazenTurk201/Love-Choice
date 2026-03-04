@@ -1,23 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:async';
-import 'dart:io';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:love_choice/data/room_service.dart';
-import 'package:love_choice/modules/authGate.dart';
-import 'package:love_choice/modules/soon.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app_links/app_links.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
+import 'data/room_service.dart';
+import 'modules/authGate.dart';
+import 'modules/globalFuncs.dart';
+import 'modules/soon.dart';
 import 'modules/firebase_options.dart';
 import 'modules/carddisplay.dart';
-import 'data/db_helper.dart';
 import 'screens/auth.dart';
 import 'screens/home.dart';
 import 'screens/gamepage.dart';
@@ -28,30 +24,26 @@ import 'screens/onlineHome.dart';
 import 'screens/profile.dart';
 import 'screens/setting.dart';
 import 'screens/metgawzenPassword.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'style/styles.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
+  // String? key1 = await NativeSecrets.getFirstKey();
+  // String? key2 = await NativeSecrets.getSecondKey();
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: ".env");
-  await requestNotificationPermission();
+  await TurkFuncs().requestStoragePermission();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(TurkFuncs().firebaseMessagingBackgroundHandler);
   FirebaseMessaging.instance.subscribeToTopic("all_users");
   final pref = await SharedPreferences.getInstance();
-  // MobileAds.instance.initialize();
   UnityAds.init(
     gameId: '5996823',
     testMode: kDebugMode,
-    onComplete: () => print('Unity Ads Initialized'),
+    onComplete: () => debugPrint('Unity Ads Initialized'),
     onFailed: (error, message) =>
-        print('Unity Ads Initialization Failed: $error $message'),
+        debugPrint('Unity Ads Initialization Failed: $error $message'),
   );
-  // await DBHelper.init();
-
   final initialUri = await AppLinks().getInitialLink();
 
   runApp(
@@ -76,8 +68,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late AppLinks _appLinks;
   StreamSubscription<Uri>?
-  _linkSubscription; // ضفنا الـ Subscription زي الـ Example
-  // bool _handlingLink = false;
+  _linkSubscription;
 
   @override
   void initState() {
@@ -85,7 +76,7 @@ class _MyAppState extends State<MyApp> {
 
     // إشعارات Firebase
     FirebaseMessaging.onMessage.listen((message) {
-      showNotification(message);
+      TurkFuncs().showNotification(message);
     });
 
     // تشغيل الـ Deep Links
@@ -128,7 +119,7 @@ class _MyAppState extends State<MyApp> {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       await RoomService().joinGroup(roomId, user.uid);
-      turkToast("منور الدنيا 🥳❤️.");
+      TurkFuncs().turkToast("منور الدنيا 🥳❤️.");
     }
   }
 
@@ -204,35 +195,47 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-
       onGenerateRoute: _onGenerateRoute,
 
       // // initialRoute: '/onboarding',
       // initialRoute: widget.skipfirstPage ? '/main' : '/onboarding',
       routes: {
         '/main': (ctx) => home(),
-        '/ahl': (ctx) =>
-            Gamepage(tablee: 'ahl_choices', title: 'أهل', style: CardStyle.towCard),
-        '/metgawzen': (ctx) =>
-            Gamepage(tablee: 'metgawzen_choices', title: 'متجوزين', style: CardStyle.towCard),
-        '/ma5toben': (ctx) =>
-            Gamepage(tablee: 'ma5toben_choices', title: 'مخطوبين', style: CardStyle.oneCard),
-        // '/shella': (ctx) =>
-        //     Gamepage(tablee: 'shella_choices', style: CardStyle.towCardRandom),
-        // '/t3arof': (ctx) =>
-        //     Gamepage(tablee: 't3arof_choices', style: CardStyle.towCardRandom),
-        // '/couples': (ctx) =>
-        //     Gamepage(tablee: 'couples_choices', style: CardStyle.towCardRandom),
-        // '/bestat': (ctx) =>
-        //     Gamepage(tablee: 'bestat_choices', style: CardStyle.towCardRandom),
-        '/shella': (ctx) =>
-            Gamepage(tablee: 'shella_choices', title: 'شِلّا', style: CardStyle.towCard),
-        '/t3arof': (ctx) =>
-            Gamepage(tablee: 't3arof_choices', title: 'تعارف', style: CardStyle.towCard),
-        '/couples': (ctx) =>
-            Gamepage(tablee: 'couples_choices', title: 'كابلز', style: CardStyle.towCard),
-        '/bestat': (ctx) =>
-            Gamepage(tablee: 'bestat_choices', title: 'بستات', style: CardStyle.towCard),
+        '/ahl': (ctx) => Gamepage(
+          tablee: 'ahl_choices',
+          title: 'أهل',
+          style: CardStyle.towCard,
+        ),
+        '/metgawzen': (ctx) => Gamepage(
+          tablee: 'metgawzen_choices',
+          title: 'متجوزين',
+          style: CardStyle.towCard,
+        ),
+        '/ma5toben': (ctx) => Gamepage(
+          tablee: 'ma5toben_choices',
+          title: 'مخطوبين',
+          style: CardStyle.oneCard,
+        ),
+        '/shella': (ctx) => Gamepage(
+          tablee: 'shella_choices',
+          title: 'شِلّا',
+          style: CardStyle.towCard,
+        ),
+        '/t3arof': (ctx) => Gamepage(
+          tablee: 't3arof_choices',
+          title: 'تعارف',
+          style: CardStyle.towCard,
+        ),
+        '/couples': (ctx) => Gamepage(
+          tablee: 'couples_choices',
+          title: 'كابلز',
+          style: CardStyle.towCard,
+        ),
+        '/bestat': (ctx) => Gamepage(
+          tablee: 'bestat_choices',
+          title: 'بستات',
+          style: CardStyle.towCard,
+        ),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),
         '/login': (ctx) => AuthPage(),
@@ -267,59 +270,4 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
     );
   }
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  showNotification(message);
-}
-
-// void requestNotificationPermission() async {
-//     // await FirebaseMessaging.instance.requestPermission();
-//     var status = await Permission.notification.status;
-//   if (!status.isGranted) {
-//     status = await Permission.notification.request();
-//   }
-// }
-
-Future<void> requestNotificationPermission() async {
-  var status = await Permission.notification.status;
-  if (!status.isGranted) {
-    await Permission.notification.request();
-    // var result = await Permission.notification.request();
-    // if (result.isPermanentlyDenied) {
-    //   openAppSettings(); // بس لو المستخدم رفض بشكل دائم
-    // }
-  }
-}
-
-Future<bool> requestStoragePermission() async {
-  // اطلب صلاحية الوصول للتخزين
-  var status = await Permission.storage.status;
-
-  if (!status.isGranted) {
-    status = await Permission.storage.request();
-  }
-
-  // في حالة أندرويد 11+
-  // if (status.isDenied || status.isPermanentlyDenied) {
-  //   // هنا ممكن تفتح إعدادات التطبيق علشان المستخدم يفعل الصلاحية بنفسه
-  //   await openAppSettings();
-  //   return false;
-  // }
-
-  return status.isGranted;
-}
-
-void turkToast(String text) {
-  Fluttertoast.showToast(
-    msg: text,
-    toastLength: Toast.LENGTH_SHORT,
-    gravity: ToastGravity.BOTTOM,
-    timeInSecForIosWeb: 1,
-    backgroundColor: Colors.black54,
-    textColor: Colors.white,
-    fontSize: 16.0,
-    fontAsset: "fonts/arabic_font.otf",
-  );
 }

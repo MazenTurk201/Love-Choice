@@ -1,7 +1,5 @@
 // ignore_for_file: file_names, use_build_context_synchronously
-
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:love_choice/modules/appBarRouter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

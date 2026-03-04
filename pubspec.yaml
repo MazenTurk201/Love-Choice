@@ -56,7 +56,6 @@ flutter:
     - images/
     - assets/love_choice.db
     - assets/animation/
-    - .env
   
   fonts:
     - family: TurkLogo

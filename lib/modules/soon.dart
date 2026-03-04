@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:love_choice/modules/appBarRouter.dart';
-import 'appbars.dart';
 import 'package:lottie/lottie.dart';
 
 class soonWidget extends StatelessWidget {
@@ -12,7 +11,7 @@ class soonWidget extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         Navigator.pushReplacementNamed(context, "/main");
-        return Future.value(false);
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: AppBarRouter(),

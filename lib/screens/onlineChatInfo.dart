@@ -25,7 +25,7 @@ class Onlinechatinfo extends StatelessWidget {
             'roomImage': roomImage,
           },
         );
-        return Future.value(false);
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: AppBar(title: Hero(tag: "name_$roomId", child: Text(roomName))),

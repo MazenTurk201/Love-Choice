@@ -1,22 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:http/http.dart' as http;
-import 'package:love_choice/data/db_helper.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../data/db_helper.dart';
 import '../data/adsManager.dart';
-import '../main.dart';
 import '../modules/appBarRouter.dart';
+import '../modules/globalFuncs.dart';
 import '../style/styles.dart';
-import 'home.dart';
 
 class setting extends StatefulWidget {
   const setting({super.key});
@@ -97,7 +94,7 @@ class _settingState extends State<setting> {
     //       });
     //     },
     //     onAdFailedToLoad: (ad, error) {
-    //       print("Faild :${error.message}");
+    //       debugPrint("Faild :${error.message}");
     //       ad.dispose();
     //     },
     //   ),
@@ -206,7 +203,7 @@ class _settingState extends State<setting> {
       child: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(false);
+          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBarRouter(),
@@ -307,7 +304,7 @@ class _settingState extends State<setting> {
                             orderItems.map((item) => jsonEncode(item)).toList(),
                           );
                         });
-                        turkToast("تم الاسترجاع");
+                        TurkFuncs().turkToast("تم الاسترجاع");
                       },
                       onLongPress: () {
                         showDialog(
@@ -371,7 +368,7 @@ class _settingState extends State<setting> {
                                 onPressed: () async {
                                   Navigator.pop(context);
                                   // [{name: Option 1, isSelected: true}, {name: Option 2, isSelected: true}, {name: Option 4, isSelected: true}, {name: Option 5, isSelected: false}, {name: Option 3, isSelected: false}]
-                                  // print(orderItems);
+                                  // debugPrint(orderItems);
                                   final pref =
                                       await SharedPreferences.getInstance();
                                   await pref.setStringList(
@@ -380,7 +377,7 @@ class _settingState extends State<setting> {
                                         .map((item) => jsonEncode(item))
                                         .toList(),
                                   );
-                                  turkToast("تم تغيير الفئات بنجاح");
+                                  TurkFuncs().turkToast("تم تغيير الفئات بنجاح");
                                 },
                                 child: Text(
                                   "حفظ",
@@ -392,7 +389,7 @@ class _settingState extends State<setting> {
                         );
                       },
                       onTap: () {
-                        turkToast(
+                        TurkFuncs().turkToast(
                           "دوس مرتين عشان ترجع طبيعي\nدوسة طويلة عشان تعرض الفئات",
                         );
                       },
@@ -410,16 +407,16 @@ class _settingState extends State<setting> {
                     ),
                     InkWell(
                       onLongPress: () async {
-                        await requestStoragePermission();
-                        openAllFilesAccessSettings();
+                        await TurkFuncs().requestStoragePermission();
+                        TurkFuncs().openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(false);
-                        turkToast("تم الاسترجاع");
+                        TurkFuncs().turkToast("تم الاسترجاع");
                       },
                       onDoubleTap: () async {
-                        await requestStoragePermission();
-                        openAllFilesAccessSettings();
+                        await TurkFuncs().requestStoragePermission();
+                        TurkFuncs().openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(true);
-                        turkToast("تم النسخ في ملفات الجهاز");
+                        TurkFuncs().turkToast("تم النسخ في ملفات الجهاز");
                         Fluttertoast.showToast(
                           msg:
                               "/storage/emulated/0/Love Choice/user_database.db",
@@ -432,7 +429,7 @@ class _settingState extends State<setting> {
                         );
                       },
                       onTap: () {
-                        turkToast(
+                        TurkFuncs().turkToast(
                           "دوس مرتين عشان تنسخ البيانات\nدوسة طويلة عشان تسترجع البيانات",
                         );
                       },
@@ -451,10 +448,10 @@ class _settingState extends State<setting> {
                     InkWell(
                       onLongPress: () {
                         downloadDB();
-                        turkToast("تم التحديث");
+                        TurkFuncs().turkToast("تم التحديث");
                       },
                       onTap: () {
-                        turkToast("دوسة طويلة عشان تحدث البيانات");
+                        TurkFuncs().turkToast("دوسة طويلة عشان تحدث البيانات");
                       },
                       child: ListTile(
                         leading: Padding(
@@ -517,7 +514,7 @@ class _settingState extends State<setting> {
                                         );
                                         Navigator.pop(context);
                                         spic_share_controler.text = "";
-                                        turkToast("تم التغيير");
+                                        TurkFuncs().turkToast("تم التغيير");
                                       } else {
                                         spic_share_controler.text = "غلط";
                                       }
@@ -579,7 +576,7 @@ class _settingState extends State<setting> {
                                     );
                                     Navigator.pop(context);
                                     spic_share_controler.text = "";
-                                    turkToast("تم التغيير");
+                                    TurkFuncs().turkToast("تم التغيير");
                                   } else {
                                     spic_share_controler.text = "غلط";
                                   }
@@ -597,10 +594,10 @@ class _settingState extends State<setting> {
                         final pref = await SharedPreferences.getInstance();
                         await pref.setBool("spic_share", false);
                         await pref.setString("spic_share_text", "");
-                        turkToast("تمت اعادة التعيين");
+                        TurkFuncs().turkToast("تمت اعادة التعيين");
                       },
                       onTap: () {
-                        turkToast(
+                        TurkFuncs().turkToast(
                           "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان الاضافة",
                         );
                       },
@@ -654,7 +651,7 @@ class _settingState extends State<setting> {
                                         );
                                         Navigator.pop(context);
                                         font_controler.text = "";
-                                        turkToast("تم التغيير");
+                                        TurkFuncs().turkToast("تم التغيير");
                                       } else {
                                         font_controler.text = "غلط";
                                       }
@@ -714,7 +711,7 @@ class _settingState extends State<setting> {
                                     );
                                     Navigator.pop(context);
                                     font_controler.text = "";
-                                    turkToast("تم التغيير");
+                                    TurkFuncs().turkToast("تم التغيير");
                                   } else {
                                     font_controler.text = "غلط";
                                   }
@@ -731,10 +728,10 @@ class _settingState extends State<setting> {
                       onDoubleTap: () async {
                         final pref = await SharedPreferences.getInstance();
                         await pref.setDouble("font_Size", 24);
-                        turkToast("تمت اعادة التعيين");
+                        TurkFuncs().turkToast("تمت اعادة التعيين");
                       },
                       onTap: () {
-                        turkToast(
+                        TurkFuncs().turkToast(
                           "دوس مرتين عشان اعادة التعيين \nدوسة طويلة عشان تغيير",
                         );
                       },
@@ -788,7 +785,7 @@ class _settingState extends State<setting> {
                                         );
                                         Navigator.pop(context);
                                         controler.text = "";
-                                        turkToast("تم التغيير");
+                                        TurkFuncs().turkToast("تم التغيير");
                                       } else {
                                         controler.text = "غلط";
                                       }
@@ -850,7 +847,7 @@ class _settingState extends State<setting> {
                                     );
                                     Navigator.pop(context);
                                     controler.text = "";
-                                    turkToast("تم التغيير");
+                                    TurkFuncs().turkToast("تم التغيير");
                                   } else {
                                     controler.text = "غلط";
                                   }
@@ -869,10 +866,10 @@ class _settingState extends State<setting> {
                         await pref.remove("metgawzen_password_num");
                         await pref.remove("metgawzen_password");
                         await pref.setBool("warning18", true);
-                        turkToast("اتحذف بنجاح");
+                        TurkFuncs().turkToast("اتحذف بنجاح");
                       },
                       onTap: () {
-                        turkToast(
+                        TurkFuncs().turkToast(
                           "دوس مرتين عشان يتحذف \nدوسة طويلة عشان تغيير",
                         );
                       },
@@ -894,7 +891,7 @@ class _settingState extends State<setting> {
                     //   fun: (val) {
                     //     isSwitched2 = val;
                     //     if (!val) {
-                    //       print("dark");
+                    //       debugPrint("dark");
                     //     }
                     //   },
                     // ),
@@ -913,19 +910,6 @@ class _settingState extends State<setting> {
           ),
         ),
       ),
-    );
-  }
-
-  void turkToast(String text) {
-    Fluttertoast.showToast(
-      msg: text,
-      toastLength: Toast.LENGTH_SHORT,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black54,
-      textColor: Colors.white,
-      fontSize: 16.0,
-      fontAsset: "fonts/arabic_font.otf",
     );
   }
 }

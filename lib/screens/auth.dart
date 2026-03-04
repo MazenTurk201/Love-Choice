@@ -1,13 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison
-
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:love_choice/modules/appBarRouter.dart';
-
 import '../style/styles.dart';
 
 class AuthPage extends StatefulWidget {
@@ -43,8 +39,7 @@ class _AuthPageState extends State<AuthPage> {
 
       // هنا الـ Error بتاع الـ await:
       // في النسخ الجديدة هي Future، لو لسه بيطلع Error شيل الـ await
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // تأكد إن الأسماء مكتوبة صح (Case-sensitive)
       final credential = GoogleAuthProvider.credential(
@@ -53,9 +48,9 @@ class _AuthPageState extends State<AuthPage> {
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
-      print("Done!");
+      debugPrint("Done!");
     } catch (e) {
-      print("Error: $e");
+      debugPrint("Error: $e");
     }
   }
 

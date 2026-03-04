@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 // ignore: unnecessary_import
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -264,7 +265,7 @@ class CombinedDatabase {
         conflictAlgorithm: conflictAlgorithm,
       );
     } catch (e) {
-      print("⚠️ update failed on defaultDb: $e");
+      debugPrint("⚠️ update failed on defaultDb: $e");
     }
 
     try {
@@ -276,7 +277,7 @@ class CombinedDatabase {
         conflictAlgorithm: conflictAlgorithm,
       );
     } catch (e) {
-      print("⚠️ update failed on userDb: $e");
+      debugPrint("⚠️ update failed on userDb: $e");
     }
 
     return count;
@@ -297,13 +298,13 @@ class CombinedDatabase {
         whereArgs: whereArgs,
       );
     } catch (e) {
-      print("⚠️ delete failed on defaultDb: $e");
+      debugPrint("⚠️ delete failed on defaultDb: $e");
     }
 
     try {
       count += await userDb.delete(table, where: where, whereArgs: whereArgs);
     } catch (e) {
-      print("⚠️ delete failed on userDb: $e");
+      debugPrint("⚠️ delete failed on userDb: $e");
     }
 
     return count;

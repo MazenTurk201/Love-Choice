@@ -1,14 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:love_choice/main.dart';
-import 'package:redacted/redacted.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/localAuth.dart';
 import '../data/toastdata.dart';
+import 'globalFuncs.dart';
 
 class Buildcard extends StatefulWidget {
   final String text;
@@ -51,7 +47,7 @@ class _BuildcardState extends State<Buildcard> {
       child: InkWell(
         onTap: () async {
           if (widget.route == "ahl") {
-            turkToast(
+            TurkFuncs().turkToast(
               ahl_enter_tablee[Random().nextInt(ahl_enter_tablee.length)],
             );
           } else if (widget.route == "metgawzen") {
@@ -134,40 +130,40 @@ class _BuildcardState extends State<Buildcard> {
                       "/metgawzen_password",
                     )
                   : null;
-              turkToast(
+              TurkFuncs().turkToast(
                 metgawzen_enter_tablee[Random().nextInt(
                   metgawzen_enter_tablee.length,
                 )],
               );
               } else {
-                turkToast("محاولة فاشلة.. لازم تحمي جهازك بباسورد من اعدادات جهازك يا ريس! 🔞❤️.");
+                TurkFuncs().turkToast("محاولة فاشلة.. لازم تحمي جهازك بباسورد من اعدادات جهازك يا ريس! 🔞❤️.");
               }
           } else if (widget.route == "ma5toben") {
-            turkToast(
+            TurkFuncs().turkToast(
               ma5toben_enter_tablee[Random().nextInt(
                 ma5toben_enter_tablee.length,
               )],
             );
           } else if (widget.route == "shella") {
-            turkToast(
+            TurkFuncs().turkToast(
               shella_enter_tablee[Random().nextInt(shella_enter_tablee.length)],
             );
           } else if (widget.route == "t3arof") {
-            turkToast(
+            TurkFuncs().turkToast(
               t3arof_enter_tablee[Random().nextInt(t3arof_enter_tablee.length)],
             );
           } else if (widget.route == "couples") {
-            turkToast(
+            TurkFuncs().turkToast(
               couples_enter_tablee[Random().nextInt(
                 couples_enter_tablee.length,
               )],
             );
           } else if (widget.route == "bestat") {
-            turkToast(
+            TurkFuncs().turkToast(
               bestat_enter_tablee[Random().nextInt(bestat_enter_tablee.length)],
             );
           } else {
-            turkToast("طب مثا من عندي");
+            TurkFuncs().turkToast("طب مثا من عندي");
           }
 
           if (widget.route != "metgawzen") {
@@ -225,18 +221,5 @@ class _BuildcardState extends State<Buildcard> {
     );
   }
 
-  void turkToast(String text) {
-    if (Platform.isAndroid || Platform.isIOS) {
-      Fluttertoast.showToast(
-        msg: text,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black54,
-        textColor: Colors.white,
-        fontSize: 16.0,
-        fontAsset: "fonts/arabic_font.otf",
-      );
-    }
-  }
+  
 }

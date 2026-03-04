@@ -1,30 +1,17 @@
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
-import 'package:app_links/app_links.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:love_choice/data/db_helper.dart';
-import 'package:love_choice/data/room_service.dart';
-import 'package:love_choice/screens/auth.dart';
-import 'package:love_choice/screens/onlineChat.dart';
-import 'package:love_choice/screens/onlineHome.dart';
-import 'package:love_choice/screens/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../data/toastdata.dart';
-import '../modules/appBarRouter.dart';
-import '../modules/changelogSheet.dart';
-import '../modules/drawerr.dart';
-import '../modules/buildcard.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-
-import '../style/styles.dart';
+import '../data/db_helper.dart';
+import '../data/toastdata.dart';
+import '../modules/appBarRouter.dart';
+import '../modules/drawerr.dart';
+import '../modules/buildcard.dart';
+import 'setting.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -55,7 +42,7 @@ Future<void> getVersionText(
     if (response.statusCode == 200) {
       double version = double.parse(response.body.trim());
       if (version > current_version) {
-        // print('🔔 A new version is available: $version');
+        // debugPrint('🔔 A new version is available: $version');
         showDialog(
           // ignore: use_build_context_synchronously
           context: context,
@@ -92,17 +79,17 @@ Future<void> getVersionText(
         );
       }
       // } else {
-      //   print('✅ You are using the latest version: $current_version');
+      //   debugPrint('✅ You are using the latest version: $current_version');
       // }
-      // print('✅ Version: $version');
+      // debugPrint('✅ Version: $version');
     } else {
-      // print(
+      // debugPrint(
       //   '❌ Failed to load version. Status code: ${response.statusCode}',
       // );
       null;
     }
   } catch (e) {
-    // print('❌ Error: $e');
+    // debugPrint('❌ Error: $e');
     null;
   }
 }
@@ -187,7 +174,7 @@ class _homeState extends State<home> {
               "root": "metgawzen",
             },
           ];
-      // print(orderItems);
+      // debugPrint(orderItems);
     });
   }
 
@@ -286,54 +273,5 @@ class _homeState extends State<home> {
         ),
       ),
     );
-  }
-}
-
-Future<void> showNotification(RemoteMessage message) async {
-  await flutterLocalNotificationsPlugin.show(
-    id: message.hashCode,
-    title: message.notification?.title ?? 'عنوان',
-    body: message.notification?.body ?? 'محتوى',
-    notificationDetails: NotificationDetails(
-      android: AndroidNotificationDetails(
-        'channel_id',
-        'channel_name',
-        channelDescription: 'channel_description',
-        icon: 'ic_notification', // ← مهم جدا
-      ),
-    ),
-  );
-}
-
-Future<bool> openAllFilesAccessSettings() async {
-  // if (Platform.isAndroid) {
-  //   const intent = AndroidIntent(
-  //     action: 'android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION',
-  //   );
-  //   await intent.launch();
-  //   turkToast("اديلنا صلاحيات الملفات عشان التحديثات");
-  // }
-
-  // if (await Permission.manageExternalStorage.request().isGranted) {
-  //   return true;
-  // } else {
-  //   openAppSettings(); // يفتح الإعدادات يدويًا
-  //   return false;
-  // }
-
-  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  if (androidInfo.version.sdkInt < 30) {
-    var status = await Permission.storage.request();
-    return status.isGranted;
-  } else {
-    // أندرويد 11 أو أحدث
-    var status = await Permission.manageExternalStorage.request();
-    if (status.isGranted) {
-      return true;
-    } else {
-      openAppSettings();
-      return false;
-    }
   }
 }

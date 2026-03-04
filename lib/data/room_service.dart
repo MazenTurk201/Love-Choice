@@ -38,9 +38,9 @@ class RoomService {
         const SnackBar(content: Text("الجروب اتعمل وأنت الأدمن 👑")),
       );
 
-      print("Room created successfully");
+      debugPrint("Room created successfully");
     } catch (e) {
-      print("خطأ أثناء إنشاء الجروب: $e");
+      debugPrint("خطأ أثناء إنشاء الجروب: $e");
     }
   }
 
@@ -57,9 +57,9 @@ class RoomService {
         "joined_at": FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      print("تم الانضمام للجروب بنجاح");
+      debugPrint("تم الانضمام للجروب بنجاح");
     } catch (e) {
-      print("مشكلة أثناء الانضمام للجروب: $e");
+      debugPrint("مشكلة أثناء الانضمام للجروب: $e");
     }
   }
 
@@ -87,7 +87,7 @@ class RoomService {
 
       return myRooms;
     } catch (e) {
-      print("مش عارف أجيب الجروبات: $e");
+      debugPrint("مش عارف أجيب الجروبات: $e");
       return [];
     }
   }

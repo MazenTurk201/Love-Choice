@@ -33,13 +33,13 @@ class _MyAppState extends State<MyApp> {
         _handleLink(uri);
       },
       onError: (err) {
-        print('يا ساتر، حصل إيرور: $err');
+        debugPrint('يا ساتر، حصل إيرور: $err');
       },
     );
   }
 
   void _handleLink(Uri uri) {
-    print('اللينك وصل يا ريس: $uri');
+    debugPrint('اللينك وصل يا ريس: $uri');
 
     // دلوقت اللينك جاي كده: .../Love-Choice?roomid=201201
     // فمش محتاجين نعمل split ولا وجع قلب، الـ Uri class هتفهم لوحدها
@@ -48,12 +48,12 @@ class _MyAppState extends State<MyApp> {
     String? roomId = uri.queryParameters['roomid'];
 
     if (roomId != null) {
-      print('مسكنا الـ ID يا ترك: $roomId');
+      debugPrint('مسكنا الـ ID يا ترك: $roomId');
 
       // هنا بقى الكود بتاعك عشان تدخل الروم
       // navigateToRoom(roomId);
     } else {
-      print('اللينك سليم بس مفيهوش roomid');
+      debugPrint('اللينك سليم بس مفيهوش roomid');
     }
   }
 

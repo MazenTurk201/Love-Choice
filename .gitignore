@@ -32,21 +32,15 @@ migrate_working_dir/
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# iOS
-ios/Flutter/App.framework
-ios/Flutter/Flutter.framework
-ios/Flutter/Generated.xcconfig
-ios/Flutter/ephemeral/
-ios/.symlinks/
-ios/Pods/
-ios/Podfile.lock
+/android/app/build
 
 # Another Trash
+/ios/
 /windows/
 /linux/
 /web/
 /macos/
+/test/
 love_choice.iml
 
 # Symbolication

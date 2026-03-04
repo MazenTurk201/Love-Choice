@@ -1,13 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'dart:io';
 import '../data/db_helper.dart';
-import '../main.dart';
 import '../modules/popMenu.dart';
 import '../style/styles.dart';
 
@@ -79,7 +75,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
       msgController.clear();
       setState(() {});
     } catch (e) {
-      print("خطأ في الإرسال: $e");
+      debugPrint("خطأ في الإرسال: $e");
     }
   }
 
@@ -101,7 +97,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
       msgController.clear();
       setState(() {});
     } catch (e) {
-      print("خطأ في الإرسال: $e");
+      debugPrint("خطأ في الإرسال: $e");
     }
   }
 
@@ -121,7 +117,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
       child: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacementNamed(context, "/onlineHome");
-          return Future.value(false);
+          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBar(
@@ -165,7 +161,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                     child: StreamBuilder(
                       stream: messagesStream(),
                       builder: (context, snapshot) {
-                        // print("DATA FROM STREAM → ${snapshot.data}");
+                        // debugPrint("DATA FROM STREAM → ${snapshot.data}");
 
                         if (!snapshot.hasData) {
                           return Center(child: CircularProgressIndicator());

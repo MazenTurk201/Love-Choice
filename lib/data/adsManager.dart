@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -34,10 +33,10 @@ class AdHelper {
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
-          print('Banner loaded');
+          debugPrint('Banner loaded');
         },
         onAdFailedToLoad: (ad, error) {
-          print("Failed: ${error.message}");
+          debugPrint("Failed: ${error.message}");
           ad.dispose();
         },
       ),
@@ -71,35 +70,35 @@ class TurkRewarded {
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
-          // print("Rewarded loaded");
+          // debugPrint("Rewarded loaded");
           _rewardedAd = ad;
 
           // إضافة الـ Listeners
           _rewardedAd!.fullScreenContentCallback = FullScreenContentCallback(
             onAdShowedFullScreenContent: (ad) {
-              // print("Rewarded showed fullscreen");
+              // debugPrint("Rewarded showed fullscreen");
             },
             onAdDismissedFullScreenContent: (ad) {
-              // print("Rewarded dismissed");
+              // debugPrint("Rewarded dismissed");
               ad.dispose();
               load(); // تحميل إعلان جديد
             },
             onAdFailedToShowFullScreenContent: (ad, error) {
-              // print("Failed to show rewarded: $error");
+              // debugPrint("Failed to show rewarded: $error");
               ad.dispose();
               load();
             },
             onAdImpression: (ad) {
-              // print("Rewarded impression");
+              // debugPrint("Rewarded impression");
             },
             onAdClicked: (ad) {
-              // print("Reward clicked");
+              // debugPrint("Reward clicked");
             },
           );
         },
 
         onAdFailedToLoad: (error) {
-          // print("Failed to load rewarded: $error");
+          // debugPrint("Failed to load rewarded: $error");
           _rewardedAd = null;
         },
       ),
@@ -109,13 +108,13 @@ class TurkRewarded {
   // عرض الإعلان
   static void show({required Function(int amount) onReward}) {
     if (_rewardedAd == null) {
-      // print("Rewarded not ready");
+      // debugPrint("Rewarded not ready");
       return;
     }
 
     _rewardedAd!.show(
       onUserEarnedReward: (ad, reward) {
-        // print("User rewarded: ${reward.amount}");
+        // debugPrint("User rewarded: ${reward.amount}");
         onReward(reward.amount.toInt());
       },
     );

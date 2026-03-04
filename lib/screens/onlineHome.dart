@@ -1,14 +1,10 @@
-import 'dart:ffi';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:d_dialog/d_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:love_choice/modules/popMenu.dart';
 import 'package:love_choice/style/styles.dart';
 import 'package:share_plus/share_plus.dart';
 import '../data/room_service.dart';
-import '../modules/drawerr.dart';
 
 final firebase = FirebaseFirestore.instance;
 
@@ -50,7 +46,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
       child: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(false);
+          return Future.value(true);
         },
         child: Scaffold(
           floatingActionButton: FloatingActionButton(

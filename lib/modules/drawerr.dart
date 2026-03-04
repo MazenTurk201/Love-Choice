@@ -1,12 +1,8 @@
 // ignore_for_file: unrelated_type_equality_checks, use_build_context_synchronously
-
 import 'dart:io';
 import 'dart:math';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:love_choice/data/adsManager.dart';
-import 'package:love_choice/main.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
@@ -51,9 +47,9 @@ class _TurkDrawerState extends State<TurkDrawer> {
     super.initState();
     UnityAds.load(
       placementId: 'Rewarded_Android',
-      onComplete: (placementId) => print('Load Complete $placementId'),
+      onComplete: (placementId) => debugPrint('Load Complete $placementId'),
       onFailed: (placementId, error, message) =>
-          print('Load Failed $placementId: $error $message'),
+          debugPrint('Load Failed $placementId: $error $message'),
     );
     loadSettings();
   }
@@ -116,6 +112,11 @@ class _TurkDrawerState extends State<TurkDrawer> {
                     title: 'ملف المطور',
                     icon: Icons.person,
                     url: 'profile',
+                  ),
+                  menuDrawerButton(
+                    title: 'testrive',
+                    icon: Icons.person,
+                    url: 'testrive',
                   ),
                   menuDrawerButton(
                     title: 'موقعنا',
@@ -215,12 +216,12 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           if (widget.disable == true) {
             UnityAds.showVideoAd(
               placementId: 'Rewarded_Android',
-              onStart: (placementId) => print('Video Ad $placementId started'),
-              onClick: (placementId) => print('Video Ad $placementId click'),
+              onStart: (placementId) => debugPrint('Video Ad $placementId started'),
+              onClick: (placementId) => debugPrint('Video Ad $placementId click'),
               onSkipped: (placementId) =>
-                  print('Video Ad $placementId skipped'),
+                  debugPrint('Video Ad $placementId skipped'),
               onComplete: (placementId) {
-                print('Video Ad $placementId completed');
+                debugPrint('Video Ad $placementId completed');
                 setState(() async {
                   final pref = await SharedPreferences.getInstance();
                   pref.setBool('settingstatus', false);
@@ -228,7 +229,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
                 });
               },
               onFailed: (placementId, error, message) =>
-                  print('Video Ad $placementId failed: $error $message'),
+                  debugPrint('Video Ad $placementId failed: $error $message'),
             );
             // TurkRewarded.show(
             //   onReward: (rewarded) {
@@ -244,6 +245,8 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           }
         } else if (widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/profile");
+        } else if (widget.url == 'testrive') {
+          Navigator.pushReplacementNamed(context, "/testrive");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(
@@ -265,12 +268,12 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
               UnityAds.showVideoAd(
                 placementId: 'Rewarded_Android',
                 onStart: (placementId) =>
-                    print('Video Ad $placementId started'),
-                onClick: (placementId) => print('Video Ad $placementId click'),
+                    debugPrint('Video Ad $placementId started'),
+                onClick: (placementId) => debugPrint('Video Ad $placementId click'),
                 onSkipped: (placementId) =>
-                    print('Video Ad $placementId skipped'),
+                    debugPrint('Video Ad $placementId skipped'),
                 onComplete: (placementId) {
-                  print('Video Ad $placementId completed');
+                  debugPrint('Video Ad $placementId completed');
                   setState(() async {
                     final pref = await SharedPreferences.getInstance();
                     pref.setBool('onlinestatus', false);
@@ -278,7 +281,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
                   });
                 },
                 onFailed: (placementId, error, message) =>
-                    print('Video Ad $placementId failed: $error $message'),
+                    debugPrint('Video Ad $placementId failed: $error $message'),
               );
               // TurkRewarded.show(
               //   onReward: (rewarded) {

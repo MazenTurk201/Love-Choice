@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:love_choice/modules/appBarRouter.dart';
-import 'package:share_plus/share_plus.dart';
-import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // import '../data/adsManager.dart';
@@ -86,7 +83,7 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
       child: WillPopScope(
         onWillPop: () {
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(false);
+          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBarRouter(),

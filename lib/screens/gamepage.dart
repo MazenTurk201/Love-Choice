@@ -21,7 +21,7 @@ class _GamepageState extends State<Gamepage> {
     return WillPopScope(
       onWillPop: () {
         Navigator.pushReplacementNamed(context, "/main");
-        return Future.value(false);
+        return Future.value(true);
       },
       child: Scaffold(
         appBar: TurkAppBar(tablee: widget.tablee, title: widget.title),

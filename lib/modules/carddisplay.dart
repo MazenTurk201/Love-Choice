@@ -1,14 +1,12 @@
 // ignore_for_file: file_names, sized_box_for_whitespace
-
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../data/db_helper.dart';
-import '../modules/skileton.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../data/db_helper.dart';
+import '../modules/skileton.dart';
 import '../style/styles.dart';
 
 class CardsFactory extends StatefulWidget {
