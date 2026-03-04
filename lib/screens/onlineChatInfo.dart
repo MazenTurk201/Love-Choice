@@ -9,13 +9,17 @@ class Onlinechatinfo extends StatelessWidget {
     super.key,
     required this.roomId,
     required this.roomName,
-    this.roomImage, required this.roomBio,
+    this.roomImage,
+    required this.roomBio,
   });
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+        }
         Navigator.of(context).pushReplacementNamed(
           '/onlineChat',
           arguments: {
@@ -25,10 +29,11 @@ class Onlinechatinfo extends StatelessWidget {
             'roomImage': roomImage,
           },
         );
-        return Future.value(true);
       },
       child: Scaffold(
-        appBar: AppBar(title: Hero(tag: "name_$roomId", child: Text(roomName))),
+        appBar: AppBar(
+          title: Hero(tag: "name_$roomId", child: Text(roomName)),
+        ),
         body: Center(child: Text(roomBio)),
       ),
     );

@@ -29,8 +29,6 @@ import 'style/styles.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  // String? key1 = await NativeSecrets.getFirstKey();
-  // String? key2 = await NativeSecrets.getSecondKey();
   WidgetsFlutterBinding.ensureInitialized();
   await TurkFuncs().requestStoragePermission();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -204,12 +202,10 @@ class _MyAppState extends State<MyApp> {
         '/ahl': (ctx) => Gamepage(
           tablee: 'ahl_choices',
           title: 'أهل',
-          style: CardStyle.towCard,
         ),
         '/metgawzen': (ctx) => Gamepage(
           tablee: 'metgawzen_choices',
           title: 'متجوزين',
-          style: CardStyle.towCard,
         ),
         '/ma5toben': (ctx) => Gamepage(
           tablee: 'ma5toben_choices',
@@ -219,22 +215,18 @@ class _MyAppState extends State<MyApp> {
         '/shella': (ctx) => Gamepage(
           tablee: 'shella_choices',
           title: 'شِلّا',
-          style: CardStyle.towCard,
         ),
         '/t3arof': (ctx) => Gamepage(
           tablee: 't3arof_choices',
           title: 'تعارف',
-          style: CardStyle.towCard,
         ),
         '/couples': (ctx) => Gamepage(
           tablee: 'couples_choices',
           title: 'كابلز',
-          style: CardStyle.towCard,
         ),
         '/bestat': (ctx) => Gamepage(
           tablee: 'bestat_choices',
           title: 'بستات',
-          style: CardStyle.towCard,
         ),
         '/profile': (ctx) => profile(),
         '/setting': (ctx) => setting(),

@@ -24,6 +24,7 @@ class _onBoardingState extends State<onBoarding> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: Padding(
           padding: const EdgeInsets.only(bottom: 80),
           child: PageView(
@@ -60,15 +61,15 @@ class _onBoardingState extends State<onBoarding> {
         ),
         bottomSheet: isListPage
             ? Container(
-                color: Colors.black87,
                 width: double.infinity,
                 height: 80,
+                color: Colors.red,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero, // عشان الجرادينت يملأ الزر كله
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(25),
-                    // ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25),
+                    ),
                   ),
                   onPressed: () async {
                     final pref = await SharedPreferences.getInstance();
@@ -81,7 +82,7 @@ class _onBoardingState extends State<onBoarding> {
                       gradient: LinearGradient(
                         colors: [Colors.blue, Colors.indigo],
                       ),
-                      // borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(25),
                     ),
                     child: Container(
                       alignment: Alignment.center,
@@ -107,7 +108,13 @@ class _onBoardingState extends State<onBoarding> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextButton(
-                      onPressed: () => controller.jumpToPage(2),
+                      onPressed: () {
+                        controller.animateToPage(
+                          2,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      },
                       child: Text(
                         "تخطي",
                         style: TextStyle(

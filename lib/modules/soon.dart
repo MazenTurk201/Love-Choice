@@ -3,15 +3,19 @@ import 'package:love_choice/modules/appBarRouter.dart';
 import 'package:lottie/lottie.dart';
 
 class soonWidget extends StatelessWidget {
-  const soonWidget({super.key,});
+  const soonWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return WillPopScope(
-      onWillPop: () {
+    return PopScope(
+      canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+        }
+        // هنا بنعمل اللي إحنا عايزينه لما المستخدم يرجع
         Navigator.pushReplacementNamed(context, "/main");
-        return Future.value(true);
       },
       child: Scaffold(
         appBar: AppBarRouter(),

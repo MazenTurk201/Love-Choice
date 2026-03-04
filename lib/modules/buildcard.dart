@@ -52,92 +52,87 @@ class _BuildcardState extends State<Buildcard> {
             );
           } else if (widget.route == "metgawzen") {
             final isAvalibalAuth = await LocalAuthManager.authenticat();
-            if (isAvalibalAuth) {
-              Navigator.pushReplacementNamed(context, "/${widget.route}");
-              warning18
-                  ? showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(
-                          "تنويه هام",
-                          style: TextStyle(
-                            fontFamily: "TurkFont",
-                            fontSize: 20,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        content: Text(
-                          "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18} وفي أي حالة ارجاع هذا التحذير الرجاء حذف الباسورد من الاعدادات، استمتعوا.",
-                          style: TextStyle(fontSize: 17),
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () async {
-                              final pref =
-                                  await SharedPreferences.getInstance();
-                              await pref.setBool('warning18', false);
-                              if (context.mounted) {
-                                Navigator.of(context).pop();
-                              }
-                            },
-                            child: Text(
-                              "عدم العرض",
-                              style: TextStyle(
-                                fontFamily: "TurkFont",
-                                fontSize: 15,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                context,
-                                "/metgawzen_password",
-                              );
-                            },
-                            child: Text(
-                              "باسورد",
-                              style: TextStyle(
-                                fontFamily: "TurkFont",
-                                fontSize: 15,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              "فهمت",
-                              style: TextStyle(
-                                fontFamily: "TurkFont",
-                                fontSize: 15,
-                                color: Colors.deepPurpleAccent,
-                              ),
-                            ),
-                          ),
-                        ],
-                        actionsAlignment: MainAxisAlignment.spaceEvenly,
-                      ),
-                    )
-                  : metgawzen_password
-                  ? Navigator.pushReplacementNamed(
-                      context,
-                      "/metgawzen_password",
-                    )
-                  : null;
+            if (!isAvalibalAuth) {
               TurkFuncs().turkToast(
-                metgawzen_enter_tablee[Random().nextInt(
-                  metgawzen_enter_tablee.length,
-                )],
+                "محاولة فاشلة.. لازم تحمي جهازك بباسورد من اعدادات جهازك يا ريس! 🔞❤️.",
               );
-              } else {
-                TurkFuncs().turkToast("محاولة فاشلة.. لازم تحمي جهازك بباسورد من اعدادات جهازك يا ريس! 🔞❤️.");
-              }
+              return;
+            }
+            Navigator.pushReplacementNamed(context, "/${widget.route}");
+            warning18
+                ? showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(
+                        "تنويه هام",
+                        style: TextStyle(fontFamily: "TurkFont", fontSize: 20),
+                        textAlign: TextAlign.center,
+                      ),
+                      content: Text(
+                        "ملحوظة\nالفئة دي للمتجوزين بس وغير مسؤوليين عن اي طفل يدخل هنا {محتوى +18} وفي أي حالة ارجاع هذا التحذير الرجاء حذف الباسورد من الاعدادات، استمتعوا.",
+                        style: TextStyle(fontSize: 17),
+                        textAlign: TextAlign.center,
+                        textDirection: TextDirection.rtl,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            final pref = await SharedPreferences.getInstance();
+                            await pref.setBool('warning18', false);
+                            if (context.mounted) {
+                              Navigator.of(context).pop();
+                            }
+                          },
+                          child: Text(
+                            "عدم العرض",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              "/metgawzen_password",
+                            );
+                          },
+                          child: Text(
+                            "باسورد",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "فهمت",
+                            style: TextStyle(
+                              fontFamily: "TurkFont",
+                              fontSize: 15,
+                              color: Colors.deepPurpleAccent,
+                            ),
+                          ),
+                        ),
+                      ],
+                      actionsAlignment: MainAxisAlignment.spaceEvenly,
+                    ),
+                  )
+                : metgawzen_password
+                ? Navigator.pushReplacementNamed(context, "/metgawzen_password")
+                : null;
+            TurkFuncs().turkToast(
+              metgawzen_enter_tablee[Random().nextInt(
+                metgawzen_enter_tablee.length,
+              )],
+            );
           } else if (widget.route == "ma5toben") {
             TurkFuncs().turkToast(
               ma5toben_enter_tablee[Random().nextInt(
@@ -220,6 +215,4 @@ class _BuildcardState extends State<Buildcard> {
       ),
     );
   }
-
-  
 }

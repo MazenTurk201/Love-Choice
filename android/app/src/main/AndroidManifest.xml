@@ -25,7 +25,7 @@
   </queries>
   <application android:label="Love Choice?" android:name="${applicationName}"
     android:icon="@mipmap/ic_launcher" android:requestLegacyExternalStorage="true"
-    android:usesCleartextTraffic="true">
+    android:usesCleartextTraffic="true" android:enableOnBackInvokedCallback="true">
     <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
       android:value="ca-app-pub-5128290475212632~5158513829" />
     <activity

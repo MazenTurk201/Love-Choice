@@ -51,7 +51,7 @@ class LocalAuthManager {
       if (e.code == 'noCredentialsSet') {
         debugPrint("يا ترك اليوزر مش عامل باسورد للموبايل أصلاً!");
         // ممكن هنا ترجع 'false' وتظهر SnackBar لليوزر تقوله "فعل حماية الموبايل الأول"
-      } else if (e.code == 'NotAvailable') {
+      } else if (e.code == 'uiUnavailable') {
         debugPrint("الخاصية مقفولة أو مش متاحة حالياً");
       }
 

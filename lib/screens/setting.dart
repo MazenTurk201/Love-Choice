@@ -200,10 +200,14 @@ class _settingState extends State<setting> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: WillPopScope(
-        onWillPop: () {
+      child: PopScope(
+        canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+          }
+          // هنا بنعمل اللي إحنا عايزينه لما المستخدم يرجع
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBarRouter(),
@@ -377,7 +381,9 @@ class _settingState extends State<setting> {
                                         .map((item) => jsonEncode(item))
                                         .toList(),
                                   );
-                                  TurkFuncs().turkToast("تم تغيير الفئات بنجاح");
+                                  TurkFuncs().turkToast(
+                                    "تم تغيير الفئات بنجاح",
+                                  );
                                 },
                                 child: Text(
                                   "حفظ",

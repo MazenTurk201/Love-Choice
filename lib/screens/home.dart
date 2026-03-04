@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:love_choice/modules/globalFuncs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../data/db_helper.dart';
 import '../data/toastdata.dart';
 import '../modules/appBarRouter.dart';
@@ -108,7 +109,6 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
-  
   List<Map<String, dynamic>> orderItems = [];
 
   @override
@@ -118,8 +118,6 @@ class _homeState extends State<home> {
     loadSettings();
     DBHelper.init();
   }
-
-  
 
   Future<void> loadSettings() async {
     final pref = await SharedPreferences.getInstance();
@@ -183,19 +181,16 @@ class _homeState extends State<home> {
     final selectedItems = orderItems
         .where((item) => item["isSelected"] == true)
         .toList();
-    return WillPopScope(
-      onWillPop: () {
-        Fluttertoast.showToast(
-          msg: exit_tablee[Random().nextInt(exit_tablee.length)],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black54,
-          textColor: Colors.white,
-          fontSize: 16.0,
-          fontAsset: "fonts/arabic_font.otf",
+    return PopScope(
+      canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+        }
+        TurkFuncs().turkToast(
+          exit_tablee[Random().nextInt(exit_tablee.length)],
         );
-        return Future.value(true);
+        SystemNavigator.pop();
       },
       child: SafeArea(
         top: false,

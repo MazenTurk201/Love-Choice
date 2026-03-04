@@ -114,10 +114,13 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       top: false,
-      child: WillPopScope(
-        onWillPop: () {
+      child: PopScope(
+        canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+          }
           Navigator.pushReplacementNamed(context, "/onlineHome");
-          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBar(

@@ -43,10 +43,14 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
         FirebaseAuth.instance.currentUser!.email!.split("@")[0];
     return SafeArea(
       top: false,
-      child: WillPopScope(
-        onWillPop: () {
+      child: PopScope(
+        canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+          }
+          // هنا بنعمل اللي إحنا عايزينه لما المستخدم يرجع
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(true);
         },
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
@@ -129,8 +133,8 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                     ) ==
                                     TextDirection.ltr
                                 ? Hero(
-                                  tag: "avatar_${chats[index]['id']}",
-                                  child: CircleAvatar(
+                                    tag: "avatar_${chats[index]['id']}",
+                                    child: CircleAvatar(
                                       backgroundColor: randomMaterialColor(),
                                       backgroundImage:
                                           chats[index]['avatar_url'] != null
@@ -149,7 +153,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                             )
                                           : null,
                                     ),
-                                )
+                                  )
                                 : null,
                             title: Hero(
                               tag: "name_${chats[index]['id']}",
@@ -184,8 +188,8 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                     ) ==
                                     TextDirection.rtl
                                 ? Hero(
-                                  tag: "avatar_${chats[index]['id']}",
-                                  child: CircleAvatar(
+                                    tag: "avatar_${chats[index]['id']}",
+                                    child: CircleAvatar(
                                       backgroundColor: randomMaterialColor(),
                                       backgroundImage:
                                           chats[index]['avatar_url'] != null
@@ -204,7 +208,7 @@ class _OnlineHomePageState extends State<OnlineHomePage> {
                                             )
                                           : null,
                                     ),
-                                )
+                                  )
                                 : null,
                             onTap: () {
                               // التصحيح هنا: بنبعت اسم الروم المتغيرة مش الثابتة

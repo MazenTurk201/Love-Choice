@@ -80,10 +80,14 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
     }
 
     return SafeArea(
-      child: WillPopScope(
-        onWillPop: () {
+      child: PopScope(
+        canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) {
+            return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+          }
+          // هنا بنعمل اللي إحنا عايزينه لما المستخدم يرجع
           Navigator.pushReplacementNamed(context, "/main");
-          return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBarRouter(),
@@ -93,11 +97,7 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [
-                      Colors.white,
-                      TurkStyle().mainColor, 
-                      Colors.black
-                      ],
+                    colors: [Colors.white, TurkStyle().mainColor, Colors.black],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                   ),
@@ -144,7 +144,10 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
                           fontSize: 25,
                           fontFamily: "TurkFontE",
                           shadows: [
-                            Shadow(color: TurkStyle().hoverColor, blurRadius: 30),
+                            Shadow(
+                              color: TurkStyle().hoverColor,
+                              blurRadius: 30,
+                            ),
                           ],
                         ),
                       ),
@@ -161,15 +164,15 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
                           fontSize: 20,
                           fontFamily: "TurkFontE",
                           shadows: [
-                            Shadow(color: TurkStyle().hoverColor, blurRadius: 30),
+                            Shadow(
+                              color: TurkStyle().hoverColor,
+                              blurRadius: 30,
+                            ),
                           ],
                         ),
                       ),
                     ),
-                    AchivementTurk(
-                      title: "Developer",
-                      wedth: 150,
-                    ),
+                    AchivementTurk(title: "Developer", wedth: 150),
                     Divider(indent: 50, endIndent: 50),
                     SlideTransition(
                       position: slideFromRight(0.3, 0.5),

@@ -246,7 +246,7 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
         } else if (widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/profile");
         } else if (widget.url == 'testrive') {
-          Navigator.pushReplacementNamed(context, "/testrive");
+          Navigator.pushReplacementNamed(context, "/onboarding");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(

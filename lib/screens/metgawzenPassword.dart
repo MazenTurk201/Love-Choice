@@ -34,10 +34,14 @@ class _metgawzenPasswordState extends State<metgawzenPassword> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false, // بنقول للسيستم "لا، متقفلش الصفحة تلقائي"
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          return; // لو اتقفلت فعلاً خلاص مش هنعمل حاجة
+        }
+        // هنا بنعمل اللي إحنا عايزينه لما المستخدم يرجع
         Navigator.pushReplacementNamed(context, "/main");
-        return false;
       },
       child: SafeArea(
         child: Scaffold(
