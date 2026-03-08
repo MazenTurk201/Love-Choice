@@ -11,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/db_helper.dart';
 import '../data/adsManager.dart';
+import '../data/globalData.dart';
 import '../modules/appBarRouter.dart';
 import '../modules/globalFuncs.dart';
 import '../style/styles.dart';
@@ -27,6 +28,7 @@ class _settingState extends State<setting> {
   bool isSwitched = false;
   bool isSwitched2 = false;
   bool isSwitched3 = false;
+  bool isSwitched4 = true;
   bool switch1 = true;
   bool switch2 = false;
   int? metgawzen_password_num;
@@ -34,72 +36,12 @@ class _settingState extends State<setting> {
   TextEditingController controler = TextEditingController();
   TextEditingController font_controler = TextEditingController();
   TextEditingController spic_share_controler = TextEditingController();
-  List<Map<String, dynamic>> orderItems = [
-    {
-      "name": "أهل",
-      "isSelected": true,
-      "dis": "التجمع الحلو والقعدة الأحلى",
-      "root": "ahl",
-    },
-    {
-      "name": "شلة",
-      "isSelected": true,
-      "dis": "يلا بينا نفك الملل",
-      "root": "shella",
-    },
-    {
-      "name": "بيستات",
-      "isSelected": true,
-      "dis": "مين حبيب اخوه؟",
-      "root": "bestat",
-    },
-    {
-      "name": "تعارف",
-      "isSelected": true,
-      "dis": "الصحاب اللي على قلبك",
-      "root": "t3arof",
-    },
-    {
-      "name": "كابلز",
-      "isSelected": true,
-      "dis": "ايدي ف ايدك نرجع البدايات",
-      "root": "couples",
-    },
-    {
-      "name": "مخطوبين",
-      "isSelected": false,
-      "dis": "نفهم بعض قبل الجد",
-      "root": "ma5toben",
-    },
-    {
-      "name": "متجوزين",
-      "isSelected": false,
-      "dis": "يلّا نحيي حُبنا من جديد",
-      "root": "metgawzen",
-    },
-  ];
+  List<Map<String, dynamic>> orderItems = UIData;
 
   @override
   void initState() {
     super.initState();
     loadSettings();
-    // _bannerAd = AdHelper.createBanner();
-    // BannerAd(
-    //   adUnitId: AdHelper.bannerAdUnitId,
-    //   size: AdSize.banner,
-    //   listener: BannerAdListener(
-    //     onAdLoaded: (ad) {
-    //       setState(() {
-    //         _bannerAd = ad as BannerAd;
-    //       });
-    //     },
-    //     onAdFailedToLoad: (ad, error) {
-    //       debugPrint("Faild :${error.message}");
-    //       ad.dispose();
-    //     },
-    //   ),
-    //   request: AdRequest(),
-    // ).load();
   }
 
   Future<void> loadSettings() async {
@@ -109,6 +51,8 @@ class _settingState extends State<setting> {
       isSwitched = pref.getBool('isDare') ?? true;
       isSwitched2 = pref.getBool('switch_both') ?? true;
       isSwitched3 = pref.getBool('pin_image') ?? true;
+      isSwitched4 = pref.getBool('origenal_questions') ?? true;
+
       // isSwitched2 = pref.getBool('isSwitched2') ?? true;
       List<String>? rawList = pref.getStringList('orderItems');
 
@@ -116,50 +60,7 @@ class _settingState extends State<setting> {
           rawList
               ?.map((item) => jsonDecode(item) as Map<String, dynamic>)
               .toList() ??
-          [
-            {
-              "name": "أهل",
-              "isSelected": true,
-              "dis": "التجمع الحلو والقعدة الأحلى",
-              "root": "ahl",
-            },
-            {
-              "name": "شلة",
-              "isSelected": true,
-              "dis": "يلا بينا نفك الملل",
-              "root": "shella",
-            },
-            {
-              "name": "بيستات",
-              "isSelected": true,
-              "dis": "مين حبيب اخوه؟",
-              "root": "bestat",
-            },
-            {
-              "name": "تعارف",
-              "isSelected": true,
-              "dis": "الصحاب اللي على قلبك",
-              "root": "t3arof",
-            },
-            {
-              "name": "مخطوبين",
-              "isSelected": true,
-              "dis": "نفهم بعض قبل الجد",
-              "root": "ma5toben",
-            },
-            {
-              "name": "كابلز",
-              "isSelected": false,
-              "dis": "ايدي ف ايدك نرجع البدايات",
-              "root": "couples",
-            },
-            {
-              "name": "متجوزين",
-              "isSelected": false,
-              "dis": "يلّا نحيي حُبنا من جديد",
-              "root": "metgawzen",
-            },
-          ];
+          UIData;
     });
   }
 
@@ -248,6 +149,15 @@ class _settingState extends State<setting> {
                       fun: (val) {
                         isSwitched3 = val;
                         saveSettings("pin_image", val);
+                      },
+                    ),
+
+                    settingTile(
+                      title: "أسئلة اللعبة؟",
+                      state: isSwitched4,
+                      fun: (val) {
+                        isSwitched4 = val;
+                        saveSettings("origenal_questions", val);
                       },
                     ),
                     SizedBox(

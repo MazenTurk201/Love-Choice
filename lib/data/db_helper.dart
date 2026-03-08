@@ -6,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
   static late CombinedDatabase database;
+  static bool useOriginalQuestions = true;
 
   static Future<void> init() async {
     // مجلد التخزين الآمن للتطبيق
@@ -324,21 +326,27 @@ class CombinedDatabase {
     int? offset,
   }) async {
     final results = <Map<String, Object?>>[];
+    final pref = await SharedPreferences.getInstance();
+    DBHelper.useOriginalQuestions = pref.getBool('origenal_questions') ?? true;
 
     // جلب البيانات من defaultDb
-    try {
-      results.addAll(
-        await defaultDb.query(
-          table,
-          columns: columns,
-          where: where,
-          whereArgs: whereArgs,
-          groupBy: groupBy,
-          having: having,
-          orderBy: orderBy?.toUpperCase() == "RANDOM()" ? "RANDOM()" : orderBy,
-        ),
-      );
-    } catch (_) {}
+    if (DBHelper.useOriginalQuestions) {
+      try {
+        results.addAll(
+          await defaultDb.query(
+            table,
+            columns: columns,
+            where: where,
+            whereArgs: whereArgs,
+            groupBy: groupBy,
+            having: having,
+            orderBy: orderBy?.toUpperCase() == "RANDOM()"
+                ? "RANDOM()"
+                : orderBy,
+          ),
+        );
+      } catch (_) {}
+    }
 
     // جلب البيانات من userDb
     try {

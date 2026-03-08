@@ -66,10 +66,10 @@ class ChangeLogSheet extends StatelessWidget {
                 'الله عز وجل'
                 '\nأمي'
                 '\nاكبر داعم: مريم'
-                '\nمختبر: ياسين'
+                '\nمختبر الأعطال: ياسين'
                 '\nفكرة التواصل: ادهم'
                 '\n قاعدة البيانات: ياسين'
-                '\nالديزاين: شهد'
+                '\nالديزاينر والألوان: شهد'
                 '\nاختبار الموقع: باسل',
                 style: TextStyle(fontSize: 18, color: Colors.white70),
                 textDirection: TextDirection.rtl,

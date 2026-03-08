@@ -211,11 +211,16 @@ class _homeState extends State<home> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Buildcard(
-                            selectedItems[0]["name"],
-                            selectedItems[0]["dis"],
-                            selectedItems[0]["root"],
-                            true,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: MediaQuery.of(context).size.height / 4 - 62.5,
+                            ),
+                            child: Buildcard(
+                              selectedItems[0]["name"],
+                              selectedItems[0]["dis"],
+                              selectedItems[0]["root"],
+                              true,
+                            ),
                           ),
                         ),
                         if (orderItems.length > 1)
