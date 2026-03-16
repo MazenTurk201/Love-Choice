@@ -50,7 +50,7 @@ class _CardsFactoryState extends State<CardsFactory>
   late AnimationController _uptextController;
   late AnimationController _downtextController;
   double textDrag = 0.0;
-  final double swipeThreshold = 0.3;
+  final double swipeThreshold = 0.2;
   TurkAnimType _animTypeDare = TurkAnimType.toLeft;
   TurkAnimType _animTypeChoice = TurkAnimType.toLeft;
 
@@ -389,267 +389,354 @@ class _CardsFactoryState extends State<CardsFactory>
       case CardStyle.oneCard:
         return _isloading
             ? SkiletonSkin(heigh: true)
-            : Center(
-                child: GestureDetector(
-                  onHorizontalDragEnd: (details) {
-                    if (details.primaryVelocity! > 0) {
-                      spic_share
-                          ? _launchUrl(
-                              "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
-                            )
-                          : SharePlus.instance.share(
-                              ShareParams(
-                                text:
-                                    '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
+            : Center(child: oneCardMethod(context));
+    }
+  }
+
+  GestureDetector oneCardMethod(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        /* Don't do anything..*/
+      },
+
+      onHorizontalDragUpdate: (details) {
+        final delta = details.primaryDelta! / MediaQuery.of(context).size.width;
+
+        textDrag += delta;
+        textDrag = textDrag.clamp(-1.0, 1.0);
+
+        final controller = _uptextController;
+
+        controller.value = textDrag.abs();
+        if (textDrag > 0 &&
+            _animTypeChoice != TurkAnimType.pupup) {
+          setState(() {
+            _animTypeChoice = TurkAnimType.pupup;
+          });
+        } else if (textDrag < 0 &&
+             _animTypeChoice != TurkAnimType.toLeft) {
+          setState(() {
+            _animTypeChoice = TurkAnimType.toLeft;
+          });
+        }
+      },
+      onHorizontalDragEnd: (_) async {
+        if (textDrag > swipeThreshold) {
+          setState(() {
+              _animTypeChoice = TurkAnimType.pupup;
+          });
+
+          final controller = _uptextController;
+
+          await controller.animateTo(
+            1.0,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOut,
+          );
+          await controller.animateBack(
+            0.0,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeIn,
+          );
+          spic_share
+              ? _launchUrl("https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
+                )
+              : SharePlus.instance.share(
+                  ShareParams(
+                    text: "*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}",
+                  ),
+                );
+        } else if (textDrag < -swipeThreshold) {
+          final controller = _uptextController;
+          setState(() {
+              _animTypeChoice = TurkAnimType.toLeft;
+          });
+
+          await controller.animateTo(
+            1,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeIn,
+          );
+
+          setState(() {
+              index = index == randQuizs.length - 1 ? 0 : index + 1;
+              _animTypeChoice = TurkAnimType.fromRight;
+          });
+          controller.value = 0;
+
+          await Future.delayed(Duration.zero);
+
+          controller.animateTo(
+            1.0,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutCubic,
+          );
+        } else {
+          final controller = _uptextController;
+          await controller.animateBack(
+            0,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeInCubic,
+          );
+        }
+        textDrag = 0;
+      },
+      
+      child: Container(
+        width: double.infinity,
+        margin: EdgeInsets.all(10),
+        // padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+        ),
+        height: 300,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.asset("images/quiz$rnum.jpg", fit: BoxFit.cover),
+              ),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          "سؤال",
+                          style: TextStyle(
+                            fontSize: 30,
+                            shadows: [
+                              Shadow(
+                                color: Colors.black,
+                                offset: Offset(1, 1),
+                                blurRadius: 30,
                               ),
-                            );
-                    } else if (details.primaryVelocity! < 0) {
-                      setState(() {
-                        if (index == randQuizs.length - 1) {
-                          index = 0;
-                        } else {
-                          index++;
-                        }
-                      });
-                    }
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(10),
-                    // padding: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    height: 300,
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              "images/quiz$rnum.jpg",
-                              fit: BoxFit.cover,
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.all(0),
+                        tooltip: "ليه السؤال ده؟",
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "ليه السؤال ده؟",
+                                style: TextStyle(
+                                  fontFamily: "TurkFont",
+                                  fontSize: 20,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Text(
+                                randQuizs.isNotEmpty
+                                    ? randQuizs[index]["dare"]
+                                    : 'لا يوجد بيانات بعد',
+                                style: TextStyle(fontSize: 17),
+                                textAlign: TextAlign.center,
+                                textDirection: TextDirection.rtl,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    "فهمت",
+                                    style: TextStyle(
+                                      fontFamily: "TurkFont",
+                                      fontSize: 15,
+                                      color: Colors.deepPurpleAccent,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
+                          );
+                        },
+                        icon: Icon(
+                          Icons.info_outline,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    child: ClipRect(
+                      child: AnimatedBuilder(
+                        animation: _uptextController,
+                        builder: (context, child) {
+                          switch (_animTypeChoice) {
+                            case TurkAnimType.pupup:
+                              return Transform.scale(
+                                scale:
+                                    1 +
+                                    Curves.easeOutBack.transform(
+                                          _uptextController.value,
+                                        ) *
+                                        0.2,
+                                child: child,
+                              );
+
+                            case TurkAnimType.fromRight:
+                              return Transform.translate(
+                                offset: Offset(
+                                  (1 - _uptextController.value) * 200,
+                                  0,
+                                ),
+                                child: Opacity(
+                                  opacity: _uptextController.value,
+                                  child: child,
+                                ),
+                              );
+
+                            case TurkAnimType.toLeft:
+                              return Transform.translate(
+                                offset: Offset(
+                                  -_uptextController.value * 80,
+                                  0,
+                                ),
+                                child: Opacity(
+                                  opacity: 1 - _uptextController.value,
+                                  child: child,
+                                ),
+                              );
+                          }
+                        },
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            randQuizs.isNotEmpty
+                                ? randQuizs[index]["choice"]
+                                : 'لا يوجد بيانات بعد',
+                            style: TextStyle(
+                              fontSize: font_Size,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black,
+                                  offset: Offset(1, 1),
+                                  blurRadius: 30,
+                                ),
+                              ],
+                            ),
+                            textAlign: TextAlign.center,
+                            textDirection: TextDirection.rtl,
                           ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Stack(
-                                alignment: Alignment.topRight,
-                                children: [
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: Text(
-                                      "سؤال",
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        shadows: [
-                                          Shadow(
-                                            color: Colors.black,
-                                            offset: Offset(1, 1),
-                                            blurRadius: 30,
-                                          ),
-                                        ],
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    tooltip: "ليه السؤال ده؟",
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: Text(
-                                            "ليه السؤال ده؟",
-                                            style: TextStyle(
-                                              fontFamily: "TurkFont",
-                                              fontSize: 20,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: Text(
-                                            randQuizs.isNotEmpty
-                                                ? randQuizs[index]["dare"]
-                                                : 'لا يوجد بيانات بعد',
-                                            style: TextStyle(fontSize: 17),
-                                            textAlign: TextAlign.center,
-                                            textDirection: TextDirection.rtl,
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text(
-                                                "فهمت",
-                                                style: TextStyle(
-                                                  fontFamily: "TurkFont",
-                                                  fontSize: 15,
-                                                  color:
-                                                      Colors.deepPurpleAccent,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.info_outline,
-                                      size: 30,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 5,
-                                ),
-                                child: ClipRect(
-                                  child: AnimatedBuilder(
-                                    animation: _uptextController,
-                                    builder: (context, child) {
-                                      switch (_animTypeChoice) {
-                                        case TurkAnimType.pupup:
-                                          return Transform.scale(
-                                            scale:
-                                                1 +
-                                                Curves.easeOutBack.transform(
-                                                      _uptextController.value,
-                                                    ) *
-                                                    0.2,
-                                            child: child,
-                                          );
-
-                                        case TurkAnimType.fromRight:
-                                          return Transform.translate(
-                                            offset: Offset(
-                                              (1 - _uptextController.value) *
-                                                  200,
-                                              0,
-                                            ),
-                                            child: Opacity(
-                                              opacity: _uptextController.value,
-                                              child: child,
-                                            ),
-                                          );
-
-                                        case TurkAnimType.toLeft:
-                                          return Transform.translate(
-                                            offset: Offset(
-                                              -_uptextController.value * 80,
-                                              0,
-                                            ),
-                                            child: Opacity(
-                                              opacity:
-                                                  1 - _uptextController.value,
-                                              child: child,
-                                            ),
-                                          );
-                                      }
-                                    },
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        randQuizs.isNotEmpty
-                                            ? randQuizs[index]["choice"]
-                                            : 'لا يوجد بيانات بعد',
-                                        style: TextStyle(
-                                          fontSize: font_Size,
-                                          shadows: [
-                                            Shadow(
-                                              color: Colors.black,
-                                              offset: Offset(1, 1),
-                                              blurRadius: 30,
-                                            ),
-                                          ],
-                                        ),
-                                        textAlign: TextAlign.center,
-                                        textDirection: TextDirection.rtl,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                // spacing: 50,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      spic_share
-                                          ? _launchUrl(
-                                              "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
-                                            )
-                                          : SharePlus.instance.share(
-                                              ShareParams(
-                                                text:
-                                                    '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
-                                              ),
-                                            );
-                                    },
-                                    icon: Icon(
-                                      Icons.share,
-                                      size: 35,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Clipboard.setData(
-                                        ClipboardData(
-                                          text:
-                                              '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(
-                                      Icons.copy,
-                                      size: 35,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        if (index == randQuizs.length - 1) {
-                                          index = 0;
-                                        } else {
-                                          index++;
-                                        }
-                                      });
-                                    },
-                                    icon: Icon(
-                                      Icons.swipe_left_rounded,
-                                      size: 35,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              );
-    }
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // spacing: 50,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          final controller = _uptextController;
+                          controller.reset();
+                          setState(() {
+                              _animTypeChoice = TurkAnimType.pupup;
+                          });
+
+                          await controller.animateTo(
+                            1,
+                            duration: const Duration(milliseconds: 220),
+                            curve: Curves.easeInCubic,
+                          );
+                          await controller.animateBack(
+                            0,
+                            duration: const Duration(milliseconds: 180),
+                            curve: Curves.easeOutCubic,
+                          );
+                          spic_share
+                              ? _launchUrl(
+                                  "https://wa.me/$spic_share_text?text=${Uri.encodeComponent("*السؤال* \n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}")}",
+                                )
+                              : SharePlus.instance.share(
+                                  ShareParams(
+                                    text:
+                                        '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
+                                  ),
+                                );
+                                _uptextController.value = 0;
+                        },
+                        icon: Icon(Icons.share, size: 35, color: Colors.white),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  '''*السؤال:*\n* ${randQuizs[index]["choice"]}\n\n*ليه السؤال ده؟:*\n* ${randQuizs[index]["dare"]}''',
+                            ),
+                          );
+                        },
+                        icon: Icon(Icons.copy, size: 35, color: Colors.white),
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          final controller = _uptextController;
+                          controller.reset();
+                          setState(() {
+                              _animTypeChoice = TurkAnimType.toLeft;
+                          });
+
+                          await controller.animateTo(
+                            1,
+                            duration: const Duration(milliseconds: 220),
+                            curve: Curves.easeInCubic,
+                          );
+
+                          setState(() {
+                              index = index == randQuizs.length - 1
+                                  ? 0
+                                  : index + 1;
+                              _animTypeChoice = TurkAnimType.fromRight;
+                          });
+                          controller.value = 0;
+
+                          await Future.delayed(Duration.zero);
+
+                          controller.animateTo(
+                            1.0,
+                            duration: const Duration(milliseconds: 180),
+                            curve: Curves.easeOutCubic,
+                          );
+                        },
+                        icon: Icon(
+                          Icons.swipe_left_rounded,
+                          size: 35,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   GestureDetector towCardMethod(
@@ -875,9 +962,11 @@ class _CardsFactoryState extends State<CardsFactory>
                     child: SizedBox(
                       width: double.infinity,
                       child: Text(
-                        type == CardType.dare
-                            ? randQuizs[dareIndex]["dare"]
-                            : randQuizs[index]["choice"],
+                        randQuizs.isNotEmpty
+                            ? type == CardType.dare
+                                  ? randQuizs[dareIndex]["dare"]
+                                  : randQuizs[index]["choice"]
+                            : 'لا يوجد بيانات بعد',
                         textAlign: TextAlign.center,
                         textDirection: TextDirection.rtl,
                         style: TextStyle(

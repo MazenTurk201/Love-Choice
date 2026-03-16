@@ -1,6 +1,6 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' as intl;
 
 class TurkStyle {
   final Color mainColor = Color.fromARGB(255, 102, 16, 242);
@@ -64,6 +64,13 @@ class TextUtils {
       return TextDirection.rtl;
     }
     return TextDirection.ltr;
+  }
+
+  // ignore: strict_top_level_inference
+  static String formatDate(timestamp) {
+    DateTime date = timestamp.toDate();
+
+    return intl.DateFormat('M/d/yy, h:mm a').format(date);
   }
 }
 

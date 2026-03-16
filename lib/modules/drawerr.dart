@@ -114,11 +114,6 @@ class _TurkDrawerState extends State<TurkDrawer> {
                     url: 'profile',
                   ),
                   menuDrawerButton(
-                    title: 'testrive',
-                    icon: Icons.person,
-                    url: 'testrive',
-                  ),
-                  menuDrawerButton(
                     title: 'موقعنا',
                     icon: Icons.contacts,
                     url: 'https://mazenturk201.github.io/Love-Choice',
@@ -245,8 +240,6 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           }
         } else if (widget.url == 'profile') {
           Navigator.pushReplacementNamed(context, "/profile");
-        } else if (widget.url == 'testrive') {
-          Navigator.pushReplacementNamed(context, "/onboarding");
         } else if (widget.url == 'share') {
           SharePlus.instance.share(
             ShareParams(

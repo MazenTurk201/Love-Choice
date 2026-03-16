@@ -1,12 +1,7 @@
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../screens/home.dart';
 
 class TurkFuncs {
   Future<void> requestNotificationPermission() async {
@@ -14,14 +9,6 @@ class TurkFuncs {
     if (!status.isGranted) {
       await Permission.notification.request();
     }
-  }
-
-  Future<bool> requestStoragePermission() async {
-    var status = await Permission.storage.status;
-    if (!status.isGranted) {
-      status = await Permission.storage.request();
-    }
-    return status.isGranted;
   }
 
   Future<bool> openAllFilesAccessSettings() async {
@@ -52,27 +39,6 @@ class TurkFuncs {
       textColor: Colors.white,
       fontSize: 16.0,
       fontAsset: "fonts/arabic_font.otf",
-    );
-  }
-
-  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
-    showNotification(message);
-  }
-
-  Future<void> showNotification(RemoteMessage message) async {
-    await flutterLocalNotificationsPlugin.show(
-      id: message.hashCode,
-      title: message.notification?.title ?? 'عنوان',
-      body: message.notification?.body ?? 'محتوى',
-      notificationDetails: NotificationDetails(
-        android: AndroidNotificationDetails(
-          'channel_id',
-          'channel_name',
-          channelDescription: 'channel_description',
-          icon: 'ic_notification', // ← مهم جدا
-        ),
-      ),
     );
   }
 }

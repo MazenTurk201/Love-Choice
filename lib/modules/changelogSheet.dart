@@ -63,15 +63,16 @@ class ChangeLogSheet extends StatelessWidget {
                 ),
               ),
               Text(
-                'الله عز وجل'
-                '\nأمي'
-                '\nاكبر داعم: مريم'
-                '\nمختبر الأعطال: ياسين'
-                '\nفكرة التواصل: ادهم'
-                '\n قاعدة البيانات: ياسين'
-                '\nالديزاينر والألوان: شهد'
-                '\nاختبار الموقع: باسل',
-                style: TextStyle(fontSize: 18, color: Colors.white70),
+                '- الله عز وجل'
+                '\n-- ثم --'
+                '\n- أمي'
+                '\n- اكبر داعم: مريم'
+                '\n- مختبر الأعطال: ياسين'
+                '\n- فكرة التواصل: ادهم'
+                '\n- الديزاينر والألوان: شهد'
+                '\n-  قاعدة البيانات: ياسين'
+                '\n- اختبار الموقع: باسل',
+                style: TextStyle(fontSize: 18, color: Colors.white),
                 textDirection: TextDirection.rtl,
               ),
 

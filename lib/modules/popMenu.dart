@@ -80,6 +80,19 @@ class TurkPopMenu extends StatelessWidget {
                       "تعال الروم بتاعنا\nhttps://mazenturk201.github.io/Love-Choice/invite/?roomid=$id",
                 ),
               );
+            } else if (value == 'download') {
+              showDialog(context: context, builder: (ctx) => AlertDialog(
+                title: Text("ملحوظة", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
+                content: Text("هتكون متاحة قريباً ان شاء الله"),
+                actions: [
+                  TextButton(
+                    onPressed: () async { 
+                      await RoomService().downloadChat(id!, name!);
+                      Navigator.of(ctx).pop();},
+                    child: Text("تنزيل"),
+                  ),
+                ],
+              ));
             } else if (value == 'leave') {
               RoomService().leaveGroup(id!);
               RoomService().getMyGroups();
@@ -100,40 +113,44 @@ class TurkPopMenu extends StatelessWidget {
             PopupMenuItem(
               value: 'settings',
               child: Row(
+                textDirection: TextDirection.rtl,
                 children: [
                   Icon(Icons.settings_rounded, color: Colors.white),
                   SizedBox(width: 8),
-                  Text("Settings", style: TextStyle(color: Colors.white)),
+                  Text("الإعدادات", style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
             PopupMenuItem(
               value: 'share',
               child: Row(
+                textDirection: TextDirection.rtl,
                 children: [
                   Icon(Icons.share_rounded, color: Colors.white),
                   SizedBox(width: 8),
-                  Text("Share", style: TextStyle(color: Colors.white)),
+                  Text("مشاركة", style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
             PopupMenuItem(
-              value: 'website',
+              value: 'download',
               child: Row(
+                textDirection: TextDirection.rtl,
                 children: [
-                  Icon(Icons.insert_link_rounded, color: Colors.white),
+                  Icon(Icons.download_rounded, color: Colors.white),
                   SizedBox(width: 8),
-                  Text("Website", style: TextStyle(color: Colors.white)),
+                  Text("تنزيل الشات", style: TextStyle(color: Colors.white)),
                 ],
               ),
             ),
             PopupMenuItem(
               value: 'leave',
               child: Row(
+                textDirection: TextDirection.rtl,
                 children: [
                   Icon(Icons.logout_rounded, color: Colors.red),
                   SizedBox(width: 8),
-                  Text("Leave", style: TextStyle(color: Colors.red)),
+                  Text("خروج", style: TextStyle(color: Colors.red),),
                 ],
               ),
             ),

@@ -138,7 +138,7 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
               tag: "name_${widget.roomId}",
               child: Material(
                 color: Colors.transparent,
-                child: Text(widget.roomName),
+                child: Text(widget.roomName, textDirection: TextUtils.getTextDirection(widget.roomName)),
               ),
             ),
             actions: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../style/styles.dart';
+
 class Onlinechatinfo extends StatelessWidget {
   final String roomId;
   final String roomName;
@@ -32,7 +34,16 @@ class Onlinechatinfo extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Hero(tag: "name_$roomId", child: Text(roomName)),
+          title: Hero(
+            tag: "name_$roomId",
+            child: Material(
+              color: Colors.transparent,
+              child: Text(
+                roomName,
+                textDirection: TextUtils.getTextDirection(roomName),
+              ),
+            ),
+          ),
         ),
         body: Center(child: Text(roomBio)),
       ),

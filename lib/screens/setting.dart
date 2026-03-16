@@ -323,13 +323,11 @@ class _settingState extends State<setting> {
                     ),
                     InkWell(
                       onLongPress: () async {
-                        await TurkFuncs().requestStoragePermission();
                         TurkFuncs().openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(false);
                         TurkFuncs().turkToast("تم الاسترجاع");
                       },
                       onDoubleTap: () async {
-                        await TurkFuncs().requestStoragePermission();
                         TurkFuncs().openAllFilesAccessSettings();
                         BackUp_Restore_LoveChoice(true);
                         TurkFuncs().turkToast("تم النسخ في ملفات الجهاز");
