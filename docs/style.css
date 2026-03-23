@@ -1,6 +1,6 @@
 /* Colors Var */
 :root {
-    --hover: color-mix(in srgb, var(--main-color), white 20%);
+    --hover: color-mix(in srgb, var(--main-color), #fff 20%);
     --main-color: #6610f2;
     --bg-main: #000;
     --text-color: #fff;
@@ -8,7 +8,12 @@
 
 /* Reduce */
 @media (prefers-reduced-motion: reduce) {
-  .anim-item { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    .anim-item {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
 }
 
 /* Animatons */
@@ -145,7 +150,9 @@
     text-align: center;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
@@ -155,7 +162,7 @@ html {
 
 body {
     /* background-color: var(--bg-main); */
-    background-image: linear-gradient(180deg, indigo, black);
+    background-image: linear-gradient(180deg, indigo, #000);
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -170,6 +177,9 @@ body {
     /* justify-content: center; */
     justify-content: space-between;
     align-items: center;
+    /* scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    scroll-behavior: smooth; */
 }
 
 main {
@@ -203,8 +213,32 @@ nav {
     width: 100%;
     margin: 0;
     filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.5));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* مهم للـ Safari */
     /* position: relative; */
-    overflow: hidden;
+    /* overflow: hidden; */
+    transition: background 0.3s ease, border-bottom 0.3s ease;
+}
+
+.bg-body-tertiary {
+    background-color: var(--main-color);
+    /* background: transparent !important; */
+}
+
+nav.scrolled {
+    background: rgba(255, 255, 255, 0.08);
+    /* زود الشفافية سنة */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    /* شكل احترافي */
+
+    & .nav-link {
+        color: rgb(200, 200, 200);
+    }
+
+    & .nav-link.active {
+        color: var(--text-color);
+    }
 }
 
 .navtitle {
@@ -214,14 +248,9 @@ nav {
     animation: fromUp 300ms ease-out forwards;
 }
 
-.bg-body-tertiary {
-    background-color: var(--main-color) !important;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-}
-
 .navbar-toggler {
     border: none;
+
     &:focus,
     &:active {
         outline: none !important;
@@ -266,7 +295,7 @@ nav {
     padding: 10px 20px;
     text-decoration: none;
     border-radius: 20px;
-    border: white 2px solid;
+    border: #fff 2px solid;
     box-shadow: var(--main-color) 0px 0px 1px, var(--main-color) 0px 0px 5px, var(--main-color) 0px 0px 10px;
     animation: fromscalehove 0.25s ease-out forwards;
 
@@ -279,20 +308,34 @@ nav {
     }
 }
 
+section {
+    scroll-margin-top: 105px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* min-height: 90dvh; */
+    width: 100%;
+    max-width: 700px;
+    min-height: 100dvh;
+    height: 100dvh;
+    scroll-snap-align: start;
+    /* max-height: 600px; */
+}
+
 fieldset {
     border: 1px solid #ccc;
     border-radius: 25px;
     background-color: var(--main-color);
     width: 75%;
-    min-width: 75%;
-    max-width: 700px;
-    max-height: 600px;
-    margin: 20px 0px;
-    padding: 0px 25px;
+    min-height: 75%;
+    /* min-width: 75%; */
+    /* margin: 20px 0px; */
+    padding: 25px 25px 0px 25px;
     display: flex;
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    position: relative;
     animation: fadeIn 0.5s ease-in forwards;
 }
 
@@ -310,8 +353,8 @@ legend {
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
     background-image: linear-gradient(to right, var(--main-color), var(--hover));
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
     z-index: 1;
+    position: absolute;
     top: -40px;
     animation: fadeIn 1s ease-out forwards;
 }
@@ -432,13 +475,6 @@ h3 {
     animation: fromRight 300ms ease-out forwards;
 }
 
-section {
-    scroll-margin-top: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .about_table {
     border-radius: 25px;
 
@@ -485,14 +521,76 @@ section {
     }
 }
 
-p.odd, .linktile:nth-of-type(odd), .about_main ul li:nth-of-type(odd), .about_table a li.odd {
-  animation: fromLeft 500ms ease-out forwards;
+p.odd,
+.linktile:nth-of-type(odd),
+.about_main ul li:nth-of-type(odd),
+.about_table a li.odd {
+    animation: fromLeft 500ms ease-out forwards;
 }
 
-p.even, .linktile:nth-of-type(even), .about_main ul li:nth-of-type(even), .about_table a li.even {
-  animation: fromRight 500ms ease-out forwards;
+p.even,
+.linktile:nth-of-type(even),
+.about_main ul li:nth-of-type(even),
+.about_table a li.even {
+    animation: fromRight 500ms ease-out forwards;
 }
 
 .text {
     text-align: center;
+}
+
+/* CSS عام */
+.releases-table,
+.releases-table th,
+.releases-table td {
+    border-collapse: collapse;
+    padding: 10px;
+    text-align: center;
+    color: #fff;
+}
+
+.releases-table td {
+    direction: ltr;
+    font-family: 'TurkFontE', sans-serif;
+}
+
+.releases-cards {
+    display: none;
+    /* افتراضي مخفي للكمبيوتر */
+    flex-direction: column;
+    gap: 15px;
+}
+
+.release-card {
+    padding: 15px;
+    border-radius: 15px;
+    color: #fff;
+
+    & div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.release-card div {
+    margin: 5px 0;
+}
+
+.release-card span {
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+/* Media query للموبايل */
+@media (max-width: 768px) {
+    .releases-table {
+        display: none;
+        /* إخفاء الجدول على الموبايل */
+    }
+
+    .releases-cards {
+        display: flex;
+        /* عرض البطاقات على الموبايل */
+    }
 }

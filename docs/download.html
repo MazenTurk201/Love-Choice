@@ -32,105 +32,131 @@
       });
   </script>
   <main>
-    <fieldset>
-      <legend>عدد تحميلات اللعبة</legend>
-      <p id="status" class="muted text">جارٍ جلب البيانات...</p>
-      <p id="results" class="text"></p>
-      <br>
-    </fieldset>
-    <fieldset>
-      <legend>حجم اللعبة</legend>
-      <div class="text" style="font-family: 'TurkFont'; text-align: center;">
-        <p>حجم اللعبة هو 27 ميجابايت.</p>
-      </div>
-    </fieldset>
-    <fieldset>
-      <legend>الأمان</legend>
-      <div class="text" style="font-family: 'TurkFont'; text-align: center;">
-        <p>مستوى الأمان في اللعبة تم فحصه <a style="text-decoration: underline; color: azure;" href="https://www.virustotal.com/gui/file/914a0929304f8aeccd4f6ea27d6346e1fa21b1146f55feefd063f242b85ed7f5/detection">هنا</a>.</p>
-      </div>
-    </fieldset>
-    <fieldset style="display: flex; justify-content: start; max-height: none;">
-      <legend>تحميل اللعبة</legend>
-      <h5 style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم
-        بالنزول
-        الى جدول التنزيلات واختار النسخة المتوفرة على جهازك. <a style="text-decoration: underline; color: azure;"
-          href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64">لمعرفة نوع المعالج اضغط هنا.</a>
-      </h5>
-      الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
-      <br>
-      <h4>حمل اللعبة وشاركها</h4>
-      <br> 
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-arm64-v8a.apk"
-        class="download_btn" target="_blank">تحميل للأجهزة الحديثة</a>
-      <h6>للمعالجات القوية arm64 v8a</h6>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-armeabi-v7a.apk"
-        class="download_btn" target="_blank">تحميل للاجهزة الضعيفة</a>
-      <h6>للمعالجات الضعيفة armeabi v7a</h6>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-x86_64.apk"
-        class="download_btn" target="_blank">تحميل للمحاكيات</a>
-      <h6>للمحاكيات x86 وx64</h6>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice.apk"
-        class="download_btn" target="_blank">تحميل لجميع الفئات</a>
-      <h6>التحميل لكل المذكور</h6>
-      <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn" target="_blank">صفحة
-        التحميل لجميع الاصدارات</a>
-      <h6>صفحة الاصدارات القديمة</h6>
-      <a href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64" class="download_btn"
-        target="_blank">معرفة المعالج</a>
-      <h6>لعدم معرفة نوع المعالج</h6>
-      <br>
-    </fieldset>
-    <fieldset>
-      <legend>صور من اللعبة</legend>
-      <!-- Slideshow container -->
-      <div class="slideshow-container">
-
-        <!-- Full-width images with number and caption text -->
-        <div class="mySlides fade">
-          <div class="numbertext">1 / 6</div>
-          <img class="screenshotimg" src="assets/images/s1.jpg">
-        </div>
-
-        <div class="mySlides fade">
-          <div class="numbertext">2 / 6</div>
-          <img class="screenshotimg" src="assets/images/s4.jpg">
-        </div>
-
-        <div class="mySlides fade">
-          <div class="numbertext">3 / 6</div>
-          <img class="screenshotimg" src="assets/images/s5.jpg">
-        </div>
-        <div class="mySlides fade">
-          <div class="numbertext">4 / 6</div>
-          <img class="screenshotimg" src="assets/images/s2.jpg">
-        </div>
-        <div class="mySlides fade">
-          <div class="numbertext">5 / 6</div>
-          <img class="screenshotimg" src="assets/images/s6.jpg">
-        </div>
-        <div class="mySlides fade">
-          <div class="numbertext">6 / 6</div>
-          <img class="screenshotimg" src="assets/images/s3.jpg">
-        </div>
+    <section style="padding-top: 20px;">
+      <fieldset>
+        <legend>عدد تحميلات اللعبة</legend>
+        <p id="status" class="muted text">جارٍ جلب البيانات...</p>
+        <p id="results" class="text"></p>
         <br>
-        <script>
-          let slideIndex = 0;
-          showSlides();
+        <div class="releases-container">
+          <table class="releases-table">
+            <thead>
+              <tr>
+                <th>النسخة</th>
+                <th>التاريخ</th>
+                <th>إجمالي التحميلات</th>
+              </tr>
+            </thead>
+            <tbody id="releases-table-body"></tbody>
+          </table>
+          <div class="releases-cards" id="releases-cards"></div>
+        </div>
+      </fieldset>
+    </section>
+    <section>
+      <fieldset>
+        <legend>حجم اللعبة</legend>
+        <div class="text" style="font-family: 'TurkFont'; text-align: center;">
+          <p>حجم اللعبة هو 27 ميجابايت.</p>
+        </div>
+      </fieldset>
+    </section>
+    <section>
+      <fieldset>
+        <legend>الأمان</legend>
+        <div class="text" style="font-family: 'TurkFont'; text-align: center;">
+          <p>مستوى الأمان في اللعبة تم فحصه <a style="text-decoration: underline; color: azure;"
+              href="https://www.virustotal.com/gui/file/914a0929304f8aeccd4f6ea27d6346e1fa21b1146f55feefd063f242b85ed7f5/detection">هنا</a>.
+          </p>
+        </div>
+      </fieldset>
+    </section>
+    <section style="height: max-content;">
+      <fieldset style="display: flex; justify-content: start;">
+        <legend>تحميل اللعبة</legend>
+        <h5 style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم
+          بالنزول
+          الى جدول التنزيلات واختار النسخة المتوفرة على جهازك. <a style="text-decoration: underline; color: azure;"
+            href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64">لمعرفة نوع المعالج اضغط هنا.</a>
+        </h5>
+        الى جدول التنزيلات واختار النسخة المتوفرة على جهازك.</p>
+        <br>
+        <h4>حمل اللعبة وشاركها</h4>
+        <br>
+        <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-arm64-v8a.apk"
+          class="download_btn" target="_blank">تحميل للأجهزة الحديثة</a>
+        <h6>للمعالجات القوية arm64 v8a</h6>
+        <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-armeabi-v7a.apk"
+          class="download_btn" target="_blank">تحميل للاجهزة الضعيفة</a>
+        <h6>للمعالجات الضعيفة armeabi v7a</h6>
+        <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice-x86_64.apk"
+          class="download_btn" target="_blank">تحميل للمحاكيات</a>
+        <h6>للمحاكيات x86 وx64</h6>
+        <a href="https://github.com/MazenTurk201/Love-Choice/releases/download/love_choice/love-choice.apk"
+          class="download_btn" target="_blank">تحميل لجميع الفئات</a>
+        <h6>التحميل لكل المذكور</h6>
+        <a href="https://github.com/MazenTurk201/Love-Choice/releases/latest" class="download_btn" target="_blank">صفحة
+          التحميل لجميع الاصدارات</a>
+        <h6>صفحة الاصدارات القديمة</h6>
+        <a href="https://www.3arrafni.com/know-your-phone-processorx86-x64-arm-arm64" class="download_btn"
+          target="_blank">معرفة المعالج</a>
+        <h6>لعدم معرفة نوع المعالج</h6>
+        <br>
+      </fieldset>
+    </section>
+    <br><br><br><br><br>
+    <section>
+      <fieldset>
+        <legend>صور من اللعبة</legend>
+        <!-- Slideshow container -->
+        <div class="slideshow-container">
 
-          function showSlides() {
-            let i;
-            let slides = document.getElementsByClassName("mySlides");
-            for (i = 0; i < slides.length; i++) {
-              slides[i].style.display = "none";
+          <!-- Full-width images with number and caption text -->
+          <div class="mySlides fade">
+            <div class="numbertext">1 / 6</div>
+            <img class="screenshotimg" src="assets/images/s1.jpg">
+          </div>
+
+          <div class="mySlides fade">
+            <div class="numbertext">2 / 6</div>
+            <img class="screenshotimg" src="assets/images/s4.jpg">
+          </div>
+
+          <div class="mySlides fade">
+            <div class="numbertext">3 / 6</div>
+            <img class="screenshotimg" src="assets/images/s5.jpg">
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">4 / 6</div>
+            <img class="screenshotimg" src="assets/images/s2.jpg">
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">5 / 6</div>
+            <img class="screenshotimg" src="assets/images/s6.jpg">
+          </div>
+          <div class="mySlides fade">
+            <div class="numbertext">6 / 6</div>
+            <img class="screenshotimg" src="assets/images/s3.jpg">
+          </div>
+          <br>
+          <script>
+            let slideIndex = 0;
+            showSlides();
+
+            function showSlides() {
+              let i;
+              let slides = document.getElementsByClassName("mySlides");
+              for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+              }
+              slideIndex++;
+              if (slideIndex > slides.length) { slideIndex = 1 }
+              slides[slideIndex - 1].style.display = "block";
+              setTimeout(showSlides, 2000); // Change image every 2 seconds
             }
-            slideIndex++;
-            if (slideIndex > slides.length) { slideIndex = 1 }
-            slides[slideIndex - 1].style.display = "block";
-            setTimeout(showSlides, 2000); // Change image every 2 seconds
-          }
-        </script>
-    </fieldset>
+          </script>
+      </fieldset>
+    </section>
 
     <button id="backToTop">⬆</button>
     <script>
@@ -190,21 +216,30 @@
 
       status.textContent = `تم العثور على ${releases.length} إصدار.`;
 
-      let html = `<table><thead><tr><th style="text-align: center;">النسخة</th><th style="text-align: center;">التاريخ</th><th style="text-align: center;">إجمالي التحميلات</th></tr></thead><tbody>`;
+      // JS
       releases.forEach(rel => {
         const total = (rel.assets || []).reduce((sum, a) => sum + (a.download_count || 0), 0);
-        // <br/>
-        // <small class="muted text" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">${rel.tag_name}</small><br/>
-        // ${(rel.assets || []).map(a => `${a.name}: ${a.download_count}`).join("<br/>") || "<span class='muted text'>لا توجد ملفات</span>"}
-        html += `<tr>
-          <td dir="ltr" style="padding: 10px;">
-            <strong class="text">${rel.name || rel.tag_name}</strong>
-          </td>
-          <td class="text" dir="ltr" style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; padding: 10px;">${new Date(rel.published_at).toLocaleString()}</td>
-          <td class="text total" style="padding: 10px;">${total}</td>
-        </tr>`;
+
+        // للكمبيوتر
+        const tableRow = `
+    <tr>
+      <td>${rel.name || rel.tag_name}</td>
+      <td>${new Date(rel.published_at).toLocaleString()}</td>
+      <td>${total}</td>
+    </tr>
+  `;
+        document.getElementById("releases-table-body").innerHTML += tableRow;
+
+        // للموبايل
+        const card = `
+    <div class="release-card">
+      <div><span>النسخة:</span> <span dir="ltr" style="font-family: 'TurkFontEn'; font-size: large;">${rel.name || rel.tag_name}</span></div>
+      <div><span>التاريخ:</span> <span dir="ltr" style="font-family: 'TurkFontEn'; font-size: large;">${new Date(rel.published_at).toLocaleDateString()}</span></div>
+      <div><span>إجمالي التحميلات:</span> <span dir="ltr" style="font-family: 'TurkFontEn'; font-size: large;">${total}</span></div>
+    </div>
+  `;
+        document.getElementById("releases-cards").innerHTML += card;
       });
-      html += "</tbody></table>";
 
       container.innerHTML = html;
     }

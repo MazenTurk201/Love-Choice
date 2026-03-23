@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
     <meta name="theme-color" content="#6610f2" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
-     crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script>
     <title>About - Love Choice</title>
 </head>
 
@@ -30,46 +30,57 @@
                     link.classList.add("active");
                 }
             });
+
+        window.addEventListener("scroll", function () {
+            const nav = document.querySelector(".navbar");
+
+            if (window.scrollY > 50) {
+                nav.classList.add("scrolled");
+            } else {
+                nav.classList.remove("scrolled");
+            }
+        });
     </script>
 
-    <head></head>
+
     <main>
-        <fieldset>
-            <legend>أقسام اللعبة</legend>
-            <ul class="about_table" style="align-self: start; margin-right: 20px;">
-                <a href="#main">
-                    <li>نبذة عن اللعبة</li>
-                </a>
-                <a href="#features">
-                    <li>المميزات</li>
-                </a>
-                <a href="#why">
-                    <li>ليه تحمّلها؟</li>
-                </a>
-                <a href="#ahl">
-                    <li>أهل</li>
-                </a>
-                <a href="#metgawzen">
-                    <li>متجوزين</li>
-                </a>
-                <a href="#ma5toben">
-                    <li>مخطوبين</li>
-                </a>
-                <a href="#t3arof">
-                    <li>تعارف</li>
-                </a>
-                <a href="#couples">
-                    <li>كوبلز</li>
-                </a>
-                <a href="#bestat">
-                    <li>بيستات</li>
-                </a>
-                <a href="#shella">
-                    <li>شلّة</li>
-                </a>
-            </ul>
-        </fieldset>
-        <div style="height: 50vh;"></div>
+        <section style="padding-top: 20px;">
+            <fieldset>
+                <legend>أقسام اللعبة</legend>
+                <ul class="about_table" style="align-self: start; margin-right: 20px;">
+                    <a href="#main">
+                        <li>نبذة عن اللعبة</li>
+                    </a>
+                    <a href="#features">
+                        <li>المميزات</li>
+                    </a>
+                    <a href="#why">
+                        <li>ليه تحمّلها؟</li>
+                    </a>
+                    <a href="#ahl">
+                        <li>أهل</li>
+                    </a>
+                    <a href="#metgawzen">
+                        <li>متجوزين</li>
+                    </a>
+                    <a href="#ma5toben">
+                        <li>مخطوبين</li>
+                    </a>
+                    <a href="#t3arof">
+                        <li>تعارف</li>
+                    </a>
+                    <a href="#couples">
+                        <li>كوبلز</li>
+                    </a>
+                    <a href="#bestat">
+                        <li>بيستات</li>
+                    </a>
+                    <a href="#shella">
+                        <li>شلّة</li>
+                    </a>
+                </ul>
+            </fieldset>
+        </section>
         <section id="main">
             <fieldset class="about_main">
                 <legend>نبذة عن اللعبة</legend>

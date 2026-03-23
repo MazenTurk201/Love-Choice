@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/images/favicon.ico">
+    <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
+    <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#6610f2" />
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
+        crossorigin="anonymous"></script>
+    <title>How To Play - Love Choice</title>
+</head>
+
+<body>
+    <nav id="navbar"></nav>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/nav.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+
+                // هنا نحدد العنصر اللي هياخد الـ class
+                let currentPage = "howtoplay"; // غيرها حسب الصفحة
+                let link = document.querySelector(`[data-page="${currentPage}"]`);
+                if (link) {
+                    link.classList.add("active");
+                }
+            });
+    </script>
+    <main>
+        <h1 class="text-center" style="font-family: 'TurkFont';">كيف تلعب لعبة Love Choice؟</h1>
+        <p class="text" style="font-family: 'TurkFont'; text-align: center;">لعبة Love Choice هي لعبة تفاعلية تعتمد على
+            اتخاذ القرارات. في كل مرحلة، ستواجه خيارات مختلفة تؤثر على مسار القصة. قم بقراءة النصوص بعناية واختيار
+            الخيارات التي تعتقد أنها الأفضل لك. استمتع باللعبة واستكشف جميع الاحتمالات!</p>
+    </main>
+</body>
+
+</html>
