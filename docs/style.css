@@ -221,6 +221,42 @@ nav {
     transition: background 0.3s ease, border-bottom 0.3s ease;
 }
 
+.banner {
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.banner-container {
+    width: 60%;
+    height: 400px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    margin-top: 75px;
+    overflow: hidden;
+}
+
+.banner-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* هنا بقى حركة الـ Gradient */
+.banner-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.8));
+    /* زودت الـ opacity لـ 0.8 عشان تبان قدامك */
+    pointer-events: none;
+    /* عشان لو في لينك تحتها تعرف تدوس عليه */
+}
+
 .bg-body-tertiary {
     background-color: var(--main-color);
     /* background: transparent !important; */
@@ -592,5 +628,11 @@ p.even,
     .releases-cards {
         display: flex;
         /* عرض البطاقات على الموبايل */
+    }
+
+    .banner-container{
+        width: 95%;
+        height: 200px;
+        margin-top: 100px;
     }
 }
