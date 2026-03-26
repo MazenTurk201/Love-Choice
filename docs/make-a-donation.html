@@ -7,34 +7,20 @@
     <link rel="icon" href="assets/images/favicon.ico">
     <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
     <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbarscripts.js"></script>
     <link rel="stylesheet" href="style.css">
     <meta name="theme-color" content="#6610f2" />
     <title>Donation - Love Choice</title>
 </head>
 
 <body>
-    <nav id="navbar"></nav>
-    <script>
-        // تحميل النافبار من ملف خارجي
-        fetch('assets/modules/nav.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('navbar').innerHTML = data;
-
-                // هنا نحدد العنصر اللي هياخد الـ class
-                let currentPage = "make-a-donation"; // غيرها حسب الصفحة
-                let link = document.querySelector(`[data-page="${currentPage}"]`);
-                if (link) {
-                    link.classList.add("active");
-                }
-            });
-    </script>
+    <nav id="make-a-donation"></nav>
 
     <head></head>
     <main>
         <fieldset style="max-height: none;min-width: 300px;">
             <br>
-            <legend style="border-radius: 50%;object-fit: cover; object-position: center;"><img
+            <legend style="object-fit: cover; object-position: center; aspect-ratio: 1/1; clip-path: circle();"><img
                     src="assets/images/MT.png" width="150" alt="Love Choice"></legend>
             <h1 style="font-family: 'TurkFont';" class="fadeIn">يمكنك دعمي بواسطة:</h1>
             <br>

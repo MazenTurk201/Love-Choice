@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'globalFuncs.dart';
 
 class OnboardingPageBuilder extends StatelessWidget {
   final String lottie;
@@ -45,7 +45,7 @@ class OnboardingPageBuilder extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                _launchUrl(link);
+                TurkFuncs().OpenUrl(link);
               },
               child: Ink(
                 decoration: BoxDecoration(
@@ -70,11 +70,5 @@ class OnboardingPageBuilder extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-Future<void> _launchUrl(String url) async {
-  if (!await launchUrl(Uri.parse(url))) {
-    throw Exception('Could not launch URL: $url');
   }
 }

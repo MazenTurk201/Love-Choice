@@ -7,6 +7,7 @@
     <link rel="icon" href="assets/images/favicon.ico">
     <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
     <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbarscripts.js"></script>
     <link rel="stylesheet" href="style.css">
     <meta name="theme-color" content="#6610f2" />
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
@@ -15,33 +16,7 @@
 </head>
 
 <body>
-    <nav id="navbar"></nav>
-    <script>
-        // تحميل النافبار من ملف خارجي
-        fetch('assets/modules/nav.html')
-            .then(res => res.text())
-            .then(data => {
-                document.getElementById('navbar').innerHTML = data;
-
-                // هنا نحدد العنصر اللي هياخد الـ class
-                let currentPage = "about"; // غيرها حسب الصفحة
-                let link = document.querySelector(`[data-page="${currentPage}"]`);
-                if (link) {
-                    link.classList.add("active");
-                }
-            });
-
-        window.addEventListener("scroll", function () {
-            const nav = document.querySelector(".navbar");
-
-            if (window.scrollY > 50) {
-                nav.classList.add("scrolled");
-            } else {
-                nav.classList.remove("scrolled");
-            }
-        });
-    </script>
-
+    <nav id="about"></nav>
 
     <main>
         <section style="padding-top: 20px;">

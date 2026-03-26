@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:love_choice/data/room_service.dart';
 import 'package:share_plus/share_plus.dart';
+import '../data/room_service.dart';
 import '../style/styles.dart';
+import 'globalFuncs.dart';
 
 enum TurkPopMenuType { home, chat }
 
@@ -83,13 +84,19 @@ class TurkPopMenu extends StatelessWidget {
             } else if (value == 'download') {
               showDialog(context: context, builder: (ctx) => AlertDialog(
                 title: Text("ملحوظة", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                content: Text("هتكون متاحة قريباً ان شاء الله"),
+                content: Text("تنزيل الشات مهم نظرًا لتصفية البيانات كل فترة ويمكنك قرائة الشات بكل سهولة من برنامجنا.", textAlign: TextAlign.center, textDirection: TextDirection.rtl,),
                 actions: [
+                  TextButton(
+                    onPressed: () async {
+                      TurkFuncs().OpenUrl("https://mazenturk201.github.io/ResWA");
+                      Navigator.of(ctx).pop();},
+                    child: Text("البرنامج"),
+                  ),
                   TextButton(
                     onPressed: () async { 
                       await RoomService().downloadChat(id!, name!);
                       Navigator.of(ctx).pop();},
-                    child: Text("تنزيل"),
+                    child: Text("الشات"),
                   ),
                 ],
               ));

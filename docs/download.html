@@ -7,6 +7,7 @@
   <link rel="icon" href="assets/images/favicon.ico">
   <link rel="stylesheet" href="assets/bootstrap/dist/css/bootstrap.min.css">
   <script src="assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/navbarscripts.js"></script>
   <link rel="stylesheet" href="style.css">
   <meta name="theme-color" content="#6610f2" />
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5128290475212632"
@@ -15,24 +16,9 @@
 </head>
 
 <body>
-  <nav id="navbar"></nav>
-  <script>
-    // تحميل النافبار من ملف خارجي
-    fetch('assets/modules/nav.html')
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById('navbar').innerHTML = data;
-
-        // هنا نحدد العنصر اللي هياخد الـ class
-        let currentPage = "download"; // غيرها حسب الصفحة
-        let link = document.querySelector(`[data-page="${currentPage}"]`);
-        if (link) {
-          link.classList.add("active");
-        }
-      });
-  </script>
+  <nav id="download"></nav>
   <main>
-    <section style="padding-top: 20px;">
+    <section style="padding-top: 20px; height: fit-content; min-height: 0; margin: 20px 0px;">
       <fieldset>
         <legend>عدد تحميلات اللعبة</legend>
         <p id="status" class="muted text">جارٍ جلب البيانات...</p>
@@ -53,7 +39,7 @@
         </div>
       </fieldset>
     </section>
-    <section>
+    <section style="height: fit-content; min-height: 0; margin: 20px 0px;">
       <fieldset>
         <legend>حجم اللعبة</legend>
         <div class="text" style="font-family: 'TurkFont'; text-align: center;">
@@ -61,7 +47,7 @@
         </div>
       </fieldset>
     </section>
-    <section>
+    <section style="height: fit-content; min-height: 0; margin: 20px 0px;">
       <fieldset>
         <legend>الأمان</legend>
         <div class="text" style="font-family: 'TurkFont'; text-align: center;">
@@ -71,7 +57,7 @@
         </div>
       </fieldset>
     </section>
-    <section style="height: max-content;">
+    <section style="height: max-content; margin: 20px 0px;">
       <fieldset style="display: flex; justify-content: start;">
         <legend>تحميل اللعبة</legend>
         <h5 style="font-family: 'TurkFont';">يمكنك تحميل اللعبة من خلال الضغط على زر التحميل أدناه. بعد التحميل، قم
@@ -104,8 +90,7 @@
         <br>
       </fieldset>
     </section>
-    <br><br><br><br><br>
-    <section>
+    <section style="height: fit-content; min-height: 0; margin: 20px 0px;">
       <fieldset>
         <legend>صور من اللعبة</legend>
         <!-- Slideshow container -->
@@ -190,8 +175,6 @@
   <script>
     async function fetchReleases() {
       const owner = "MazenTurk201";
-      // const repo = "Easy-Command";
-      // const repo = "Easy-Commnd";
       const repo = "Love-Choice";
       const url = `https://api.github.com/repos/${owner}/${repo}/releases?per_page=100`;
 
