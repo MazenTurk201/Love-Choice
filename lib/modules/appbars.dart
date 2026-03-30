@@ -409,6 +409,17 @@ class _TurkAppBarState extends State<TurkAppBar> {
                     Divider(),
                     ElevatedButton(
                       onPressed: () {
+                        _launchUrl('https://mazenturk201.github.io/Love-Choice/howtoplay.html');
+                      },
+                      child: Text(
+                        "كيفية اللعب",
+                        style: iconTextS,
+                        softWrap: true,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
                         _launchUrl('https://wa.me/+201092130013?text=Hi+Turk');
                       },
                       child: Text(

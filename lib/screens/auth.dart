@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:love_choice/modules/authGate.dart';
 import '../style/styles.dart';
 
 class AuthPage extends StatefulWidget {
@@ -49,6 +50,7 @@ class _AuthPageState extends State<AuthPage> {
 
       await FirebaseAuth.instance.signInWithCredential(credential);
       debugPrint("Done!");
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AuthGate()));
     } catch (e) {
       debugPrint("Error: $e");
     }

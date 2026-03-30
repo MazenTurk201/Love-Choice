@@ -218,6 +218,9 @@ class _OnlineChatPageState extends State<OnlineChatPage> {
                               Text(
                                 msg["text"] ?? "",
                                 style: const TextStyle(color: Colors.white),
+                                textDirection: TextUtils.getTextDirection(
+                                  msg["text"][0] ?? "",
+                                ),
                                 textAlign: msg["sender"] == userId
                                     ? TextAlign.right
                                     : msg["sender"] == TurkUserID

@@ -43,8 +43,8 @@ class _onBoardingState extends State<onBoarding> {
               ),
               OnboardingPageBuilder(
                 lottie: "assets/animation/MoneyTransfer.json",
-                title: "دعم المطور",
-                discribtion: "متنساش الدعم مش شرط فلوس.",
+                title: "دعم اللعبة",
+                discribtion: "متنساش الدعم مش شرط فلوس ممكن شير او حتى دعم معنوي.",
                 link:
                     "https://mazenturk201.github.io/Love-Choice/make-a-donation.html",
                 colors: [Colors.indigo, Colors.teal],
@@ -63,7 +63,11 @@ class _onBoardingState extends State<onBoarding> {
             ? Container(
                 width: double.infinity,
                 height: 80,
-                color: Colors.red,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                        colors: [Colors.teal, Colors.blueAccent],
+                      ),
+                ),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.zero, // عشان الجرادينت يملأ الزر كله

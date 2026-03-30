@@ -101,6 +101,7 @@ class ChangeLogSheet extends StatelessWidget {
               ChangeLogItem('سجل التغيرات والشكر', ChangeLogType.feature),
               ChangeLogItem('الصلاحيات', ChangeLogType.bugfix),
               ChangeLogItem('ملف المطور', ChangeLogType.imporvment),
+              ChangeLogItem('وأكثر', ChangeLogType.feature),
               // Add more changelog entries here
             ],
           ),

@@ -1,3 +1,4 @@
+double LoveChoiceVersion = 2.0;
 List<Map<String, dynamic>> UIData = [
   {
     "name": "أهل",

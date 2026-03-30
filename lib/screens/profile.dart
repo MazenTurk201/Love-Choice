@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:love_choice/data/globalData.dart';
 import 'package:love_choice/modules/appBarRouter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -218,7 +219,7 @@ class _profileState extends State<profile> with TickerProviderStateMixin {
                     Expanded(child: Container()),
                     Divider(endIndent: 30, indent: 30),
                     Text(
-                      "MazenTurk © 2025",
+                      "MazenTurk © ${DateTime.now().year} All rights reserved ${LoveChoiceVersion}v.",
                       style: TextStyle(fontSize: 15, fontFamily: "arial"),
                     ),
                     SizedBox(height: 10),

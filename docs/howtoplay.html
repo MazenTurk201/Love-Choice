@@ -18,11 +18,93 @@
 <body>
     <nav id="howtoplay"></nav>
     <main>
-        <h1 class="text-center" style="font-family: 'TurkFont';">كيف تلعب لعبة Love Choice؟</h1>
-        <p class="text" style="font-family: 'TurkFont'; text-align: center;">لعبة Love Choice هي لعبة تفاعلية تعتمد على
-            اتخاذ القرارات. في كل مرحلة، ستواجه خيارات مختلفة تؤثر على مسار القصة. قم بقراءة النصوص بعناية واختيار
-            الخيارات التي تعتقد أنها الأفضل لك. استمتع باللعبة واستكشف جميع الاحتمالات!</p>
+        <section style="padding-top: 20px;">
+            <fieldset>
+                <legend>شرح اللعبة</legend>
+                <ul class="about_table" style="align-self: start; margin-right: 20px;">
+                    <a href="#ideas">
+                        <li>افكار للعب</li>
+                    </a>
+                    <a href="#where">
+                        <li>وسائل اللعب</li>
+                    </a>
+                    <a href="#who">
+                        <li>لمن اللعبة</li>
+                    </a>
+                </ul>
+            </fieldset>
+        </section>
+        <section id="ideas">
+            <fieldset class="about_main">
+                <legend>افكار للعب</legend>
+                <p>من بعض الأمثلة للعب:</p>
+                <ul>
+                    <li>يمكنك استعمال سؤال وتحدي لكل شخص</li>
+                    <li>يمكنك استخدام الأسئلة كبداية لمحادثة عميقة</li>
+                    <li>يمكنك استخدام الاسئلة فقط</li>
+                    <li>يمكنك استخدام التحدي عند عدم الاجابة على السؤال</li>
+                    <li>يمكنك استعمال تحديات فقط</li>
+                    <li>يمكنك الاختيار بين السؤال والتحدي</li>
+                    <li>يمكنك اللعب مع نفسك</li>
+                </ul>
+            </fieldset>
+        </section>
+        <section id="where">
+            <fieldset class="about_main" style="width: 75%;">
+                <legend>وسائل اللعب</legend>
+                <p>يمكنك لعب اللعبة في اماكن كثيرة:</p>
+                <ul>
+                    <li>من تطبيق الwhatsapp</li>
+                    <li>يمكنك نسخ البيانات ولصقها في اماكن كثيرة</li>
+                    <li>من اللعبة نفسها</li>
+                    <li>مشاركة لأي برنامج</li>
+                    <li>على هاتف واحد</li>
+                </ul>
+            </fieldset>
+        </section>
+        <section id="who">
+            <fieldset class="about_main" style="width: 75%;">
+                <legend>لمن اللعبة</legend>
+                <p>اللعبة مخصصة لكل الأعمار، وتنفع للأطفال والكبار {مع أقسام مخصصة للكبار}.</p>
+            </fieldset>
+        </section>
+        <button id="backToTop">⬆</button>
+        <script>
+            const backToTop = document.getElementById("backToTop");
+
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 200) { // يظهر بعد النزول 200px
+                    backToTop.classList.add("show");
+                } else {
+                    backToTop.classList.remove("show");
+                }
+            });
+
+            backToTop.addEventListener("click", () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            });
+        </script>
     </main>
+    <footer id="footer"></footer>
+    <script>
+        // تحميل النافبار من ملف خارجي
+        fetch('assets/modules/footer.html')
+            .then(res => res.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+    <script>
+        document.querySelectorAll("p").forEach((el, i) => {
+            el.classList.add(i % 2 === 0 ? "odd" : "even");
+        });
+        document.querySelectorAll("li").forEach((el, i) => {
+            el.classList.add(i % 2 === 0 ? "odd" : "even");
+        });
+    </script>
 </body>
 
 </html>

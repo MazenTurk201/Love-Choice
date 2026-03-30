@@ -813,7 +813,7 @@ class _settingState extends State<setting> {
                     // SizedBox(height: MediaQuery.of(context).size.height / 25),
                     Divider(endIndent: 30, indent: 30),
                     Text(
-                      "MazenTurk © 2025",
+                      "MazenTurk © ${DateTime.now().year} All rights reserved ${LoveChoiceVersion}v.",
                       style: TextStyle(fontSize: 15, fontFamily: "arial"),
                     ),
                     // SizedBox(height: 10),

@@ -124,7 +124,7 @@ class _TurkDrawerState extends State<TurkDrawer> {
                     url: 'https://wa.me/+201092130013?text=Hi+Turk',
                   ),
                   menuDrawerButton(
-                    title: 'ادينا نصايح',
+                    title: 'قيمنا',
                     icon: Icons.rate_review,
                     url: 'rate',
                   ),

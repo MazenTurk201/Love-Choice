@@ -33,7 +33,7 @@ migrate_working_dir/
 /android/app/profile
 /android/app/release
 /android/app/build
-
+firebase.json
 # Another Trash
 /ios/
 /windows/

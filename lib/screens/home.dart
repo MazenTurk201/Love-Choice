@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../data/db_helper.dart';
+import '../data/globalData.dart';
 import '../data/toastdata.dart';
 import '../modules/appBarRouter.dart';
 import '../modules/drawerr.dart';
@@ -28,11 +29,8 @@ void initializeNotifications() {
   flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
 }
 
-final double currentVersion = 1.0;
-
 Future<void> getVersionText(
   BuildContext context,
-  double current_version,
 ) async {
   try {
     final response = await http.get(
@@ -42,7 +40,7 @@ Future<void> getVersionText(
     );
     if (response.statusCode == 200) {
       double version = double.parse(response.body.trim());
-      if (version > current_version) {
+      if (version > LoveChoiceVersion) {
         // debugPrint('🔔 A new version is available: $version');
         showDialog(
           // ignore: use_build_context_synchronously
@@ -114,7 +112,7 @@ class _homeState extends State<home> {
   @override
   void initState() {
     super.initState();
-    getVersionText(context, currentVersion);
+    getVersionText(context);
     loadSettings();
     DBHelper.init();
   }
