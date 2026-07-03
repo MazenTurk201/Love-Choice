@@ -132,7 +132,7 @@ class _TurkDrawerState extends State<TurkDrawer> {
                     title: 'اعزمني على قهوة',
                     icon: Icons.coffee,
                     url:
-                        'https://mazenturk201.github.io/Love-Choice/make-a-donation.html',
+                        'https://mazenturk201.github.io/#/donate',
                   ),
                   menuDrawerButton(
                     title: 'سجل التغيرات والشكر',

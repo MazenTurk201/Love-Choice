@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:love_choice/modules/globalFuncs.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../style/styles.dart';
 
@@ -24,19 +26,27 @@ class RoomService {
 
     for (var doc in messages.docs) {
       final data = doc.data();
-
       content +=
           "${TextUtils.formatDate(data["created_at"])} - ${data["disname"]}: ${data["text"]}\n";
     }
 
-    TurkFuncs().openAllFilesAccessSettings();
-    final dbDir = Directory('/storage/emulated/0/Download/Love Choice/Chats');
-    if (!dbDir.existsSync()) dbDir.createSync(recursive: true);
-    final file = File("${dbDir.path}/$roomName.txt");
+    // 🔥 الحل السحري: هنحفظ الشات في الفولدر المؤقت للتطبيق (مش محتاج أي صلاحيات)
+    final tempDir = await getTemporaryDirectory();
+    final chatDir = Directory(join(tempDir.path, 'Love_Choice_Chats'));
 
+    if (!await chatDir.exists()) {
+      await chatDir.create(recursive: true);
+    }
+
+    // عمل ملف الـ txt
+    final file = File(join(chatDir.path, "$roomName.txt"));
     await file.writeAsString(content);
-    Share.shareXFiles([XFile(file.path)], text: "محادثة جروب $roomName");
-    TurkFuncs().turkToast("تم حفظ الشات في مجلد التنزيلات");
+
+    // فتح قائمة المشاركة الرسمية (المستخدم يقدر يحفظها في الموبايل أو يبعتها)
+    await Share.shareXFiles([XFile(file.path)], text: "محادثة جروب $roomName");
+
+    // التوست بتاعك زي ما هو
+    TurkFuncs().turkToast("تم تجهيز الشات ومشاركته بنجاح");
   }
 
   /// 4️⃣ إنشاء جروب جديد وتبقى Admin

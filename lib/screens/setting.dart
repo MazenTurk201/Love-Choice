@@ -5,10 +5,12 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:file_saver/file_saver.dart';
 import '../data/db_helper.dart';
 import '../data/adsManager.dart';
 import '../data/globalData.dart';
@@ -323,24 +325,24 @@ class _settingState extends State<setting> {
                     ),
                     InkWell(
                       onLongPress: () async {
-                        TurkFuncs().openAllFilesAccessSettings();
-                        BackUp_Restore_LoveChoice(false);
+                        // TurkFuncs().openAllFilesAccessSettings();
+                        await BackUp_Restore_LoveChoice(context, false);
                         TurkFuncs().turkToast("تم الاسترجاع");
                       },
                       onDoubleTap: () async {
-                        TurkFuncs().openAllFilesAccessSettings();
-                        BackUp_Restore_LoveChoice(true);
+                        // TurkFuncs().openAllFilesAccessSettings();
+                        await BackUp_Restore_LoveChoice(context, true);
                         TurkFuncs().turkToast("تم النسخ في ملفات الجهاز");
-                        Fluttertoast.showToast(
-                          msg:
-                              "/storage/emulated/0/Love Choice/user_database.db",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.black54,
-                          textColor: Colors.white,
-                          fontSize: 16.0,
-                        );
+                        // Fluttertoast.showToast(
+                        //   msg:
+                        //       "/storage/emulated/0/Love Choice/user_database.db",
+                        //   toastLength: Toast.LENGTH_SHORT,
+                        //   gravity: ToastGravity.BOTTOM,
+                        //   timeInSecForIosWeb: 1,
+                        //   backgroundColor: Colors.black54,
+                        //   textColor: Colors.white,
+                        //   fontSize: 16.0,
+                        // );
                       },
                       onTap: () {
                         TurkFuncs().turkToast(
@@ -828,58 +830,69 @@ class _settingState extends State<setting> {
   }
 }
 
-Future<void> BackUp_Restore_LoveChoice(bool backup) async {
+Future<void> BackUp_Restore_LoveChoice(
+  BuildContext context,
+  bool backup,
+) async {
+  Directory? extDir = await getExternalStorageDirectory();
+  if (extDir == null) return;
+  File appFile = File(join(extDir.path, 'Love Choice', "user_database.db"));
+
   if (backup) {
-    // 📂 Backup
-    Directory? ext_Dir = await getExternalStorageDirectory();
-    Directory? extDir = Directory(join(ext_Dir!.path, 'Love Choice'));
-
-    // ملف التطبيق
-    File sourceFile = File(join(extDir.path, "user_database.db"));
-
-    // مكان النسخة الاحتياطية (خارجي)
-    Directory targetDir = Directory("/storage/emulated/0/Love Choice/");
-    if (!await targetDir.exists()) {
-      await targetDir.create(recursive: true);
-    }
-
-    File targetFile = File(join(targetDir.path, "user_database.db"));
-
-    if (await targetFile.exists()) {
-      await targetFile.delete();
-    }
-
-    await sourceFile.copy(targetFile.path);
-  } else {
-    // 📂 Restore
-    try {
-      // غلقها
+    await appFile.parent.create(recursive: true);
+    if (await appFile.exists()) {
       await DBHelper.close();
 
-      // ملف النسخة الاحتياطية
-      File sourceFile = File(
-        "/storage/emulated/0/Love Choice/user_database.db",
+      final bytes = await appFile.readAsBytes();
+
+      await FileSaver.instance.saveFile(
+        name: "Love_Choice_Backup",
+        bytes: bytes,
+        fileExtension: "db",
+        mimeType: MimeType.other,
       );
 
-      // مسار التطبيق
-      Directory? extDir = await getExternalStorageDirectory();
-      if (extDir == null) return;
+      File buFile = File(join(extDir.path, "Love_Choice_Backup.db"));
 
-      Directory targetDir = Directory(join(extDir.path, "Love Choice"));
-      if (!await targetDir.exists()) {
-        await targetDir.create(recursive: true);
-      }
+      await Share.shareXFiles([
+        XFile(buFile.path),
+      ], text: "نسخة احتياطية من الأسئلة المخصصة.");
 
-      File targetFile = File(join(targetDir.path, "user_database.db"));
-
-      if (await targetFile.exists()) {
-        await targetFile.delete();
-      }
-
-      await sourceFile.copy(targetFile.path);
+      print("Backup saved");
       await DBHelper.init();
-    } catch (e) {
-      BackUp_Restore_LoveChoice(true);
+    }
+  } else {
+    // 📂 Restore (استيراد الملف من الخارج)
+    try {
+      // خليه يختار ملف الـ backup اللي عايزه
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        withData: true,
+      );
+
+      if (result != null) {
+        final pickedFile = result.files.single;
+
+        await DBHelper.close();
+
+        if (await appFile.exists()) {
+          await appFile.delete();
+        }
+
+        await appFile.writeAsBytes(
+          pickedFile.bytes ?? await File(pickedFile.path!).readAsBytes(),
+          flush: true,
+        );
+
+        await DBHelper.init();
+      }
+    } catch (e, st) {
+      debugPrint(e.toString());
+      debugPrint(st.toString());
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
 }
@@ -910,14 +923,20 @@ Future<void> downloadDB() async {
     if (response.statusCode == 200) {
       // لو الملف موجود امسحه احتياط
       if (await file.exists()) {
-        await file.delete();
+        try {
+          await file.delete();
+          // print("Deleted");
+        } catch (e) {
+          // print("Delete Error: $e");
+        }
       }
-
-      // اكتب الجديد
-      await file.writeAsBytes(response.bodyBytes, flush: true);
-      await DBHelper.init();
+      await File(
+        filePath,
+      ).writeAsBytes(response.bodyBytes, mode: FileMode.write, flush: true);
     }
   } catch (e) {
     // null;
+  } finally {
+    await DBHelper.init();
   }
 }
