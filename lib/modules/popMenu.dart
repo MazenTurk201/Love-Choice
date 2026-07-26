@@ -41,12 +41,15 @@ class TurkPopMenu extends StatelessWidget {
               Navigator.of(context).pushReplacementNamed('/soon');
             } else if (value == 'logout') {
               FirebaseAuth.instance.signOut();
-              final googleSignIn = GoogleSignIn();
-              if (await googleSignIn.isSignedIn()) {
-                await googleSignIn
-                    .disconnect(); // أو await googleSignIn.signOut();
+              final googleSignIn = GoogleSignIn.instance;
+              try {
+                await googleSignIn.disconnect();
+              } catch (_) {
+                // لو مفيش حساب متسجل
               }
-              Navigator.pushReplacementNamed(context, "/main");
+              if (context.mounted) {
+                Navigator.pushReplacementNamed(context, "/main");
+              }
             }
           },
           itemBuilder: (context) => [
@@ -82,24 +85,39 @@ class TurkPopMenu extends StatelessWidget {
                 ),
               );
             } else if (value == 'download') {
-              showDialog(context: context, builder: (ctx) => AlertDialog(
-                title: Text("ملحوظة", style: TextStyle(fontWeight: FontWeight.bold), textAlign: TextAlign.center,),
-                content: Text("تنزيل الشات مهم نظرًا لتصفية البيانات كل فترة ويمكنك قرائة الشات بكل سهولة من برنامجنا.", textAlign: TextAlign.center, textDirection: TextDirection.rtl,),
-                actions: [
-                  TextButton(
-                    onPressed: () async {
-                      TurkFuncs().OpenUrl("https://mazenturk201.github.io/ResWA");
-                      Navigator.of(ctx).pop();},
-                    child: Text("البرنامج"),
+              showDialog(
+                context: context,
+                builder: (ctx) => AlertDialog(
+                  title: Text(
+                    "ملحوظة",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
                   ),
-                  TextButton(
-                    onPressed: () async { 
-                      await RoomService().downloadChat(id!, name!);
-                      Navigator.of(ctx).pop();},
-                    child: Text("الشات"),
+                  content: Text(
+                    "تنزيل الشات مهم نظرًا لتصفية البيانات كل فترة ويمكنك قرائة الشات بكل سهولة من برنامجنا.",
+                    textAlign: TextAlign.center,
+                    textDirection: TextDirection.rtl,
                   ),
-                ],
-              ));
+                  actions: [
+                    TextButton(
+                      onPressed: () async {
+                        TurkFuncs().OpenUrl(
+                          "https://mazenturk201.github.io/ResWA",
+                        );
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("البرنامج"),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await RoomService().downloadChat(id!, name!);
+                        Navigator.of(ctx).pop();
+                      },
+                      child: Text("الشات"),
+                    ),
+                  ],
+                ),
+              );
             } else if (value == 'leave') {
               RoomService().leaveGroup(id!);
               RoomService().getMyGroups();
@@ -157,7 +175,7 @@ class TurkPopMenu extends StatelessWidget {
                 children: [
                   Icon(Icons.logout_rounded, color: Colors.red),
                   SizedBox(width: 8),
-                  Text("خروج", style: TextStyle(color: Colors.red),),
+                  Text("خروج", style: TextStyle(color: Colors.red)),
                 ],
               ),
             ),

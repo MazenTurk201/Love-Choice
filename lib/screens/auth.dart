@@ -26,31 +26,38 @@ class _AuthPageState extends State<AuthPage> {
   // 🔹 Google Auth
   Future<void> authGoogle() async {
     try {
-      // عرف المتغير هنا بوضوح
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        // الـ Client ID اللي جبناه من الـ Console
+      // final GoogleSignIn googleSignIn = GoogleSignIn(
+      //   serverClientId:
+      //       '405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com',
+      // );
+      final GoogleSignIn googleSignIn = GoogleSignIn.instance;
+      await googleSignIn.initialize(
         serverClientId:
-            '405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com',
+            "405627178641-4k50np2k04isaa6m4eir4hdjgb5ns364.apps.googleusercontent.com",
       );
 
       // سجل دخول
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      // final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final googleUser = await googleSignIn.authenticate();
 
       if (googleUser == null) return;
 
-      // هنا الـ Error بتاع الـ await:
-      // في النسخ الجديدة هي Future، لو لسه بيطلع Error شيل الـ await
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      // 🔥 رجعنا الـ await هنا عشان يقرأ الـ accessToken صح
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
-      // تأكد إن الأسماء مكتوبة صح (Case-sensitive)
       final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
+        accessToken: googleAuth.idToken,
         idToken: googleAuth.idToken,
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
       debugPrint("Done!");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const AuthGate()));
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const AuthGate()),
+      );
     } catch (e) {
       debugPrint("Error: $e");
     }
@@ -63,22 +70,26 @@ class _AuthPageState extends State<AuthPage> {
 
     if (email.isEmpty || pass.isEmpty) return;
 
-    if (isLogin) {
-      final cred = await auth.signInWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
+    try {
+      if (isLogin) {
+        final cred = await auth.signInWithEmailAndPassword(
+          email: email,
+          password: pass,
+        );
 
-      await createProfileIfNotExists(cred.user!);
-    } else {
-      final cred = await auth.createUserWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
+        await createProfileIfNotExists(cred.user!);
+      } else {
+        final cred = await auth.createUserWithEmailAndPassword(
+          email: email,
+          password: pass,
+        );
 
-      await createProfileIfNotExists(cred.user!);
+        await createProfileIfNotExists(cred.user!);
 
-      setState(() => isLogin = true);
+        setState(() => isLogin = true);
+      }
+    } catch (e) {
+      debugPrint("Auth Email Error: $e");
     }
   }
 
@@ -97,6 +108,13 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
@@ -104,11 +122,11 @@ class _AuthPageState extends State<AuthPage> {
           backgroundColor: TurkStyle().mainColor,
           title: Text(
             isLogin ? "Login" : "Sign Up",
-            style: TextStyle(fontFamily: "TurkLogo", fontSize: 35),
+            style: const TextStyle(fontFamily: "TurkLogo", fontSize: 35),
           ),
           leading: IconButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/main'),
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
           centerTitle: true,
         ),
@@ -161,7 +179,7 @@ class _AuthPageState extends State<AuthPage> {
                           ),
 
                           const SizedBox(height: 10),
-                          Text(
+                          const Text(
                             'or',
                             style: TextStyle(color: Colors.grey, fontSize: 16),
                           ),
@@ -180,7 +198,7 @@ class _AuthPageState extends State<AuthPage> {
                             ),
                           ),
 
-                          Expanded(child: SizedBox()),
+                          const Expanded(child: SizedBox()),
 
                           TextButton(
                             onPressed: () => setState(() => isLogin = !isLogin),

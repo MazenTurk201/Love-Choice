@@ -12,7 +12,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_saver/file_saver.dart';
 import '../data/db_helper.dart';
-import '../data/adsManager.dart';
+// import '../data/adsManager.dart';
 import '../data/globalData.dart';
 import '../modules/appBarRouter.dart';
 import '../modules/globalFuncs.dart';
@@ -48,7 +48,7 @@ class _settingState extends State<setting> {
 
   Future<void> loadSettings() async {
     final pref = await SharedPreferences.getInstance();
-    TurkRewarded.load();
+    // TurkRewarded.load();
     setState(() {
       isSwitched = pref.getBool('isDare') ?? true;
       isSwitched2 = pref.getBool('switch_both') ?? true;

@@ -618,6 +618,15 @@ p.even,
     margin-left: 5px;
 }
 
+.GPWidth{
+    width: 90%;
+    transition: all 0.3s ease-in-out;
+
+    &:hover{
+        transform: scale(1.075);
+    }
+}
+
 /* Media query للموبايل */
 @media (max-width: 768px) {
     .releases-table {
