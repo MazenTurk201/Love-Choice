@@ -4,9 +4,8 @@
     "target": {
       "namespace": "android_app",
       "package_name": "com.turk.love_choice",
-      "sha256_cert_fingerprints": [
-        "28:A9:08:09:92:C5:CC:7A:7B:DF:4C:A9:9D:19:8A:EC:54:93:C3:5A:67:88:39:EA:CE:64:96:32:39:6D:04:CF"
-      ]
+      "sha256_cert_fingerprints":
+        ["28:A9:08:09:92:C5:CC:7A:7B:DF:4C:A9:9D:19:8A:EC:54:93:C3:5A:67:88:39:EA:CE:64:96:32:39:6D:04:CF"]
     }
   }
 ]
