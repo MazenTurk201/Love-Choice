@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "405627178641-nbuqglau888mo9njudpnopqi6d76bld1.apps.googleusercontent.com",
+          "client_id": "405627178641-ikd95gmm80revjtnaen90llhmlvhqi92.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.turk.love_choice",
-            "certificate_hash": "18b9bc545b9c33f61ae4c375fdfc207628b57d73"
+            "certificate_hash": "ec47815e2486559978c380f3c59a39be0cb8d050"
           }
         },
         {
