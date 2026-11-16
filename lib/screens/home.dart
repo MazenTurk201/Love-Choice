@@ -1,19 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:love_choice/modules/globalFuncs.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:in_app_update/in_app_update.dart';
 import '../data/db_helper.dart';
-import '../data/globalData.dart';
 import '../data/toastdata.dart';
 import '../modules/appBarRouter.dart';
 import '../modules/drawerr.dart';
 import '../modules/buildcard.dart';
-import 'setting.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -29,73 +27,95 @@ void initializeNotifications() {
   flutterLocalNotificationsPlugin.initialize(settings: initializationSettings);
 }
 
-Future<void> getVersionText(
-  BuildContext context,
-) async {
+Future<void> getVersionText(BuildContext context) async {
   try {
-    final response = await http.get(
-      Uri.parse(
-        'https://raw.githubusercontent.com/MazenTurk201/Love-Choice/refs/heads/main/version.txt',
+    final info = await InAppUpdate.checkForUpdate();
+
+    if (!context.mounted) return;
+
+    // استكمال تحديث فوري بدأ ولم يكتمل
+    if (info.updateAvailability ==
+        UpdateAvailability.developerTriggeredUpdateInProgress) {
+      await InAppUpdate.performImmediateUpdate();
+      return;
+    }
+
+    if (info.updateAvailability != UpdateAvailability.updateAvailable) {
+      return;
+    }
+
+    if (!info.immediateUpdateAllowed && !info.flexibleUpdateAllowed) {
+      debugPrint("No update type is currently allowed.");
+      return;
+    }
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text(
+          "تحديث جديد 🔔",
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.rtl,
+          style: TextStyle(fontFamily: "TurkFont"),
+        ),
+        content: const Text(
+          "نسخة جديدة من التطبيق متاحة! "
+          "حدّث التطبيق واستمتع بأحدث الميزات والتحسينات.",
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.rtl,
+          style: TextStyle(fontSize: 15, fontFamily: "TurkFont"),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.of(dialogContext).pop();
+
+              try {
+                // الأولوية للتحديث الفوري
+                if (info.immediateUpdateAllowed) {
+                  await InAppUpdate.performImmediateUpdate();
+                } else if (info.flexibleUpdateAllowed) {
+                  StreamSubscription<InstallStatus>? subscription;
+
+                  subscription = InAppUpdate.installUpdateListener.listen(
+                    (status) async {
+                      if (status == InstallStatus.downloaded) {
+                        await subscription?.cancel();
+
+                        try {
+                          await InAppUpdate.completeFlexibleUpdate();
+                        } catch (e) {
+                          debugPrint("Complete update error: $e");
+                        }
+                      }
+                    },
+                    onError: (e) {
+                      debugPrint("Update listener error: $e");
+                    },
+                  );
+
+                  final result = await InAppUpdate.startFlexibleUpdate();
+
+                  if (result != AppUpdateResult.success) {
+                    await subscription.cancel();
+                  }
+                }
+              } catch (e) {
+                debugPrint("Update error: $e");
+              }
+            },
+            child: const Text(
+              "يلا بينا 🚀",
+              style: TextStyle(fontSize: 15, fontFamily: "TurkFont"),
+            ),
+          ),
+        ],
       ),
     );
-    if (response.statusCode == 200) {
-      double version = double.parse(response.body.trim());
-      if (version > LoveChoiceVersion) {
-        // debugPrint('🔔 A new version is available: $version');
-        showDialog(
-          // ignore: use_build_context_synchronously
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(
-              "تحديث جديد 🔔",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontFamily: "TurkFont"),
-              textDirection: TextDirection.rtl,
-            ),
-            content: Text(
-              "نسخة جديدة من التطبيق متاحة. الرجاء تحديث التطبيق للاستمتاع بأحدث الميزات.",
-              style: TextStyle(fontSize: 15, fontFamily: "TurkFont"),
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  _launchUrl(
-                    'https://github.com/MazenTurk201/Love-Choice/releases/latest',
-                  );
-                  downloadDB();
-                },
-                child: Text(
-                  "يلا بينا",
-                  style: TextStyle(fontSize: 15, fontFamily: "TurkFont"),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-      // } else {
-      //   debugPrint('✅ You are using the latest version: $current_version');
-      // }
-      // debugPrint('✅ Version: $version');
-    } else {
-      // debugPrint(
-      //   '❌ Failed to load version. Status code: ${response.statusCode}',
-      // );
-      null;
-    }
   } catch (e) {
-    // debugPrint('❌ Error: $e');
-    null;
-  }
-}
-
-Future<void> _launchUrl(String url) async {
-  if (!await launchUrl(Uri.parse(url))) {
-    throw Exception('Could not launch URL: $url');
+    debugPrint("In-App Update error: $e");
   }
 }
 
@@ -112,7 +132,11 @@ class _homeState extends State<home> {
   @override
   void initState() {
     super.initState();
-    getVersionText(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        getVersionText(context);
+      }
+    });
     loadSettings();
     DBHelper.init();
   }
@@ -211,7 +235,8 @@ class _homeState extends State<home> {
                         Expanded(
                           child: ConstrainedBox(
                             constraints: BoxConstraints(
-                              minHeight: MediaQuery.of(context).size.height / 4 - 62.5,
+                              minHeight:
+                                  MediaQuery.of(context).size.height / 4 - 62.5,
                             ),
                             child: Buildcard(
                               selectedItems[0]["name"],

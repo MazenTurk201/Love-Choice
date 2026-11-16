@@ -5,14 +5,13 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:file_saver/file_saver.dart';
 import '../data/db_helper.dart';
-// import '../data/adsManager.dart';
+import 'package:file_picker/file_picker.dart';
 import '../data/globalData.dart';
 import '../modules/appBarRouter.dart';
 import '../modules/globalFuncs.dart';
@@ -865,13 +864,15 @@ Future<void> BackUp_Restore_LoveChoice(
     // 📂 Restore (استيراد الملف من الخارج)
     try {
       // خليه يختار ملف الـ backup اللي عايزه
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.any,
-        withData: true,
-      );
+      final result = await FilePicker.pickFiles(type: FileType.any);
 
-      if (result != null) {
-        final pickedFile = result.files.single;
+      if (result.isNotEmpty) {
+        final file = result.first; // أو الـ item اللي بيعبر عن الملف
+        print(file.name);
+      }
+
+      if (result.isNotEmpty) {
+        final pickedFile = result.first;
 
         await DBHelper.close();
 
@@ -879,10 +880,12 @@ Future<void> BackUp_Restore_LoveChoice(
           await appFile.delete();
         }
 
-        await appFile.writeAsBytes(
-          pickedFile.bytes ?? await File(pickedFile.path!).readAsBytes(),
-          flush: true,
-        );
+        final filePath = pickedFile.path;
+        if (filePath != null) {
+          final fileBytes = await File(filePath).readAsBytes();
+
+          await appFile.writeAsBytes(fileBytes, flush: true);
+        }
 
         await DBHelper.init();
       }

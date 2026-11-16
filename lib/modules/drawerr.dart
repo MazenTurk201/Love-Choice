@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:in_app_review/in_app_review.dart';
 import '../data/toastdata.dart';
 import '../style/styles.dart';
 import 'authGate.dart';
@@ -131,8 +132,7 @@ class _TurkDrawerState extends State<TurkDrawer> {
                   menuDrawerButton(
                     title: 'اعزمني على قهوة',
                     icon: Icons.coffee,
-                    url:
-                        'https://mazenturk201.github.io/#/donate',
+                    url: 'https://mazenturk201.github.io/#/donate',
                   ),
                   menuDrawerButton(
                     title: 'سجل التغيرات والشكر',
@@ -211,8 +211,10 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           if (widget.disable == true) {
             UnityAds.showVideoAd(
               placementId: 'Rewarded_Android',
-              onStart: (placementId) => debugPrint('Video Ad $placementId started'),
-              onClick: (placementId) => debugPrint('Video Ad $placementId click'),
+              onStart: (placementId) =>
+                  debugPrint('Video Ad $placementId started'),
+              onClick: (placementId) =>
+                  debugPrint('Video Ad $placementId click'),
               onSkipped: (placementId) =>
                   debugPrint('Video Ad $placementId skipped'),
               onComplete: (placementId) {
@@ -249,12 +251,12 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
           );
         } else if (widget.url == 'rate') {
           Scaffold.of(context).closeDrawer();
-          _showRateDialog(context);
+          await showRateDialog(context);
         } else if (widget.url == 'changelog') {
           Scaffold.of(context).closeDrawer();
           Scaffold.of(context).showBottomSheet((context) {
             return ChangeLogSheet();
-          },);
+          });
         } else if (widget.url == 'online') {
           if (await checkRealConnection()) {
             if (widget.disable == true) {
@@ -262,7 +264,8 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
                 placementId: 'Rewarded_Android',
                 onStart: (placementId) =>
                     debugPrint('Video Ad $placementId started'),
-                onClick: (placementId) => debugPrint('Video Ad $placementId click'),
+                onClick: (placementId) =>
+                    debugPrint('Video Ad $placementId click'),
                 onSkipped: (placementId) =>
                     debugPrint('Video Ad $placementId skipped'),
                 onComplete: (placementId) {
@@ -282,7 +285,10 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
               //   },
               // );
             } else {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthGate()));
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const AuthGate()),
+              );
               // final session = FirebaseAuth.instance.currentUser;
               // if (session != null) {
               //   Navigator.of(context).pushReplacementNamed('/onlineHome');
@@ -308,10 +314,10 @@ class _menuDrawerButtonState extends State<menuDrawerButton> {
       },
       child: ListTile(
         leading: Icon(
-          widget.disable == true ? Icons.lock_rounded : widget.icon,
+          widget.disable == true ? Icons.attach_money_rounded : widget.icon,
           size: 30,
           color: widget.disable == true
-              ? const Color.fromARGB(255, 102, 102, 102)
+              ? const Color.fromARGB(255, 68, 255, 0)
               : Colors.white,
         ),
         title: Text(
@@ -336,71 +342,49 @@ Future<void> _launchUrl(String url) async {
   }
 }
 
-final TextEditingController _controller = TextEditingController();
+Future<void> showRateDialog(BuildContext context) async {
+  final InAppReview inAppReview = InAppReview.instance;
 
-void _showRateDialog(BuildContext context) {
-  int uiStars = 0;
-
-  showDialog(
+  await showDialog(
     context: context,
-    builder: (_) => AlertDialog(
+    builder: (dialogContext) => AlertDialog(
       alignment: Alignment.center,
-      title: const Text("قيمنا", textAlign: TextAlign.center),
-      content: StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  5,
-                  (index) => InkWell(
-                    onTap: () {
-                      setState(() {
-                        uiStars = index + 1;
-                      });
-                    },
-                    child: Icon(
-                      index < uiStars ? Icons.star : Icons.star_border_outlined,
-                      color: Colors.amber,
-                      size: 32,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              // نص التقييم
-              TextField(
-                controller: _controller,
-                decoration: const InputDecoration(
-                  hintText: "اكتب اقتراحك أو تقييمك",
-                  border: OutlineInputBorder(),
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 3,
-              ),
-            ],
-          );
-        },
+      title: const Text('استمتعت باللعبة؟ ❤️', textAlign: TextAlign.center),
+      content: const Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.favorite_rounded, color: Colors.redAccent, size: 55),
+          SizedBox(height: 15),
+          Text(
+            'رأيك يهمنا جدًا! تقييمك على Google Play بيساعدنا نطور Love Choice ونقدم لك تجربة أفضل.',
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: [
-        ElevatedButton(
+        TextButton(
           onPressed: () {
-            String text = _controller.text;
-            launchUrl(
-              Uri(
-                scheme: 'mailto',
-                path: 'maznktr@gmail.com',
-                query: encodeQueryParameters(<String, String>{
-                  'subject': "Love Choice Game تقييم جديد",
-                  'body': "⭐ التقييم: $uiStars من 5\n\nالرسالة:\n$text",
-                }),
-              ),
-            );
-            Navigator.pop(context);
+            Navigator.pop(dialogContext);
           },
-          child: const Text("أرسل"),
+          child: const Text('لاحقًا'),
+        ),
+        ElevatedButton.icon(
+          onPressed: () async {
+            Navigator.pop(dialogContext);
+
+            try {
+              if (await inAppReview.isAvailable()) {
+                await inAppReview.requestReview();
+              } else {
+                await inAppReview.openStoreListing();
+              }
+            } catch (e) {
+              debugPrint('Review Error: $e');
+            }
+          },
+          icon: const Icon(Icons.star_rounded),
+          label: const Text('قيّمنا'),
         ),
       ],
     ),

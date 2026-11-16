@@ -1,7 +1,7 @@
 name: love_choice
 description: "My Game."
-publish_to: 'none'
-version: 2.0.0+7
+publish_to: "none"
+version: 2.0.0+8
 
 environment:
   sdk: ^3.8.1
@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  share_plus: ^12.0.1
+  cupertino_icons: ^2.0.0
+  share_plus: ^13.3.1
   url_launcher: ^6.3.2
   sqflite: ^2.4.2
   path: ^1.9.1
@@ -20,28 +20,30 @@ dependencies:
   shared_preferences: ^2.5.3
   http: ^1.4.0
   lottie: ^3.3.1
-  firebase_messaging: ^16.0.0
-  firebase_core: ^4.0.0
-  firebase_auth: ^6.1.4
-  cloud_firestore: ^6.1.2
+  firebase_messaging: ^17.0.1
+  firebase_core: ^5.1.0
+  firebase_auth: ^7.0.1
+  cloud_firestore: ^7.1.0
   google_sign_in: ^7.2.0
-  flutter_local_notifications: ^20.0.0
-  fluttertoast: ^9.0.0
+  flutter_local_notifications: ^22.3.3
+  fluttertoast: ^10.0.2
   redacted: ^1.0.13
-  smooth_page_indicator: ^2.0.1
-  permission_handler: ^12.0.1
+  smooth_page_indicator: ^3.0.0
+  permission_handler: ^13.0.2
   android_intent_plus: ^6.0.0
-  device_info_plus: ^12.3.0
+  device_info_plus: ^13.3.0
   image_picker: ^1.1.0
   intl: ^0.20.2
   flutter_dotenv: ^6.0.0
   app_links: ^7.0.0
-  unity_ads_plugin: ^0.3.28
+  unity_ads_plugin: ^0.6.0
   local_auth: ^3.0.0
   local_auth_android: ^2.0.4
-  firebase_storage: ^13.0.6
-  file_picker: ^8.0.0
-  file_saver: ^0.3.1
+  firebase_storage: ^14.0.1
+  file_picker: ^13.3.2
+  file_saver: ^0.7.0
+  in_app_review: ^2.0.12
+  in_app_update: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -50,14 +52,13 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
 flutter:
-
   uses-material-design: true
 
   assets:
     - images/
     - assets/love_choice.db
     - assets/animation/
-  
+
   fonts:
     - family: TurkLogo
       fonts:
