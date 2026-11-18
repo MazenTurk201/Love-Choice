@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>405627178641-t0u5pj3ir4g9nadscfslnnpbk8kg48sp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.405627178641-t0u5pj3ir4g9nadscfslnnpbk8kg48sp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>405627178641-41nrcu04t91jouj358v9frvoue5t63a6.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBIHOtgvWK6jag7MVd3h6lnNzRfZPRWT8w</string>
+	<key>GCM_SENDER_ID</key>
+	<string>405627178641</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.turk.lovechoice</string>
+	<key>PROJECT_ID</key>
+	<string>love-choice-game</string>
+	<key>STORAGE_BUCKET</key>
+	<string>love-choice-game.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:405627178641:ios:adf74ae83e991b20dff930</string>
+</dict>
+</plist>
