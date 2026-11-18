@@ -57,13 +57,15 @@ class DefaultFirebaseOptions {
     storageBucket: 'love-choice-game.firebasestorage.app',
   );
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBIHOtgvWK6jag7MVd3h6lnNzRfZPRWT8w',
+    apiKey: 'AIzaSyBylojVdHUOoftsEouC1k_prkFwXdHFNB4',
     appId: '1:405627178641:ios:adf74ae83e991b20dff930',
     messagingSenderId: '405627178641',
     projectId: 'love-choice-game',
     storageBucket: 'love-choice-game.firebasestorage.app',
-    androidClientId: '405627178641-41nrcu04t91jouj358v9frvoue5t63a6.apps.googleusercontent.com',
-    iosClientId: '405627178641-t0u5pj3ir4g9nadscfslnnpbk8kg48sp.apps.googleusercontent.com',
+    androidClientId:
+        '405627178641-41nrcu04t91jouj358v9frvoue5t63a6.apps.googleusercontent.com',
+    iosClientId:
+        '405627178641-t0u5pj3ir4g9nadscfslnnpbk8kg48sp.apps.googleusercontent.com',
     iosBundleId: 'com.turk.lovechoice',
   );
 }
