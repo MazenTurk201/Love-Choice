@@ -1,9 +1,21 @@
 workflows:
+  ios-workflow:
+    name: Love Choice iOS
+    max_build_duration: 120
+    instance_type: mac_mini_m2
 
-    ios-workflow-id:
+    integrations:
+      app_store_connect: YOUR_INTEGRATION_NAME
 
-        name: Codemagic Sample Workflow
+    environment:
+      flutter: stable
 
-        max_build_duration: 120
+    scripts:
+      - name: Get Flutter packages
+        script: flutter pub get
 
-        instance_type: mac_mini_m2
+      - name: Build iOS
+        script: flutter build ipa --release --no-codesign
+
+    artifacts:
+      - build/ios/ipa/*.ipa
