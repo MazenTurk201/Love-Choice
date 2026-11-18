@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +55,15 @@ class DefaultFirebaseOptions {
     messagingSenderId: '405627178641',
     projectId: 'love-choice-game',
     storageBucket: 'love-choice-game.firebasestorage.app',
+  );
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyBIHOtgvWK6jag7MVd3h6lnNzRfZPRWT8w',
+    appId: '1:405627178641:ios:adf74ae83e991b20dff930',
+    messagingSenderId: '405627178641',
+    projectId: 'love-choice-game',
+    storageBucket: 'love-choice-game.firebasestorage.app',
+    androidClientId: '405627178641-41nrcu04t91jouj358v9frvoue5t63a6.apps.googleusercontent.com',
+    iosClientId: '405627178641-t0u5pj3ir4g9nadscfslnnpbk8kg48sp.apps.googleusercontent.com',
+    iosBundleId: 'com.turk.lovechoice',
   );
 }

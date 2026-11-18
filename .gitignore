@@ -1,3 +1,4 @@
+
 # Miscellaneous
 *.class
 *.log
@@ -11,14 +12,14 @@
 .swiftpm/
 migrate_working_dir/
 
-# IDE related
+# IDE
 *.iml
 *.ipr
 *.iws
 .idea/
 .vscode/
 
-# Flutter/Dart/Pub related
+# Flutter / Dart
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -27,21 +28,24 @@ migrate_working_dir/
 /build/
 **/doc/api/
 **/ios/Flutter/.last_build_id
+coverage/
 
 # Android
 /android/app/debug
 /android/app/profile
 /android/app/release
 /android/app/build
-firebase.json
-# Another Trash
-/ios/
-/windows/
-/linux/
-/web/
-/macos/
-/test/
-love_choice.iml
+android/.kotlin/sessions/
+android/local.properties
+android/key.properties
+android/app/*.jks
+android/app/*.keystore
+
+# Other platforms (optional)
+# /windows/
+# /linux/
+# /web/
+# /macos/
 
 # Symbolication
 app.*.symbols
@@ -51,13 +55,24 @@ app.*.map.json
 
 # Turk
 secret.txt
-codemagic.yaml
-firebase.json
 build.bat
-android/.kotlin/sessions/kotlin-compiler-1060616231414960632.salive
-assets/love_choice.db-journal
-android/.kotlin/sessions/kotlin-compiler-14746318275385125581.salive
 .env
-android/key.properties
-android/app/*.jks
-android/app/*.keystore
+.env.*
+!.env.example
+
+# Temporary files
+assets/love_choice.db-journal
+
+# iOS generated files and signing data
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Runner.xcworkspace/xcuserdata/
+ios/Runner.xcodeproj/xcuserdata/
+*.p12
+*.mobileprovision
+*.provisionprofile
+*.ipa
+*.dSYM.zip
